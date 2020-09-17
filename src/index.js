@@ -1,10 +1,10 @@
 import InterfaceComponent from './interface.vue';
 
 export default {
-    id: 'custom',
-    name: 'Custom',
-    description: 'This is my custom interface!',
-    icon: 'box',
+    id: 'unsplash',
+    name: 'Unsplash',
+    description: 'Select images from the Unsplash image library',
+    icon: 'image_search',
     component: InterfaceComponent,
-    types: ['string'],
+    types: ['uuid'],
 }
