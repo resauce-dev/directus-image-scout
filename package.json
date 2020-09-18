@@ -3,11 +3,8 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
-  "scripts": {
-    "start": "npx rollup -c"
-  },
-  "keywords": [],
-  "author": "",
+  "keywords": ["directus","extension","unsplash","image","library","royalty free","vue"],
+  "author": "Shea Lavington <shea@lavington.me>",
   "license": "ISC",
   "devDependencies": {
     "@vue/compiler-sfc": "^3.0.0-rc.11",
