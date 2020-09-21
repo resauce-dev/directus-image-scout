@@ -152,7 +152,13 @@ export default {
         { text: 'Pixabay', value: 'pixabay', url: 'https://pixabay.com' },
         { text: 'Giphy', value: 'giphy', url: 'https://giphy.com' },
       ],
-      search_history: []
+      search_history: [],
+
+      images: null,
+      countOfPages: null,
+      countOfImages: null,
+      fetch_limit: 30,
+      request_time: 0,
     }
   },
   computed: {
@@ -181,9 +187,16 @@ export default {
       this.selectedProvider = this.last_used_provider = provider
       this.current_page = page
 
+      //
+
       this.processing = true
+      const timerStart = performance.now()
       this[`${this.selectedProvider}FetchPhotos`](search_term, page)
-        .then(() => this.processing = false)
+        .then(() => {
+          this.processing = false
+          const timerEnd = performance.now()
+          this.request_time = parseFloat((timerEnd-timerStart)/1000).toFixed(12)
+        })
     }
   },
   mounted() {
@@ -331,8 +344,7 @@ export default {
 }
 .v-card::v-deep .v-card-subtitle {
   font-size: 12px!important;
-  margin-top: calc(var(--v-card-padding) * -2);
-  padding: var(--v-card-padding); /* This should be fixed in the component sometime... */
+  padding: 0;
 }
 .v-card::v-deep .v-card-actions {
   justify-content: flex-start;

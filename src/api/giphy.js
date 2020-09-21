@@ -4,29 +4,17 @@ import { giphy_key } from '../apiKeys.js'
 
 export default {
   inject: ['system'],
-  data() {
+  data() { 
     const api = this.system.axios.create({
-      baseURL: 'https://api.giphy.com/v1/',
-      timeout: 1000,
-    });
-    return {
-      giphyApi: api,
-      images: null,
-      countOfPages: null,
-      countOfImages: null,
-      fetch_limit: 30,
-      request_time: 0,
-    }
-  },
-  created() {
-    console.info('🎨✅ Giphy: Loaded!')
+      baseURL: 'https://api.giphy.com/v1/'
+    })
+    return { api_giphy: api }
   },
   methods: {
     giphyFetchPhotos(search_term, current_page) {
-      var timerStart = performance.now()
       console.info(`🎨🕒 Giphy: Fetching search for "${search_term}" on page ${current_page}`, 'pending')
       const reqUrl = `/gifs/search?api_key=${giphy_key}&limit=${this.fetch_limit}&offset=${this.fetch_limit*current_page}&q=${search_term}`
-      return this.giphyApi.get(reqUrl)
+      return this.api_giphy.get(reqUrl)
         .then(({data}) => {
           console.info(`🎨✅ Giphy: Fetching search for "${search_term}" on page ${current_page}`, 'succeeded', data)
           let results = []
@@ -47,10 +35,6 @@ export default {
           this.countOfPages = Math.round(data.pagination.total_count / this.fetch_limit)
         })
         .catch(err => console.warn(`🎨❌ Giphy: Fetched search for "${search_term}" on page ${current_page}`, 'failed', err))
-        .then(() => {
-          var timerEnd = performance.now()
-          this.request_time = parseFloat(timerEnd-timerStart/1000).toFixed(12)
-        })
     },
     giphyFetchRandomPhotos() {
       let random;
@@ -70,11 +54,11 @@ export default {
         .then(data => console.info('🎨✅ Giphy: Fetching random images from the sessionStorage', 'succeeded', data))
         .catch(err => console.warn('🎨❌ Giphy: Fetching random images from sessionStorage', 'failed', err))
       } else {
-        console.info('🎨 Giphy: Fetching random images from the GiphyAPI')
+        console.info('🎨🕒 Giphy: Fetching random images from the api_giphy')
         const reqUrl = `/gifs/trending?api_key=${giphy_key}&limit=${this.fetch_limit}`
-        return this.giphyApi.get(reqUrl)
+        return this.api_giphy.get(reqUrl)
           .then(({data}) => {
-            console.info('🎨✅ Giphy: Fetching random images from the GiphyAPI', 'succeeded', data)
+            console.info('🎨✅ Giphy: Fetching random images from the api_giphy', 'succeeded', data)
             let results = []
             data.data.forEach(res => {
               const image = new ImageModel(
@@ -93,7 +77,7 @@ export default {
             this.countOfPages = null
             sessionStorage.setItem('giphy_random_images', JSON.stringify(results))
           })
-          .catch(err => console.warn('🎨❌ Giphy: Fetching random images from the GiphyAPI', 'failed', err))
+          .catch(err => console.warn('🎨❌ Giphy: Fetching random images from the api_giphy', 'failed', err))
       }
     }
   }

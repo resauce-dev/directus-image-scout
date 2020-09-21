@@ -1,27 +1,18 @@
-import { unsplash_access_key } from '../apiKeys.js'
-
-// OTHER META DATA I WANT TO PASS TO IMPORT ENDPOINT
-
-// tags: [...image.tags.map(item => item['title']), image.city, image.country, image.id],
-// description: image.description ? image.description : image.alt_description,
-// location: image.location?.name,
-// metadata: image.exif,
-
 export default {
   inject: ['system'],
-  data() {
-    return {
-      apiDirectus: this.system.api,
-    }
-  },
-  created() {
-    console.log('🐰✅ Directus mixin loaded!')
-  },
   methods: {
-    directusImportImage(url) {
+    directusImportImage(download_url) {
       console.info('🐰🕒 Directus import selected image', 'pending');
-      return this.apiDirectus.post('/files/import', {
-        url: `${url}?client_id=${unsplash_access_key}`,
+      return this.system.api.post('/files/import', {
+        data: {
+          tags: JSON.stringify(['foo','bar']),
+          location: 'location',
+          description: 'example',
+          // type: '',
+          title: "COVID-19",
+          filename_download: "corona-virus.jpg",
+        },
+        url: download_url,
       })
       .then(({ data }) => {
         console.info('🐰✅ Directus import selected image', 'succeeded', data);
