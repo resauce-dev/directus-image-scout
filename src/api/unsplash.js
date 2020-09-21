@@ -1,5 +1,7 @@
 import { access_key } from '../unsplashKeys.js'
 
+import ImageModel from '../classes/ImageModel.js'
+
 export default {
   inject: ['system'],
   data() {
@@ -9,7 +11,8 @@ export default {
       images: null,
       total_pages: null,
       total_images: null,
-      fetch_limit: 30
+      fetch_limit: 30,
+      request_time: 0,
     }
   },
   created() {
@@ -17,16 +20,35 @@ export default {
   },
   methods: {
     unsplashFetchPhotos(search_term, current_page) {
+      var timerStart = performance.now()
       console.info(`🎨🕒 Unsplash: Fetching search for "${search_term}" on page ${current_page}`, 'pending')
       const reqUrl = `${this.apiUrl}/search/photos?client_id=${access_key}&per_page=${this.fetch_limit}&page=${current_page}&query=${search_term}`
       return this.apiUnsplash.get(reqUrl)
         .then(({data}) => {
           console.info(`🎨✅ Unsplash: Fetching search for "${search_term}" on page ${current_page}`, 'succeeded', data)
-          this.images = data.results
+          let results = []
+          data.results.forEach(res => {
+            const image = new ImageModel(
+              res,
+              `Photo by ${res.user.name}`, 
+              res.alt_description, 
+              res.urls.thumb, 
+              res.links.download, 
+              res.links.html,
+              res.user.links.html
+            )
+            if(res.tags) { image.setTags(res.tags.map(item => item['title'])) }
+            results.push(image)
+          })
+          this.images = results
           this.total_images = data.total
           this.total_pages = data.total_pages
         })
         .catch(err => console.warn(`🎨❌ Unsplash: Fetched search for "${search_term}" on page ${current_page}`, 'failed', err))
+        .then(() => {
+          var timerEnd = performance.now()
+          this.request_time = timerEnd-timerStart
+        })
     },
     unsplashFetchRandomPhotos() {
       let random;
@@ -51,11 +73,24 @@ export default {
         return this.apiUnsplash.get(reqUrl)
           .then(({data}) => {
             console.info('🎨✅ Unsplash: Fetching random images from the UnsplashAPI', 'succeeded', data)
-            
-            this.images = data
+            let results = []
+            data.forEach(res => {
+              const image = new ImageModel(
+                res,
+                `Photo by ${res.user.name}`, 
+                res.alt_description, 
+                res.urls.thumb, 
+                res.links.download,
+                res.links.html,
+                res.user.links.html
+              )
+              if(res.tags) { image.setTags(res.tags.map(item => item['title'])) }
+              results.push(image)
+            })
+            this.images = results
             this.total_images = data.length
             this.total_pages = null
-            sessionStorage.setItem('unsplash_random', JSON.stringify(data))
+            sessionStorage.setItem('unsplash_random', results)
           })
           .catch(err => console.warn('🎨❌ Unsplash: Fetching random images from the UnsplashAPI', 'failed', err))
       }

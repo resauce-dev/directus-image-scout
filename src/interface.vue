@@ -17,31 +17,58 @@
         Please wait while we process your request...
       </v-fullpage-loader>
 
-      <v-input class="search" v-model="search" placeholder="Search for image keywords..." @keyup.enter="getPhotos(search)">
-        <template v-slot:append>
-          <v-icon name="search"></v-icon>
-        </template>
-      </v-input>
+      <div class="search">
+        <v-input 
+          v-model="search" 
+          placeholder="Search for image keywords..." 
+          @keyup.enter="getPhotos(search)"
+        >
+          <template v-slot:append>
+            <v-icon name="search"></v-icon>
+          </template>
+        </v-input>
+        <p v-if="total_pages" class="search-detail">
+          {{total_images}} results for "{{last_search_term}}" ({{request_time/1000}} seconds)
+        </p>
+      </div>
 
       <div v-if="images && images.length > 0">
         <div class="image-grid" v-if="images && images.length > 0">
           <v-card v-for="(image, i) in images" :key="'image_'+i">
-            <img :src="image.urls.thumb" :alt="image.alt_description">
+            <img :src="image.url_thumb" :alt="image.description">
             <div class="v-card-details">
               <v-card-title>
-                Photo by&nbsp;<a :href="image.user.links.portfolio">{{image.user.name}}</a>
+                {{image.title}}
               </v-card-title>
-              <v-card-subtitle v-if="image.alt_description">
-                {{image.alt_description}}
+              <v-card-subtitle v-if="image.description">
+                {{image.description}}
               </v-card-subtitle>
               <v-chip-list 
                 v-if="image.tags" 
-                :chips="image.tags.map(item => item['title'])"
+                :chips="image.tags"
                 @click="tag => getPhotos(tag)">
               </v-chip-list>
               <v-card-actions>
-                <v-button class="button--select-image" icon rounded large @click="selectImage(image)">
+                <v-button 
+                  class="button--select-image" icon rounded small 
+                  v-tooltip="'Author\'s Portfolio'" instant 
+                  v-if="image.url_author" :href="image.url_author" target="_BLANK"
+                >
+                  <v-icon name="face"></v-icon>
+                </v-button>
+                <v-button 
+                  class="button--select-image" icon rounded large 
+                  v-tooltip="'Select Image'" instant 
+                  @click="selectImage(image)"
+                >
                   <v-icon name="save_alt"></v-icon>
+                </v-button>
+                <v-button 
+                  class="button--select-image" icon rounded small 
+                  v-tooltip="'Share Image'" instant 
+                  v-if="image.url_share" :href="image.url_share" target="_BLANK"
+                >
+                  <v-icon name="share"></v-icon>
                 </v-button>
               </v-card-actions>
             </div>
@@ -56,6 +83,11 @@
             :show-first-last="true"
             @input="newPage => getPhotos(last_search_term, newPage)"></v-pagination>
         </div>
+        
+        <p class="api-supplier">
+          Royalty-Free images provided by 
+          <a href="https://unsplash.com/?utm_source=directus" target="_BLANK">Unsplash</a>
+        </p>
 
       </div>
 
@@ -111,7 +143,7 @@ export default {
     },
     selectImage(image) {
       this.processing = true
-      this.directusImportImage(image.links.download)
+      this.directusImportImage(image.url_download)
         .then((data) => {
           this.processing = false
           this.$emit('input', data.data.id)
@@ -131,6 +163,14 @@ export default {
 
 .display {
   display:flex;
+}
+
+.api-supplier {
+  text-align: center;
+  font-size: 8px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-top: 25px;
 }
 
 .icon-search {
@@ -174,9 +214,14 @@ export default {
 .search {
   margin-bottom: 25px;
 }
+.search-detail {
+  font-size: 10px;
+  color: var(--border-normal-alt);
+}
 
 .v-paginator {
   margin: 25px auto;
+  margin-top: 50px;
   display: flex;
   justify-content: center;
   align-items: center;
