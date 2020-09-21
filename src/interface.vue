@@ -1,5 +1,5 @@
 <template>
-  <div class="v-unsplash">
+  <div class="v-image-library">
     
     <div class="display">
       <v-avatar class="v-avatar" x-large>
@@ -11,7 +11,7 @@
       </v-button>
     </div>
 
-    <v-modal class="v-modal" title="Unsplash Image Library" v-model="isModalOpen">
+    <v-modal class="v-modal" title="Library of Images" v-model="isModalOpen">
 
       <v-fullpage-loader v-if="processing">
         Please wait while we process your request...
@@ -85,8 +85,8 @@
         </div>
         
         <p class="api-supplier">
-          Royalty-Free images provided by 
-          <a href="https://unsplash.com/?utm_source=directus" target="_BLANK">Unsplash</a>
+         Images provided by 
+          <a :href="provider.url" target="_BLANK">{{provider.name}}</a>
         </p>
 
       </div>

@@ -16,6 +16,10 @@ export default {
       total_images: null,
       fetch_limit: 30,
       request_time: 0,
+      provider: {
+        name: 'Giphy',
+        url: 'https://giphy.com'
+      }
     }
   },
   created() {

@@ -1,9 +1,9 @@
 {
-  "name": "unsplash",
+  "name": "image-library",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
-  "keywords": ["directus","extension","unsplash","image","library","royalty free","vue"],
+  "keywords": ["directus","extension","unsplash","pixabay","giphy","image","library","royalty free","vue"],
   "author": "Shea Lavington <shea@lavington.me>",
   "license": "ISC",
   "devDependencies": {

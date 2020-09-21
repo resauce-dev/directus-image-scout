@@ -1,9 +1,9 @@
 import InterfaceComponent from './interface.vue';
 
 export default {
-    id: 'unsplash',
-    name: 'Unsplash Image',
-    description: 'Select an image from the Unsplash image library',
+    id: 'image-library',
+    name: 'Image Library',
+    description: 'Select images from an array of online image libraries',
     icon: 'image_search',
     component: InterfaceComponent,
     relationship: 'm2o',
