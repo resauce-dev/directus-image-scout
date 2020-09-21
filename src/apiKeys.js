@@ -1,3 +1,3 @@
-export const unsplash_secret_key = ''
 export const unsplash_access_key = ''
-export const pixabay_key = ''
+export const pixabay_key = '6036434-'
+export const giphy_key = ''
