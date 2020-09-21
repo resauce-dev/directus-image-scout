@@ -1,13 +1,17 @@
-import { access_key } from '../unsplashKeys.js'
-
 import ImageModel from '../classes/ImageModel.js'
+
+import { access_key } from '../unsplashKeys.js'
 
 export default {
   inject: ['system'],
   data() {
+    const api = this.system.axios.create({
+      baseURL: 'https://api.unsplash.com',
+      timeout: 1000,
+      headers: {"Authorization" : `Client-ID ${access_key}`} // This should be removed eventually as it shouldn't be client-side
+    });
     return {
-      apiUnsplash: this.system.axios,
-      apiUrl: 'https://api.unsplash.com',
+      apiUnsplash: api,
       images: null,
       total_pages: null,
       total_images: null,
@@ -22,7 +26,7 @@ export default {
     unsplashFetchPhotos(search_term, current_page) {
       var timerStart = performance.now()
       console.info(`🎨🕒 Unsplash: Fetching search for "${search_term}" on page ${current_page}`, 'pending')
-      const reqUrl = `${this.apiUrl}/search/photos?client_id=${access_key}&per_page=${this.fetch_limit}&page=${current_page}&query=${search_term}`
+      const reqUrl = `/search/photos?per_page=${this.fetch_limit}&page=${current_page}&query=${search_term}`
       return this.apiUnsplash.get(reqUrl)
         .then(({data}) => {
           console.info(`🎨✅ Unsplash: Fetching search for "${search_term}" on page ${current_page}`, 'succeeded', data)
@@ -69,7 +73,7 @@ export default {
         .catch(err => console.warn('🎨❌ Unsplash: Fetching random images from sessionStorage', 'failed', err))
       } else {
         console.info('🎨 Unsplash: Fetching random images from the UnsplashAPI')
-        const reqUrl = `${this.apiUrl}/photos/random?client_id=${access_key}&featured=true&count=${this.fetch_limit}`
+        const reqUrl = `/photos/random?featured=true&count=${this.fetch_limit}`
         return this.apiUnsplash.get(reqUrl)
           .then(({data}) => {
             console.info('🎨✅ Unsplash: Fetching random images from the UnsplashAPI', 'succeeded', data)
@@ -90,7 +94,7 @@ export default {
             this.images = results
             this.total_images = data.length
             this.total_pages = null
-            sessionStorage.setItem('unsplash_random', results)
+            sessionStorage.setItem('unsplash_random', JSON.stringify(results))
           })
           .catch(err => console.warn('🎨❌ Unsplash: Fetching random images from the UnsplashAPI', 'failed', err))
       }
