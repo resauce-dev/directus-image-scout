@@ -25,12 +25,11 @@ export default {
 
 <style lang="scss" scoped>
 .v-chip-list {
-  padding: var(--v-card-padding);
-  padding-top: calc(var(--v-card-padding) * -2);
+  margin: var(--v-card-padding) 0;
 }
 .v-chip-list::v-deep .v-chip {
   text-transform: capitalize;
-  color: inherit;
+  color: var(--v-badge-color);
   margin: 5px;
 }
 </style>

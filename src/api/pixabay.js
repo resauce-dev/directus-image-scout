@@ -10,27 +10,23 @@ export default {
       timeout: 1000,
     });
     return {
-      imageApi: api,
+      pixabayApi: api,
       images: null,
-      total_pages: null,
-      total_images: null,
+      countOfPages: null,
+      countOfImages: null,
       fetch_limit: 30,
       request_time: 0,
-      provider: {
-        name: 'Pixabay',
-        url: 'https://pixabay.com'
-      }
     }
   },
   created() {
     console.info('🎨✅ Pixabay: Loaded!')
   },
   methods: {
-    fetchPhotos(search_term, current_page) {
+    pixabayFetchPhotos(search_term, current_page) {
       var timerStart = performance.now()
       console.info(`🎨🕒 Pixabay: Fetching search for "${search_term}" on page ${current_page}`, 'pending')
       const reqUrl = `/?key=${pixabay_key}&per_page=${this.fetch_limit}&page=${current_page}&q=${search_term}`
-      return this.imageApi.get(reqUrl)
+      return this.pixabayApi.get(reqUrl)
         .then(({data}) => {
           console.info(`🎨✅ Pixabay: Fetching search for "${search_term}" on page ${current_page}`, 'succeeded', data)
           let results = []
@@ -46,25 +42,25 @@ export default {
             results.push(image)
           })
           this.images = results
-          this.total_images = data.totalHits
-          this.total_pages = Math.round(data.totalHits / this.fetch_limit)
+          this.countOfImages = data.totalHits
+          this.countOfPages = Math.round(data.totalHits / this.fetch_limit)
         })
         .catch(err => console.warn(`🎨❌ Pixabay: Fetched search for "${search_term}" on page ${current_page}`, 'failed', err))
         .then(() => {
           var timerEnd = performance.now()
-          this.request_time = timerEnd-timerStart
+          this.request_time = parseFloat(timerEnd-timerStart/1000).toFixed(12)
         })
     },
-    fetchRandomPhotos() {
+    pixabayFetchRandomPhotos() {
       let random;
-      if(random = sessionStorage.getItem('random_images')) {
+      if(random = sessionStorage.getItem('pixabay_random_images')) {
         console.info('🎨🕒 Pixabay: Fetching random images from the sessionStorage', 'pending')
         return new Promise( (resolve, reject) => {
           let data = JSON.parse(random)
           try {
             this.images = data
-            this.total_images = data.length
-            this.total_pages = null
+            this.countOfImages = data.length
+            this.countOfPages = null
           } catch (error) { 
             reject(error) 
           }
@@ -75,7 +71,7 @@ export default {
       } else {
         console.info('🎨 Pixabay: Fetching random images from the PixabayAPI')
         const reqUrl = `/?key=${pixabay_key}&per_page=${this.fetch_limit}`
-        return this.imageApi.get(reqUrl)
+        return this.pixabayApi.get(reqUrl)
           .then(({data}) => {
             console.info('🎨✅ Pixabay: Fetching random images from the PixabayAPI', 'succeeded', data)
             let results = []
@@ -91,9 +87,9 @@ export default {
               results.push(image)
             })
             this.images = results
-            this.total_images = data.totalHits
-            this.total_pages = null
-            sessionStorage.setItem('random_images', JSON.stringify(results))
+            this.countOfImages = data.totalHits
+            this.countOfPages = null
+            sessionStorage.setItem('pixabay_random_images', JSON.stringify(results))
           })
           .catch(err => console.warn('🎨❌ Pixabay: Fetching random images from the PixabayAPI', 'failed', err))
       }

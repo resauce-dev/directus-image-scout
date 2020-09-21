@@ -17,24 +17,36 @@
         Please wait while we process your request...
       </v-fullpage-loader>
 
-      <div class="search">
-        <v-input 
-          v-model="search" 
-          placeholder="Search for image keywords..." 
-          @keyup.enter="getPhotos(search)"
-        >
-          <template v-slot:append>
-            <v-icon name="search"></v-icon>
-          </template>
-        </v-input>
-        <p v-if="total_pages" class="search-detail">
-          {{total_images}} results for "{{last_search_term}}" ({{request_time/1000}} seconds)
+      <div>
+        <div class="header-search-area">
+          <v-input 
+            v-model="search"
+            class="header-search--bar" 
+            placeholder="Search for image keywords..." 
+            @keyup.enter="getPhotos(search, selectedProvider)"
+          >
+            <template v-slot:append>
+              <v-icon name="search"></v-icon>
+            </template>
+          </v-input>
+          <div class="header-search--provider">
+            <v-select v-model="selectedProvider" :items="providers" />
+          </div>
+        </div>
+        <p v-if="countOfPages" class="header-search-detail">
+          {{lastProvider.text}} returned {{countOfImages}} results for "{{last_used_search_term}}" in {{request_time}} seconds
         </p>
       </div>
+      
+      <v-chip-list 
+        v-if="search_history && search_history.length > 0" 
+        :chips="search_history"
+        @click="term => getPhotos(term, last_used_provider)">
+      </v-chip-list>
 
-      <div v-if="images && images.length > 0">
+      <div class="image-container" v-if="images && images.length > 0">
         <div class="image-grid" v-if="images && images.length > 0">
-          <v-card v-for="(image, i) in images" :key="'image_'+i">
+          <v-card v-for="(image, i) in images" :key="`image_${image.url_thumb}`">
             <img :src="image.url_thumb" :alt="image.description">
             <div class="v-card-details">
               <v-card-title>
@@ -46,7 +58,7 @@
               <v-chip-list 
                 v-if="image.tags" 
                 :chips="image.tags"
-                @click="tag => getPhotos(tag)">
+                @click="term => getPhotos(term, last_used_provider)">
               </v-chip-list>
               <v-card-actions>
                 <v-button 
@@ -75,18 +87,18 @@
           </v-card>
         </div>
 
-        <div class="v-paginator" v-if="total_pages && total_pages > 1">
+        <div class="v-paginator" v-if="countOfPages && countOfPages > 1">
           <v-pagination 
             v-model="current_page" 
-            :length="total_pages" 
+            :length="countOfPages" 
             :total-visible="5" 
             :show-first-last="true"
-            @input="newPage => getPhotos(last_search_term, newPage)"></v-pagination>
+            @input="newPage => getPhotos(last_used_search_term, last_used_provider, newPage)"></v-pagination>
         </div>
         
         <p class="api-supplier">
          Images provided by 
-          <a :href="provider.url" target="_BLANK">{{provider.name}}</a>
+          <a :href="lastProvider.url" target="_BLANK">{{lastProvider.text}}</a>
         </p>
 
       </div>
@@ -107,27 +119,47 @@
 import VFullpageLoader from './components/VFullpageLoader.vue';
 import VChipList from './components/VChipList.vue';
 
-import apiProvider from './api/unsplash.js';
 import apiDirectus from './api/directus.js';
 
+import providerUnsplash from './api/unsplash.js';
+import providerPixabay from './api/pixabay.js';
+import providerGiphy from './api/giphy.js';
+
 export default {
-  name: 'unsplash',
+  name: 'search-image-library',
   components: {
     VFullpageLoader, 
     VChipList
   },
   mixins: [
-    apiProvider,
+    providerUnsplash,
+    providerPixabay,
+    providerGiphy,
     apiDirectus
   ],
   props: ['value'],
   data() {
     return {
       search: '',
-      last_search_term: '',
+      last_used_search_term: '',
+      last_used_provider: null,
       current_page: 1,
       isModalOpen: false,
-      processing: false
+      processing: false,
+      selectedProvider: 'unsplash',
+      providers: [
+        { text: 'Unsplash', value: 'unsplash', url: 'https://unsplash.com' },
+        { text: 'Pixabay', value: 'pixabay', url: 'https://pixabay.com' },
+        { text: 'Giphy', value: 'giphy', url: 'https://giphy.com' },
+      ],
+      search_history: []
+    }
+  },
+  computed: {
+    lastProvider() { 
+      return this.last_used_provider ? 
+        this.providers.find(i => i.value === this.last_used_provider) :
+        this.providers.find(i => i.value === this.selectedProvider)
     }
   },
   methods: {
@@ -140,20 +172,23 @@ export default {
           this.isModalOpen = false
         })
     },
-    getPhotos(search_term, page=1) {
+    getPhotos(search_term, provider, page=1) {
       if(!search_term) { this.images = null }
-      this.search = search_term
-      this.last_search_term = search_term
+      if(!this.search_history.includes(search_term.toLowerCase())) { 
+        this.search_history.unshift(search_term.toLowerCase()) 
+      }
+      this.search = this.last_used_search_term = search_term
+      this.selectedProvider = this.last_used_provider = provider
       this.current_page = page
 
       this.processing = true
-      this.fetchPhotos(search_term, page)
+      this[`${this.selectedProvider}FetchPhotos`](search_term, page)
         .then(() => this.processing = false)
     }
   },
   mounted() {
     this.processing = true
-    this.fetchRandomPhotos()
+    this[`${this.selectedProvider}FetchRandomPhotos`]()
       .then(() => this.processing = false)
   }
 }
@@ -170,7 +205,7 @@ export default {
   font-size: 8px;
   text-transform: uppercase;
   letter-spacing: 1px;
-  margin-top: 25px;
+  margin-top: var(--v-card-padding);
 }
 
 .icon-search {
@@ -208,19 +243,23 @@ export default {
   z-index: 1;
 }
 .v-progress-circular {
-  margin-bottom: 25px;
+  margin-bottom: var(--v-card-padding);
 }
 
-.search {
-  margin-bottom: 25px;
+.header-search-area {
+  display: flex;
 }
-.search-detail {
+.header-search-detail {
   font-size: 10px;
   color: var(--border-normal-alt);
 }
+.header-search--provider {
+  min-width: 25%;
+  margin-left: 15px;
+}
 
 .v-paginator {
-  margin: 25px auto;
+  margin: var(--v-card-padding) auto;
   margin-top: 50px;
   display: flex;
   justify-content: center;
@@ -230,6 +269,9 @@ export default {
   margin: auto;
 }
 
+.image-container {
+  margin: var(--v-card-padding) 0;
+}
 .image-grid {
   column-count: 3;
 }
