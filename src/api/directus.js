@@ -1,4 +1,4 @@
-import { access_key } from '../unsplashKeys.js'
+import { unsplash_access_key } from '../apiKeys.js'
 
 // OTHER META DATA I WANT TO PASS TO IMPORT ENDPOINT
 
@@ -21,7 +21,7 @@ export default {
     directusImportImage(url) {
       console.info('🐰🕒 Directus import selected image', 'pending');
       return this.apiDirectus.post('/files/import', {
-        url: `${url}?client_id=${access_key}`,
+        url: `${url}?client_id=${unsplash_access_key}`,
       })
       .then(({ data }) => {
         console.info('🐰✅ Directus import selected image', 'succeeded', data);

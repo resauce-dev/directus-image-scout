@@ -1,6 +1,6 @@
 import ImageModel from '../classes/ImageModel.js'
 
-import { access_key } from '../unsplashKeys.js'
+import { unsplash_access_key } from '../apiKeys.js'
 
 export default {
   inject: ['system'],
@@ -8,7 +8,7 @@ export default {
     const api = this.system.axios.create({
       baseURL: 'https://api.unsplash.com',
       timeout: 1000,
-      headers: {"Authorization" : `Client-ID ${access_key}`} // This should be removed eventually as it shouldn't be client-side
+      headers: {"Authorization" : `Client-ID ${unsplash_access_key}`} // This should be removed eventually as it shouldn't be client-side
     });
     return {
       imageApi: api,
@@ -23,7 +23,7 @@ export default {
     console.info('🎨✅ Unsplash: Loaded!')
   },
   methods: {
-    unsplashFetchPhotos(search_term, current_page) {
+    fetchPhotos(search_term, current_page) {
       var timerStart = performance.now()
       console.info(`🎨🕒 Unsplash: Fetching search for "${search_term}" on page ${current_page}`, 'pending')
       const reqUrl = `/search/photos?per_page=${this.fetch_limit}&page=${current_page}&query=${search_term}`
@@ -54,9 +54,9 @@ export default {
           this.request_time = timerEnd-timerStart
         })
     },
-    unsplashFetchRandomPhotos() {
+    fetchRandomPhotos() {
       let random;
-      if(random = sessionStorage.getItem('unsplash_random')) {
+      if(random = sessionStorage.getItem('random_images')) {
         console.info('🎨🕒 Unsplash: Fetching random images from the sessionStorage', 'pending')
         return new Promise( (resolve, reject) => {
           let data = JSON.parse(random)
@@ -94,7 +94,7 @@ export default {
             this.images = results
             this.total_images = data.length
             this.total_pages = null
-            sessionStorage.setItem('unsplash_random', JSON.stringify(results))
+            sessionStorage.setItem('random_images', JSON.stringify(results))
           })
           .catch(err => console.warn('🎨❌ Unsplash: Fetching random images from the UnsplashAPI', 'failed', err))
       }

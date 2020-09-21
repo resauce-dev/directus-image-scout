@@ -107,7 +107,7 @@
 import VFullpageLoader from './components/VFullpageLoader.vue';
 import VChipList from './components/VChipList.vue';
 
-import apiUnsplash from './api/unsplash.js';
+import apiProvider from './api/unsplash.js';
 import apiDirectus from './api/directus.js';
 
 export default {
@@ -117,7 +117,7 @@ export default {
     VChipList
   },
   mixins: [
-    apiUnsplash,
+    apiProvider,
     apiDirectus
   ],
   props: ['value'],
@@ -131,16 +131,6 @@ export default {
     }
   },
   methods: {
-    getPhotos(search_term, page=1) {
-      if(!search_term) { this.images = null }
-      this.search = search_term
-      this.last_search_term = search_term
-      this.current_page = page
-
-      this.processing = true
-      this.unsplashFetchPhotos(search_term, page)
-        .then(() => this.processing = false)
-    },
     selectImage(image) {
       this.processing = true
       this.directusImportImage(image.url_download)
@@ -149,11 +139,21 @@ export default {
           this.$emit('input', data.data.id)
           this.isModalOpen = false
         })
+    },
+    getPhotos(search_term, page=1) {
+      if(!search_term) { this.images = null }
+      this.search = search_term
+      this.last_search_term = search_term
+      this.current_page = page
+
+      this.processing = true
+      this.fetchPhotos(search_term, page)
+        .then(() => this.processing = false)
     }
   },
   mounted() {
     this.processing = true
-    this.unsplashFetchRandomPhotos()
+    this.fetchRandomPhotos()
       .then(() => this.processing = false)
   }
 }
