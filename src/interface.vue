@@ -13,10 +13,9 @@
 
     <v-modal class="v-modal" title="Unsplash Image Library" v-model="isModalOpen">
 
-      <div class="v-loader" v-if="processing">
-        <v-progress-circular x-large indeterminate></v-progress-circular>
-        <p>Please wait while we process your request...</p>
-      </div>
+      <v-fullpage-loader v-if="processing">
+        Please wait while we process your request...
+      </v-fullpage-loader>
 
       <v-input class="search" v-model="search" placeholder="Search for image keywords..." @keyup.enter="getPhotos(search)">
         <template v-slot:append>
@@ -35,16 +34,11 @@
               <v-card-subtitle v-if="image.alt_description">
                 {{image.alt_description}}
               </v-card-subtitle>
-              <div class="v-chips" v-if="image.tags">
-                <v-chip
-                  v-for="tag in image.tags.map(item => item['title'])" 
-                  :key="tag"
-                  x-small
-                  @click="getPhotos(tag)"
-                >
-                  {{ tag }}
-                </v-chip>
-              </div>
+              <v-chip-list 
+                v-if="image.tags" 
+                :chips="image.tags.map(item => item['title'])"
+                @click="tag => getPhotos(tag)">
+              </v-chip-list>
               <v-card-actions>
                 <v-button class="button--select-image" icon rounded large @click="selectImage(image)">
                   <v-icon name="save_alt"></v-icon>
@@ -78,11 +72,18 @@
 </template>
 
 <script>
+import VFullpageLoader from './components/VFullpageLoader.vue';
+import VChipList from './components/VChipList.vue';
+
 import apiUnsplash from './api/unsplash.js';
 import apiDirectus from './api/directus.js';
 
 export default {
   name: 'unsplash',
+  components: {
+    VFullpageLoader, 
+    VChipList
+  },
   mixins: [
     apiUnsplash,
     apiDirectus
@@ -250,15 +251,6 @@ export default {
   justify-content: flex-start;
   padding: var(--v-card-padding);
   padding-top: calc(var(--v-card-padding) * -2);
-}
-.v-chips {
-  padding: var(--v-card-padding);
-  padding-top: calc(var(--v-card-padding) * -2);
-}
-.v-card::v-deep .v-chip {
-  text-transform: capitalize;
-  color: inherit;
-  margin: 5px;
 }
 
 .container {
