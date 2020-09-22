@@ -72,6 +72,7 @@ export default {
         if(image.location) { model.setLocation(image.location.title) }
         model.setShareUrl(image.links.html)
         model.setAuthorUrl(image.user.links.html)
+        model.setPreviewUrl(image.urls.regular)
 
         results.push(model)
       })

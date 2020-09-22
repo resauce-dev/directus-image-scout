@@ -11,6 +11,15 @@
       </v-button>
     </div>
 
+    <v-overlay 
+      v-if="overlayImage" 
+      :active="overlayImage?true:false" 
+      @click="overlayImage=null" 
+      @keyup.esc="overlayImage=null"
+    >
+      <img class="overlay-image" :src="overlayImage.url_download">
+    </v-overlay>
+
     <v-modal class="v-modal" title="Search Image Library" v-model="isModalOpen">
 
       <v-fullpage-loader v-if="processing">
@@ -55,12 +64,21 @@
               <v-card-subtitle v-if="image.description">
                 {{image.description}}
               </v-card-subtitle>
+
               <v-chip-list 
                 v-if="image.tags" 
                 :chips="image.tags"
                 @click="term => getPhotos(term, last_used_provider)">
               </v-chip-list>
               <v-card-actions>
+                <v-button 
+                  class="button--select-image" icon rounded small 
+                  v-tooltip="'Preview Image'" instant 
+                  v-if="image.url_preview" @click="overlayImage=image"
+                >
+                  <v-icon name="aspect_ratio"></v-icon>
+                </v-button>
+
                 <v-button 
                   class="button--select-image" icon rounded small 
                   v-tooltip="'Author\'s Portfolio'" instant 
@@ -71,7 +89,7 @@
                 <v-button 
                   class="button--select-image" icon rounded large 
                   v-tooltip="'Select Image'" instant 
-                  @click="selectImage(image)"
+                  :disabled="!image.url_download" @click="selectImage(image)"
                 >
                   <v-icon name="save_alt"></v-icon>
                 </v-button>
@@ -140,6 +158,7 @@ export default {
   props: ['value'],
   data() {
     return {
+      overlayImage: null,
       search: '',
       last_used_search_term: '',
       last_used_provider: null,
@@ -211,6 +230,13 @@ export default {
 
 .display {
   display:flex;
+}
+
+.overlay-image {
+  max-height: 91vh;
+  max-width: 90vw;
+  height: auto;
+  width: auto;
 }
 
 .api-supplier {

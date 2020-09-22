@@ -63,12 +63,13 @@ export default {
           image,
           `Photo by ${image.user}`, 
           image.alt_description, 
-          image.previewURL, 
+          image.webformatURL, 
           image.imageURL 
         )
 
         if(image.tags) { model.setTags(image.tags.split(',')) }
         model.setShareUrl(image.pageURL)
+        model.setPreviewUrl(image.largeImageURL)
 
         results.push(model)
       })

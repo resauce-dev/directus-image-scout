@@ -20,6 +20,7 @@ export default class ImageModel {
     this.location = ''
     this.url_share = ''
     this.url_author = ''
+    this.url_preview = ''
   }
   /**
    * Add tags (typeof:`array`)
@@ -55,6 +56,15 @@ export default class ImageModel {
    */
   setAuthorUrl(data) {
     this.url_author = data
+    return this
+  }
+  /**
+   * Add URL of image to preview larger (typeof:`string`)
+   * 
+   * @param {String} data 
+   */
+  setPreviewUrl(data) {
+    this.url_preview = data
     return this
   }
 }
