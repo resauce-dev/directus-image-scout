@@ -62,7 +62,7 @@ export default {
 
         const model = new ImageModel(
           image,
-          image.urls.thumb, 
+          image.urls.small, 
           `${image.links.download}?client_id=${unsplash_key}`
         )
 
