@@ -1,13 +1,13 @@
 import ImageModel from '../classes/ImageModel.js'
 
-import { unsplash_access_key } from '../apiKeys.js'
+import { unsplash_key } from '../apiKeys.js'
 
 export default {
   inject: ['system'],
   data() {
     const api = this.system.axios.create({
       baseURL: 'https://api.unsplash.com',
-      headers: {"Authorization" : `Client-ID ${unsplash_access_key}`} // This should be removed eventually as it shouldn't be client-side
+      headers: {"Authorization" : `Client-ID ${unsplash_key}`} // This should be removed eventually as it shouldn't be client-side
     })
     return { api_unsplash: api }
   },
@@ -62,17 +62,17 @@ export default {
 
         const model = new ImageModel(
           image,
-          `Photo by ${image.user.name}`, 
-          image.alt_description, 
           image.urls.thumb, 
-          `${image.links.download}?client_id=${unsplash_access_key}`
+          `${image.links.download}?client_id=${unsplash_key}`
         )
 
-        if(image.tags) { model.setTags(image.tags.map(tag => tag['title'])) }
-        if(image.location) { model.setLocation(image.location.title) }
+        model.setTitle(`Photo by ${image.user.name}`)
+        model.setDescription(image.alt_description)
         model.setShareUrl(image.links.html)
         model.setAuthorUrl(image.user.links.html)
         model.setPreviewUrl(image.urls.regular)
+        if(image.tags) { model.setTags(image.tags.map(tag => tag['title'])) }
+        if(image.location) { model.setLocation(image.location.title) }
 
         results.push(model)
       })

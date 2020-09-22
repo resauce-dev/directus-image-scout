@@ -49,7 +49,7 @@ export default {
             this.images = this.giphyFormatResults(data.data)
             this.countOfImages = data.pagination.total_count
             this.countOfPages = null
-            sessionStorage.setItem('giphy_random_images', JSON.stringify(results))
+            sessionStorage.setItem('giphy_random_images', JSON.stringify(this.images))
           })
           .catch(err => console.warn('🎨❌ Giphy: Fetching random images from the api_giphy', 'failed', err))
       }
@@ -59,16 +59,15 @@ export default {
 
       data.forEach(image => {
 
-        const model = new ImageModel(
-          image,
-          image.title, 
-          image.alt_description, 
-          `https://media.giphy.com/media/${image.id}/giphy.gif`, 
-          `https://media.giphy.com/media/${image.id}/giphy.gif`, 
-        )
+        const gifUrl = `https://media.giphy.com/media/${image.id}/giphy.gif`
 
-        if(image.tags) { model.setTags(image.tags) }
+        const model = new ImageModel(image, gifUrl, gifUrl)
+        
+        model.setTitle(image.title)
+        model.setDescription(image.alt_description)
         model.setShareUrl(image.url)
+        model.setPreviewUrl(gifUrl)
+        if(image.tags) { model.setTags(image.tags) }
 
         results.push(model)
       })

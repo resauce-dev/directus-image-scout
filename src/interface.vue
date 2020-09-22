@@ -61,7 +61,7 @@
           <v-card v-for="(image, i) in images" :key="`image_${image.url_thumb}`">
             <img :src="image.url_thumb" :alt="image.description">
             <div class="v-card-details">
-              <v-card-title>
+              <v-card-title v-if="image.title">
                 {{image.title}}
               </v-card-title>
               <v-card-subtitle v-if="image.description">
@@ -141,10 +141,13 @@ import VFullpageLoader from './components/VFullpageLoader.vue';
 import VChipList from './components/VChipList.vue';
 import VImageOverlay from './components/VImageOverlay.vue';
 
+import providers from './providers.js';
+
 import apiDirectus from './api/directus.js';
 
 import providerUnsplash from './api/unsplash.js';
 import providerPixabay from './api/pixabay.js';
+import providerPexels from './api/pexels.js';
 import providerGiphy from './api/giphy.js';
 
 export default {
@@ -157,6 +160,7 @@ export default {
   mixins: [
     providerUnsplash,
     providerPixabay,
+    providerPexels,
     providerGiphy,
     apiDirectus
   ],
@@ -171,11 +175,7 @@ export default {
       isModalOpen: false,
       processing: false,
       selectedProvider: 'unsplash',
-      providers: [
-        { text: 'Unsplash', value: 'unsplash', url: 'https://unsplash.com' },
-        { text: 'Pixabay', value: 'pixabay', url: 'https://pixabay.com' },
-        { text: 'Giphy', value: 'giphy', url: 'https://giphy.com' },
-      ],
+      providers: providers,
       search_history: [],
 
       images: null,

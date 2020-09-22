@@ -2,25 +2,41 @@ export default class ImageModel {
   /**
    * 
    * @param {Object} $source 
-   * @param {String} title 
-   * @param {String} description 
    * @param {String} url_thumb 
    * @param {String} url_download 
    */
-  constructor($source, title, description, url_thumb, url_download) {
+  constructor($source, url_thumb, url_download) {
     // Requied
     this.$source = $source
-    this.title = title
-    this.description = description
     this.url_thumb = url_thumb
     this.url_download = url_download
-
+    
     // Not Required
+    this.title = ''
+    this.description = ''
     this.tags = []
     this.location = ''
     this.url_share = ''
     this.url_author = ''
     this.url_preview = ''
+  }
+  /**
+   * Add title (typeof:`array`)
+   * 
+   * @param {String} data 
+   */
+  setTitle(data) {
+    this.title = data
+    return this
+  }
+  /**
+   * Add title (typeof:`array`)
+   * 
+   * @param {String} data 
+   */
+  setDescription(data) {
+    this.description = data
+    return this
   }
   /**
    * Add tags (typeof:`array`)

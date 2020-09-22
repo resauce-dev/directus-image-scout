@@ -49,7 +49,7 @@ export default {
             this.images = this.pixabayFormatResults(data.hits)
             this.countOfImages = data.totalHits
             this.countOfPages = null
-            sessionStorage.setItem('pixabay_random_images', JSON.stringify(results))
+            sessionStorage.setItem('pixabay_random_images', JSON.stringify(this.images))
           })
           .catch(err => console.warn('🎨❌ Pixabay: Fetching random images from the api_pixabay', 'failed', err))
       }
@@ -59,17 +59,13 @@ export default {
 
       data.forEach(image => {
 
-        const model = new ImageModel(
-          image,
-          `Photo by ${image.user}`, 
-          image.alt_description, 
-          image.webformatURL, 
-          image.imageURL 
-        )
+        const model = new ImageModel(image, image.webformatURL, image.imageURL)
 
-        if(image.tags) { model.setTags(image.tags.split(',')) }
+        model.setTitle(`Photo by ${image.user}`)
+        model.setDescription(image.alt_description)
         model.setShareUrl(image.pageURL)
         model.setPreviewUrl(image.largeImageURL)
+        if(image.tags) { model.setTags(image.tags.split(',')) }
 
         results.push(model)
       })
