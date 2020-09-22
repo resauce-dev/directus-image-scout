@@ -11,14 +11,12 @@
       </v-button>
     </div>
 
-    <v-overlay 
+    <v-image-overlay 
       v-if="overlayImage" 
-      :active="overlayImage?true:false" 
-      @click="overlayImage=null" 
-      @keyup.esc="overlayImage=null"
+      :image="overlayImage" 
+      @close="overlayImage=null"
     >
-      <img class="overlay-image" :src="overlayImage.url_preview">
-    </v-overlay>
+    </v-image-overlay>
 
     <v-modal class="v-modal" title="Search Image Library" v-model="isModalOpen">
 
@@ -39,7 +37,12 @@
             </template>
           </v-input>
           <div class="header-search--provider">
-            <v-select v-model="selectedProvider" :items="providers" />
+            <v-select 
+              v-model="selectedProvider" 
+              :items="providers" 
+              @input="search.length > 0 ? getPhotos(search, selectedProvider) : getProviderFeaturedPhotos()"
+            >
+            </v-select>
           </div>
         </div>
         <p v-if="countOfPages" class="header-search-detail">
@@ -71,32 +74,32 @@
                 @click="term => getPhotos(term, last_used_provider)">
               </v-chip-list>
               <v-card-actions>
-                <v-button 
-                  class="button--select-image" icon rounded small 
-                  v-tooltip="'Preview Image'" instant 
-                  v-if="image.url_preview" @click="overlayImage=image"
+                <v-button class="v-action-button"
+                  icon rounded large instant v-tooltip="'Select Image'"
+                  :disabled="!image.url_download" 
+                  @click="selectImage(image)"
+                >
+                  <v-icon name="save_alt"></v-icon>
+                </v-button>
+                <v-button class="v-action-button"
+                  icon rounded small instant v-tooltip="'Preview Image'"
+                  v-if="image.url_preview"
+                  @click="overlayImage=image"
                 >
                   <v-icon name="aspect_ratio"></v-icon>
                 </v-button>
 
-                <v-button 
-                  class="button--select-image" icon rounded small 
-                  v-tooltip="'Author\'s Portfolio'" instant 
-                  v-if="image.url_author" :href="image.url_author" target="_BLANK"
+                <v-button class="v-action-button"
+                  icon rounded small instant v-tooltip="'Author\'s Portfolio'"
+                  v-if="image.url_author" 
+                  :href="image.url_author" target="_BLANK"
                 >
                   <v-icon name="face"></v-icon>
                 </v-button>
-                <v-button 
-                  class="button--select-image" icon rounded large 
-                  v-tooltip="'Select Image'" instant 
-                  :disabled="!image.url_download" @click="selectImage(image)"
-                >
-                  <v-icon name="save_alt"></v-icon>
-                </v-button>
-                <v-button 
-                  class="button--select-image" icon rounded small 
-                  v-tooltip="'Share Image'" instant 
-                  v-if="image.url_share" :href="image.url_share" target="_BLANK"
+                <v-button class="v-action-button"
+                  icon rounded small instant v-tooltip="'Share Image'"
+                  v-if="image.url_share" 
+                  :href="image.url_share" target="_BLANK"
                 >
                   <v-icon name="share"></v-icon>
                 </v-button>
@@ -136,6 +139,7 @@
 <script>
 import VFullpageLoader from './components/VFullpageLoader.vue';
 import VChipList from './components/VChipList.vue';
+import VImageOverlay from './components/VImageOverlay.vue';
 
 import apiDirectus from './api/directus.js';
 
@@ -147,7 +151,8 @@ export default {
   name: 'search-image-library',
   components: {
     VFullpageLoader, 
-    VChipList
+    VChipList,
+    VImageOverlay
   },
   mixins: [
     providerUnsplash,
@@ -216,12 +221,15 @@ export default {
           const timerEnd = performance.now()
           this.request_time = parseFloat((timerEnd-timerStart)/1000).toFixed(12)
         })
+    },
+    getProviderFeaturedPhotos() {
+      this.processing = true
+      this[`${this.selectedProvider}FetchRandomPhotos`]()
+        .then(() => this.processing = false)
     }
   },
   mounted() {
-    this.processing = true
-    this[`${this.selectedProvider}FetchRandomPhotos`]()
-      .then(() => this.processing = false)
+    this.getProviderFeaturedPhotos()
   }
 }
 </script>
@@ -230,13 +238,6 @@ export default {
 
 .display {
   display:flex;
-}
-
-.overlay-image {
-  max-height: 91vh;
-  max-width: 90vw;
-  height: auto;
-  width: auto;
 }
 
 .api-supplier {
@@ -251,7 +252,7 @@ export default {
   color: var(--background-normal);
 }
 
-.button--select-image {
+.v-action-button {
   --v-button-color: var(--primary-175);
   --v-button-color-hover: var(--primary);
   --v-button-background-color: var(--background-normal);
@@ -299,7 +300,7 @@ export default {
 
 .v-paginator {
   margin: var(--v-card-padding) auto;
-  margin-top: 50px;
+  margin-top: calc(var(--v-card-padding) * 2);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -345,6 +346,7 @@ export default {
   background: #00000066;
   height: 100%;
   width: 100%;
+  padding: var(--v-card-padding);
 
   display: flex;
   flex-direction: column;
