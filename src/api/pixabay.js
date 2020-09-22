@@ -17,7 +17,7 @@ export default {
       return this.api_pixabay.get(reqUrl)
         .then(({data}) => {
           console.info(`🎨✅ Pixabay: Fetching search for "${search_term}" on page ${current_page}`, 'succeeded', data)
-          this.images = this.images = this.pixabayFormatResults(results)
+          this.images = this.images = this.pixabayFormatResults(data.hits)
           this.countOfImages = data.totalHits
           this.countOfPages = Math.round(data.totalHits / this.fetch_limit)
         })
@@ -46,7 +46,7 @@ export default {
         return this.api_pixabay.get(reqUrl)
           .then(({data}) => {
             console.info('🎨✅ Pixabay: Fetching random images from the api_pixabay', 'succeeded', data)
-            this.images = this.pixabayFormatResults(results)
+            this.images = this.pixabayFormatResults(data.hits)
             this.countOfImages = data.totalHits
             this.countOfPages = null
             sessionStorage.setItem('pixabay_random_images', JSON.stringify(results))

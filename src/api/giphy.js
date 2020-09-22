@@ -17,7 +17,7 @@ export default {
       return this.api_giphy.get(reqUrl)
         .then(({data}) => {
           console.info(`🎨✅ Giphy: Fetching search for "${search_term}" on page ${current_page}`, 'succeeded', data)
-          this.images = this.giphyFormatResults(results)
+          this.images = this.giphyFormatResults(data.data)
           this.countOfImages = data.pagination.total_count
           this.countOfPages = Math.round(data.pagination.total_count / this.fetch_limit)
         })
@@ -46,7 +46,7 @@ export default {
         return this.api_giphy.get(reqUrl)
           .then(({data}) => {
             console.info('🎨✅ Giphy: Fetching random images from the api_giphy', 'succeeded', data)
-            this.images = this.giphyFormatResults(results)
+            this.images = this.giphyFormatResults(data.data)
             this.countOfImages = data.pagination.total_count
             this.countOfPages = null
             sessionStorage.setItem('giphy_random_images', JSON.stringify(results))
