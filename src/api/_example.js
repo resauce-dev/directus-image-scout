@@ -1,4 +1,4 @@
-import { pexels_key } from '../apiKeys.js'
+import { myprovidername_key } from '../apiKeys.js'
 
 import ImageModel from '../classes/ImageModel.js'
 
@@ -6,29 +6,29 @@ export default {
   inject: ['system'],
   data() {
     const api = this.system.axios.create({
-      baseURL: 'https://api.pexels.com/v1',
-      headers: {"Authorization" : `${pexels_key}`}
+      baseURL: 'https://api.myprovidername.com/v1',
+      headers: {"Authorization" : `${myprovidername_key}`}
     })
-    return { api_pexels: api }
+    return { api_myprovidername: api }
   },
   methods: {
-    pexelsUrlSearch(search_term, current_page) {
+    myprovidernameUrlSearch(search_term, current_page) {
       return `/search?per_page=${this.fetch_limit}&page=${this.current_page}&query=${search_term}`
     },
-    pexelsUrlFeatured(){
+    myprovidernameUrlFeatured(){
       return `/curated?per_page=${this.fetch_limit}`
     },
-    pexelsProcessSearchResponse(data) {
-      this.images = this.pexelsFormatResults(data.photos)
+    myprovidernameProcessSearchResponse(data) {
+      this.images = this.myprovidernameFormatResults(data.photos)
       this.countOfImages = data.total_results
-      this.countOfPages = Math.round(data.total_results / this.fetch_limit)
+      this.countOfPages = Math.round(data.pagination.total_count / this.fetch_limit)
     },
-    pexelsProcessFeaturedResponse(data) {
-      this.images = this.pexelsFormatResults(data.photos)
+    myprovidernameProcessFeaturedResponse(data) {
+      this.images = this.myprovidernameFormatResults(data.photos)
       this.countOfImages = null
       this.countOfPages = null
     },
-    pexelsFormatResults(data) {
+    myprovidernameFormatResults(data) {
       let results = []
       data.forEach(image => {
         const model = new ImageModel(image, image.src.medium,  image.src.original)

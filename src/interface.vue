@@ -30,7 +30,7 @@
             v-model="search"
             class="header-search--bar" 
             placeholder="Search for image keywords..." 
-            @keyup.enter="getPhotos(search, selectedProvider)"
+            @keyup.enter="getPhotos(search, providerSelected)"
           >
             <template v-slot:append>
               <v-icon name="search"></v-icon>
@@ -38,9 +38,9 @@
           </v-input>
           <div class="header-search--provider">
             <v-select 
-              v-model="selectedProvider" 
-              :items="providers" 
-              @input="search.length > 0 ? getPhotos(search, selectedProvider) : getProviderFeaturedPhotos()"
+              v-model="providerSelected" 
+              :items="providerList" 
+              @input="search.length > 0 ? getPhotos(search, providerSelected) : getProviderFeaturedPhotos()"
             >
             </v-select>
           </div>
@@ -138,10 +138,8 @@
 
 <script>
 import VFullpageLoader from './components/VFullpageLoader.vue';
-import VChipList from './components/VChipList.vue';
 import VImageOverlay from './components/VImageOverlay.vue';
-
-import providers from './providers.js';
+import VChipList from './components/VChipList.vue';
 
 import apiDirectus from './api/directus.js';
 
@@ -149,19 +147,21 @@ import providerUnsplash from './api/unsplash.js';
 import providerPixabay from './api/pixabay.js';
 import providerPexels from './api/pexels.js';
 import providerGiphy from './api/giphy.js';
+import providerBase from './api/base.js';
 
 export default {
   name: 'search-image-library',
   components: {
     VFullpageLoader, 
+    VImageOverlay,
     VChipList,
-    VImageOverlay
   },
   mixins: [
     providerUnsplash,
     providerPixabay,
     providerPexels,
     providerGiphy,
+    providerBase,
     apiDirectus
   ],
   props: ['value'],
@@ -174,8 +174,6 @@ export default {
       current_page: 1,
       isModalOpen: false,
       processing: false,
-      selectedProvider: 'unsplash',
-      providers: providers,
       search_history: [],
 
       images: null,
@@ -188,8 +186,8 @@ export default {
   computed: {
     lastProvider() { 
       return this.last_used_provider ? 
-        this.providers.find(i => i.value === this.last_used_provider) :
-        this.providers.find(i => i.value === this.selectedProvider)
+        this.providerList.find(i => i.value === this.last_used_provider) :
+        this.providerList.find(i => i.value === this.providerSelected)
     }
   },
   methods: {
@@ -204,18 +202,19 @@ export default {
     },
     getPhotos(search_term, provider, page=1) {
       if(!search_term) { this.images = null }
-      if(!this.search_history.includes(search_term.toLowerCase())) { 
+      if(search_term.length < 1) { return this.getProviderFeaturedPhotos() }
+
+      if(search_term.length > 0 && !this.search_history.includes(search_term.toLowerCase())) { 
         this.search_history.unshift(search_term.toLowerCase()) 
       }
-      this.search = this.last_used_search_term = search_term
-      this.selectedProvider = this.last_used_provider = provider
-      this.current_page = page
 
-      //
+      this.search = this.last_used_search_term = search_term
+      this.providerSelected = this.last_used_provider = provider
+      this.current_page = page
 
       this.processing = true
       const timerStart = performance.now()
-      this[`${this.selectedProvider}FetchPhotos`](search_term, page)
+      this.getSearch(search_term, page)
         .then(() => {
           this.processing = false
           const timerEnd = performance.now()
@@ -224,7 +223,7 @@ export default {
     },
     getProviderFeaturedPhotos() {
       this.processing = true
-      this[`${this.selectedProvider}FetchRandomPhotos`]()
+      this.getFeatured()
         .then(() => this.processing = false)
     }
   },
@@ -245,7 +244,7 @@ export default {
   font-size: 8px;
   text-transform: uppercase;
   letter-spacing: 1px;
-  margin-top: var(--v-card-padding);
+  margin-top: calc(var(--v-card-padding) * 2);
 }
 
 .icon-search {
