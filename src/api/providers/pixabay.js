@@ -1,6 +1,6 @@
-import { pixabay_key } from '../apiKeys.js'
+import { pixabay_key } from '../../apiKeys.js'
 
-import ImageModel from '../classes/ImageModel.js'
+import ImageModel from '../../classes/ImageModel.js'
 
 export default {
   inject: ['system'],

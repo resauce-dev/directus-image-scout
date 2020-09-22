@@ -46,7 +46,7 @@
           </div>
         </div>
         <p v-if="countOfPages" class="header-search-detail">
-          {{lastProvider.text}} returned {{countOfImages.toLocaleString()}} results for "{{last_used_search_term}}" in {{request_time}} seconds
+          {{providerLastSelected.text}} returned {{countOfImages.toLocaleString()}} results for "{{last_used_search_term}}" in {{request_time}} seconds
         </p>
       </div>
       
@@ -119,7 +119,7 @@
         
         <p class="api-supplier">
          Images provided by 
-          <a :href="lastProvider.url" target="_BLANK">{{lastProvider.text}}</a>
+          <a :href="providerLastSelected.url" target="_BLANK">{{providerLastSelected.text}}</a>
         </p>
 
       </div>
@@ -141,13 +141,12 @@ import VFullpageLoader from './components/VFullpageLoader.vue';
 import VImageOverlay from './components/VImageOverlay.vue';
 import VChipList from './components/VChipList.vue';
 
+import providerUnsplash from './api/providers/unsplash.js';
+import providerPixabay from './api/providers/pixabay.js';
+import providerPexels from './api/providers/pexels.js';
+import providerGiphy from './api/providers/giphy.js';
+import providerBase from './api/providers/base.js';
 import apiDirectus from './api/directus.js';
-
-import providerUnsplash from './api/unsplash.js';
-import providerPixabay from './api/pixabay.js';
-import providerPexels from './api/pexels.js';
-import providerGiphy from './api/giphy.js';
-import providerBase from './api/base.js';
 
 export default {
   name: 'search-image-library',
@@ -184,7 +183,7 @@ export default {
     }
   },
   computed: {
-    lastProvider() { 
+    providerLastSelected() { 
       return this.last_used_provider ? 
         this.providerList.find(i => i.value === this.last_used_provider) :
         this.providerList.find(i => i.value === this.providerSelected)

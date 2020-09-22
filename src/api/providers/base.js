@@ -1,6 +1,6 @@
-import providers from '../providers.js';
+import providers from '../../providers.js';
 
-import QueryCache from '../classes/QueryCache.js'  
+import QueryCache from '../../classes/QueryCache.js'  
 
 export default {
   data() {
