@@ -17,7 +17,7 @@
       @click="overlayImage=null" 
       @keyup.esc="overlayImage=null"
     >
-      <img class="overlay-image" :src="overlayImage.url_download">
+      <img class="overlay-image" :src="overlayImage.url_preview">
     </v-overlay>
 
     <v-modal class="v-modal" title="Search Image Library" v-model="isModalOpen">
