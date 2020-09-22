@@ -1,18 +1,18 @@
 export default {
   inject: ['system'],
   methods: {
-    directusImportImage(download_url) {
+    directusImportImage(image) {
       console.info('🐰🕒 Directus import selected image', 'pending');
       return this.system.api.post('/files/import', {
         data: {
-          tags: JSON.stringify(['foo','bar']),
-          location: 'location',
-          description: 'example',
+          tags: JSON.stringify(image.tags),
+          location: image.location,
+          description: image.description,
+          title: image.title,
           // type: '',
-          title: "COVID-19",
-          filename_download: "corona-virus.jpg",
+          // filename_download: 'image.jpg',
         },
-        url: download_url,
+        url: image.url_download,
       })
       .then(({ data }) => {
         console.info('🐰✅ Directus import selected image', 'succeeded', data);

@@ -34,7 +34,7 @@
           </div>
         </div>
         <p v-if="countOfPages" class="header-search-detail">
-          {{lastProvider.text}} returned {{countOfImages}} results for "{{last_used_search_term}}" in {{request_time}} seconds
+          {{lastProvider.text}} returned {{countOfImages.toLocaleString()}} results for "{{last_used_search_term}}" in {{request_time}} seconds
         </p>
       </div>
       
@@ -171,7 +171,7 @@ export default {
   methods: {
     selectImage(image) {
       this.processing = true
-      this.directusImportImage(image.url_download)
+      this.directusImportImage(image)
         .then((data) => {
           this.processing = false
           this.$emit('input', data.data.id)

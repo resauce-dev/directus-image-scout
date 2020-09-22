@@ -17,20 +17,7 @@ export default {
       return this.api_giphy.get(reqUrl)
         .then(({data}) => {
           console.info(`🎨✅ Giphy: Fetching search for "${search_term}" on page ${current_page}`, 'succeeded', data)
-          let results = []
-          data.data.forEach(res => {
-            const image = new ImageModel(
-              res,
-              res.title, 
-              res.alt_description, 
-              `https://media.giphy.com/media/${res.id}/giphy.gif`, 
-              `https://media.giphy.com/media/${res.id}/giphy.gif`, 
-              res.url
-            )
-            if(res.tags) { image.setTags(res.tags) }
-            results.push(image)
-          })
-          this.images = results
+          this.images = this.giphyFormatResults(results)
           this.countOfImages = data.pagination.total_count
           this.countOfPages = Math.round(data.pagination.total_count / this.fetch_limit)
         })
@@ -59,26 +46,34 @@ export default {
         return this.api_giphy.get(reqUrl)
           .then(({data}) => {
             console.info('🎨✅ Giphy: Fetching random images from the api_giphy', 'succeeded', data)
-            let results = []
-            data.data.forEach(res => {
-              const image = new ImageModel(
-                res,
-                res.title, 
-                res.alt_description, 
-                `https://media.giphy.com/media/${res.id}/giphy.gif`, 
-                `https://media.giphy.com/media/${res.id}/giphy.gif`, 
-                res.url
-              )
-              if(res.tags) { image.setTags(res.tags) }
-              results.push(image)
-            })
-            this.images = results
+            this.images = this.giphyFormatResults(results)
             this.countOfImages = data.pagination.total_count
             this.countOfPages = null
             sessionStorage.setItem('giphy_random_images', JSON.stringify(results))
           })
           .catch(err => console.warn('🎨❌ Giphy: Fetching random images from the api_giphy', 'failed', err))
       }
+    },
+    giphyFormatResults(data) {
+      let results = []
+
+      data.forEach(image => {
+
+        const model = new ImageModel(
+          res,
+          res.title, 
+          res.alt_description, 
+          `https://media.giphy.com/media/${res.id}/giphy.gif`, 
+          `https://media.giphy.com/media/${res.id}/giphy.gif`, 
+        )
+
+        if(res.tags) { image.setTags(res.tags) }
+        image.setShareUrl(res.url)
+
+        results.push(model)
+      })
+
+      return results
     }
   }
 }

@@ -17,19 +17,7 @@ export default {
       return this.api_pixabay.get(reqUrl)
         .then(({data}) => {
           console.info(`🎨✅ Pixabay: Fetching search for "${search_term}" on page ${current_page}`, 'succeeded', data)
-          let results = []
-          data.hits.forEach(res => {
-            const image = new ImageModel(
-              res,
-              `Photo by ${res.user}`, 
-              res.alt_description, 
-              res.previewURL, 
-              res.imageURL, 
-            )
-            if(res.tags) { image.setTags(res.tags.split(',')) }
-            results.push(image)
-          })
-          this.images = results
+          this.images = this.images = this.pixabayFormatResults(results)
           this.countOfImages = data.totalHits
           this.countOfPages = Math.round(data.totalHits / this.fetch_limit)
         })
@@ -58,25 +46,34 @@ export default {
         return this.api_pixabay.get(reqUrl)
           .then(({data}) => {
             console.info('🎨✅ Pixabay: Fetching random images from the api_pixabay', 'succeeded', data)
-            let results = []
-            data.hits.forEach(res => {
-              const image = new ImageModel(
-                res,
-                `Photo by ${res.user}`, 
-                res.alt_description, 
-                res.previewURL, 
-                res.imageURL, 
-              )
-              if(res.tags) { image.setTags(res.tags.split(',')) }
-              results.push(image)
-            })
-            this.images = results
+            this.images = this.pixabayFormatResults(results)
             this.countOfImages = data.totalHits
             this.countOfPages = null
             sessionStorage.setItem('pixabay_random_images', JSON.stringify(results))
           })
           .catch(err => console.warn('🎨❌ Pixabay: Fetching random images from the api_pixabay', 'failed', err))
       }
+    },
+    pixabayFormatResults(data) {
+      let results = []
+
+      data.forEach(image => {
+
+        const model = new ImageModel(
+          res,
+          `Photo by ${res.user}`, 
+          res.alt_description, 
+          res.previewURL, 
+          res.imageURL 
+        )
+
+        if(res.tags) { image.setTags(res.tags.split(',')) }
+        image.setShareUrl(res.pageURL)
+
+        results.push(model)
+      })
+
+      return results
     }
   }
 }

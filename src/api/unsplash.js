@@ -18,21 +18,7 @@ export default {
       return this.api_unsplash.get(reqUrl)
         .then(({data}) => {
           console.info(`🎨✅ Unsplash: Fetching search for "${search_term}" on page ${current_page}`, 'succeeded', data)
-          let results = []
-          data.results.forEach(res => {
-            const image = new ImageModel(
-              res,
-              `Photo by ${res.user.name}`, 
-              res.alt_description, 
-              res.urls.thumb, 
-              `${res.links.download}?client_id=${unsplash_access_key}`, 
-              res.links.html,
-              res.user.links.html
-            )
-            if(res.tags) { image.setTags(res.tags.map(item => item['title'])) }
-            results.push(image)
-          })
-          this.images = results
+          this.images = this.unsplashFormatResults(data.results)
           this.countOfImages = data.total
           this.countOfPages = data.total_pages
         })
@@ -61,27 +47,36 @@ export default {
         return this.api_unsplash.get(reqUrl)
           .then(({data}) => {
             console.info('🎨✅ Unsplash: Fetching random images from the api_unsplash', 'succeeded', data)
-            let results = []
-            data.forEach(res => {
-              const image = new ImageModel(
-                res,
-                `Photo by ${res.user.name}`, 
-                res.alt_description, 
-                res.urls.thumb, 
-                res.links.download,
-                res.links.html,
-                res.user.links.html
-              )
-              if(res.tags) { image.setTags(res.tags.map(item => item['title'])) }
-              results.push(image)
-            })
-            this.images = results
+            this.images = this.unsplashFormatResults(data)
             this.countOfImages = data.length
             this.countOfPages = null
-            sessionStorage.setItem('unsplash_random_images', JSON.stringify(results))
+            sessionStorage.setItem('unsplash_random_images', JSON.stringify(this.images))
           })
           .catch(err => console.warn('🎨❌ Unsplash: Fetching random images from the api_unsplash', 'failed', err))
       }
+    },
+    unsplashFormatResults(data) {
+      let results = []
+
+      data.forEach(image => {
+
+        const model = new ImageModel(
+          image,
+          `Photo by ${image.user.name}`, 
+          image.alt_description, 
+          image.urls.thumb, 
+          `${image.links.download}?client_id=${unsplash_access_key}`
+        )
+
+        if(image.tags) { model.setTags(image.tags.map(tag => tag['title'])) }
+        if(image.location) { model.setLocation(image.location.title) }
+        model.setShareUrl(image.links.html)
+        model.setAuthorUrl(image.user.links.html)
+
+        results.push(model)
+      })
+
+      return results
     }
   }
 }
