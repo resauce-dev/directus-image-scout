@@ -60,15 +60,15 @@ export default {
       data.forEach(image => {
 
         const model = new ImageModel(
-          res,
-          `Photo by ${res.user}`, 
-          res.alt_description, 
-          res.previewURL, 
-          res.imageURL 
+          image,
+          `Photo by ${image.user}`, 
+          image.alt_description, 
+          image.previewURL, 
+          image.imageURL 
         )
 
-        if(res.tags) { image.setTags(res.tags.split(',')) }
-        image.setShareUrl(res.pageURL)
+        if(image.tags) { model.setTags(image.tags.split(',')) }
+        model.setShareUrl(image.pageURL)
 
         results.push(model)
       })

@@ -60,15 +60,15 @@ export default {
       data.forEach(image => {
 
         const model = new ImageModel(
-          res,
-          res.title, 
-          res.alt_description, 
-          `https://media.giphy.com/media/${res.id}/giphy.gif`, 
-          `https://media.giphy.com/media/${res.id}/giphy.gif`, 
+          image,
+          image.title, 
+          image.alt_description, 
+          `https://media.giphy.com/media/${image.id}/giphy.gif`, 
+          `https://media.giphy.com/media/${image.id}/giphy.gif`, 
         )
 
-        if(res.tags) { image.setTags(res.tags) }
-        image.setShareUrl(res.url)
+        if(image.tags) { model.setTags(image.tags) }
+        model.setShareUrl(image.url)
 
         results.push(model)
       })
