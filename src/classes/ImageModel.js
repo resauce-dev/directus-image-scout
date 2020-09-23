@@ -12,13 +12,34 @@ export default class ImageModel {
     this.url_download = url_download
     
     // Not Required
-    this.title = ''
-    this.description = ''
-    this.tags = []
-    this.location = ''
-    this.url_share = ''
-    this.url_author = ''
-    this.url_preview = ''
+    this.url_preview = null
+    this.attribution = null
+    this.title = null
+    this.description = null
+    this.tags = null
+    this.location = null
+    this.url_share = null
+  }
+  /**
+   * Add URL of image to preview larger (typeof:`string`)
+   * 
+   * @param {String} data 
+   */
+  setPreviewUrl(data) {
+    this.url_preview = data
+    return this
+  }
+  /**
+   * Provide attribution information
+   * 
+   * @param {String} name 
+   * @param {String} url 
+   */
+  setAttribution(name, url) {
+    this.attribution = {
+      name: name,
+      url: url
+    }
   }
   /**
    * Add title (typeof:`array`)
@@ -63,24 +84,6 @@ export default class ImageModel {
    */
   setShareUrl(data) {
     this.url_share = data
-    return this
-  }
-  /**
-   * Add URL to image author page (typeof:`string`)
-   * 
-   * @param {String} data 
-   */
-  setAuthorUrl(data) {
-    this.url_author = data
-    return this
-  }
-  /**
-   * Add URL of image to preview larger (typeof:`string`)
-   * 
-   * @param {String} data 
-   */
-  setPreviewUrl(data) {
-    this.url_preview = data
     return this
   }
 }

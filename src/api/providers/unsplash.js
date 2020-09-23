@@ -36,13 +36,16 @@ export default {
           image.urls.small, 
           `${image.links.download}?client_id=${unsplash_key}`
         )
-        model.setTitle(`Photo by ${image.user.name}`)
-        model.setDescription(image.alt_description)
-        model.setShareUrl(image.links.html)
-        model.setAuthorUrl(image.user.links.html)
+        model.setAttribution(image.user.name, image.user.links.html)
         model.setPreviewUrl(image.urls.regular)
+
         if(image.tags) { model.setTags(image.tags.map(tag => tag['title'])) }
         if(image.location) { model.setLocation(image.location.title) }
+
+        model.setTitle(image.user.name)
+        model.setDescription(image.alt_description)
+        model.setShareUrl(image.links.html)
+        
         results.push(model)
       })
       return results

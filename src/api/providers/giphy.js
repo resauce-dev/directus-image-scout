@@ -32,11 +32,15 @@ export default {
       data.forEach(image => {
         const gifUrl = `https://media.giphy.com/media/${image.id}/giphy.gif`
         const model = new ImageModel(image, gifUrl, gifUrl)
+        model.setAttribution(image.source_tld, image.source_post_url)
+        model.setPreviewUrl(gifUrl)
+
+        if(image.tags) { model.setTags(image.tags) }
+        
         model.setTitle(image.title)
         model.setDescription(image.alt_description)
         model.setShareUrl(image.url)
-        model.setPreviewUrl(gifUrl)
-        if(image.tags) { model.setTags(image.tags) }
+        
         results.push(model)
       })
       return results

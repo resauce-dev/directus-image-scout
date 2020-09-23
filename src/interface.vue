@@ -61,49 +61,29 @@
           <v-card v-for="(image, i) in images" :key="`image_${image.url_thumb}`">
             <img :src="image.url_thumb" :alt="image.description">
             <div class="v-card-details">
-              <v-card-title v-if="image.title">
-                {{image.title}}
-              </v-card-title>
-              <v-card-subtitle v-if="image.description">
-                {{image.description}}
-              </v-card-subtitle>
-
-              <v-chip-list 
-                v-if="image.tags" 
-                :chips="image.tags"
-                @click="term => getPhotos(term, last_used_provider)">
-              </v-chip-list>
-              <v-card-actions>
-                <v-button class="v-action-button"
-                  icon rounded large instant v-tooltip="'Select Image'"
+              <div>
+                <v-button class="action-button" x-small 
+                  v-if="image.attribution"
+                  :href="image.attribution.url"
+                >
+                  <v-icon name="account_circle" class="action-button-icon"></v-icon>
+                  {{image.attribution.name}} 
+                </v-button>
+              </div>
+              <div>
+                <v-button class="action-button" x-small icon
                   :disabled="!image.url_download" 
                   @click="selectImage(image)"
                 >
                   <v-icon name="save_alt"></v-icon>
                 </v-button>
-                <v-button class="v-action-button"
-                  icon rounded small instant v-tooltip="'Preview Image'"
+                <v-button class="action-button" x-small icon
                   v-if="image.url_preview"
                   @click="overlayImage=image"
                 >
-                  <v-icon name="aspect_ratio"></v-icon>
+                  <v-icon name="zoom_in"></v-icon>
                 </v-button>
-
-                <v-button class="v-action-button"
-                  icon rounded small instant v-tooltip="'Author\'s Portfolio'"
-                  v-if="image.url_author" 
-                  :href="image.url_author" target="_BLANK"
-                >
-                  <v-icon name="face"></v-icon>
-                </v-button>
-                <v-button class="v-action-button"
-                  icon rounded small instant v-tooltip="'Share Image'"
-                  v-if="image.url_share" 
-                  :href="image.url_share" target="_BLANK"
-                >
-                  <v-icon name="share"></v-icon>
-                </v-button>
-              </v-card-actions>
+              </div>
             </div>
           </v-card>
         </div>
@@ -118,7 +98,7 @@
         </div>
         
         <p class="api-supplier">
-         Images provided by 
+          Image library powered by
           <a :href="providerLastSelected.url" target="_BLANK">{{providerLastSelected.text}}</a>
         </p>
 
@@ -250,11 +230,25 @@ export default {
   color: var(--background-normal);
 }
 
-.v-action-button {
-  --v-button-color: var(--primary-175);
-  --v-button-color-hover: var(--primary);
-  --v-button-background-color: var(--background-normal);
-  --v-button-background-color-hover: var(--background-normal-alt);
+.action-button {
+  padding: 0;
+  min-width: 0;
+
+  --v-button-color: #fff;
+  --v-button-color-hover: #ffffff99;
+  --v-button-color-activated: #ffffff99;
+  --v-button-color-disabled: #ffffffaa;
+  
+  --v-button-background-color: transparent;
+  --v-button-background-color-hover: transparent;
+  --v-button-background-color-activated: transparent;
+  --v-button-background-color-disabled: transparent;
+}
+.action-button::v-deep .button.x-small {
+  padding: 0;
+}
+.action-button-icon {
+  margin-right: 5px;
 }
 
 .v-avatar {
@@ -341,17 +335,14 @@ export default {
   top: 0;
   left: 0;
   bottom: 0;
-  background: #00000066;
+  background-image: linear-gradient(0, black -25%, transparent 75%);
   height: 100%;
   width: 100%;
-  padding: var(--v-card-padding);
+  padding: calc(var(--v-card-padding) / 2);
 
   display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-  color: var(--background-highlight);
+  justify-content: space-between;
+  align-items: flex-end;
 
   transition: 0.5s;
   opacity: 0;
@@ -361,21 +352,6 @@ export default {
   transition: 0.5s;
   opacity: 1;
   pointer-events: all;
-}
-
-.v-card::v-deep .v-card-title {
-  font-size: 14px!important;
-  margin-top: 0!important;
-  color: inherit;
-}
-.v-card::v-deep .v-card-subtitle {
-  font-size: 12px!important;
-  padding: 0;
-}
-.v-card::v-deep .v-card-actions {
-  justify-content: flex-start;
-  padding: var(--v-card-padding);
-  padding-top: calc(var(--v-card-padding) * -2);
 }
 
 .container {

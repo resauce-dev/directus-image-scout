@@ -32,10 +32,13 @@ export default {
       let results = []
       data.forEach(image => {
         const model = new ImageModel(image, image.src.medium,  image.src.original)
-        model.setTitle(`Photo by ${image.photographer}`)
+        model.setAttribution(image.photographer, image.photographer_url)
+        model.setPreviewUrl(image.src.large2x)
+
+        model.setTitle(image.photographer)
         model.setDescription(image.alt_description)
         model.setShareUrl(image.url)
-        model.setPreviewUrl(image.src.large2x)
+        
         results.push(model)
       })
       return results

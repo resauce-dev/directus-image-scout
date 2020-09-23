@@ -31,11 +31,15 @@ export default {
       let results = []
       data.forEach(image => {
         const model = new ImageModel(image, image.webformatURL, image.imageURL)
-        model.setTitle(`Photo by ${image.user}`)
+        model.setAttribution(image.user, `https://pixabay.com/users/${image.user}-${image.user_id}/`)
+        model.setPreviewUrl(image.largeImageURL)
+
+        if(image.tags) { model.setTags(image.tags.split(',')) }
+
+        model.setTitle(image.user)
         model.setDescription(image.alt_description)
         model.setShareUrl(image.pageURL)
-        model.setPreviewUrl(image.largeImageURL)
-        if(image.tags) { model.setTags(image.tags.split(',')) }
+        
         results.push(model)
       })
       return results
