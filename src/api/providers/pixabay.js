@@ -34,9 +34,9 @@ export default {
         model.setAttribution(image.user, `https://pixabay.com/users/${image.user}-${image.user_id}/`)
         model.setPreviewUrl(image.largeImageURL)
 
-        model.setTitle(image.user)
+        model.setTitle(`Photo by ${image.user}`)
         model.setDescription(image.alt_description)
-        if(image.tags) { model.setTags(image.tags.split(',')) }
+        if(image.tags) { model.setTags(image.tags.split(', ')) }
         
         results.push(model)
       })

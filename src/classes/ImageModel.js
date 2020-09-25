@@ -92,12 +92,12 @@ export default class ImageModel {
    * Return the data needed to provide to Directus import
    */
   getImportData() {
-    return {
-      title: this.file_title,
-      description: this.file_description,
-      tags: JSON.stringify(this.file_tags),
-      location: this.file_location,
-      filename_download: this.file_name,
-    }
+    let data = {}
+    if(this.file_title) { data.title = this.file_title } 
+    if(this.file_description) { data.description = this.file_description } 
+    if(this.file_tags) { data.tags = JSON.stringify(this.file_tags) } 
+    if(this.file_location) { data.location = this.file_location } 
+    if(this.file_name) { data.filename_download = this.file_name } 
+    return data
   }
 }

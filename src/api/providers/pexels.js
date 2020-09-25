@@ -35,7 +35,7 @@ export default {
         model.setAttribution(image.photographer, image.photographer_url)
         model.setPreviewUrl(image.src.large2x)
 
-        model.setTitle(image.photographer)
+        model.setTitle(`Photo by ${image.photographer}`)
         model.setDescription(image.alt_description)
         
         results.push(model)

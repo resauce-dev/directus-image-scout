@@ -37,6 +37,7 @@ export default {
         model.setDescription(image.desc)
         model.setTags(image.tags)
         model.setLocation(image.location)
+        model.setFileName(image.filename)
         results.push(model)
       })
       return results

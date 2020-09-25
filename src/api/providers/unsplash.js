@@ -31,6 +31,7 @@ export default {
     unsplashFormatResults(data) {
       let results = []
       data.forEach(image => {
+        const fileName = 'unsplash_' + image.id + '.' + image.urls.full.match(/&fm=([a-z]*)/)[1]
         const model = new ImageModel(
           image,
           image.urls.small, 
@@ -39,8 +40,9 @@ export default {
         model.setAttribution(image.user.name, image.user.links.html)
         model.setPreviewUrl(image.urls.regular)
 
-        model.setTitle(image.user.name)
+        model.setTitle(`Photo by ${image.user.name}`)
         model.setDescription(image.alt_description)
+        model.setFileName(fileName)
         if(image.tags) { model.setTags(image.tags.map(tag => tag['title'])) }
         if(image.location) { model.setLocation(image.location.title) }
         
