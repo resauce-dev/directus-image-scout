@@ -31,12 +31,9 @@ export default {
     unsplashFormatResults(data) {
       let results = []
       data.forEach(image => {
-        const fileName = 'unsplash_' + image.id + '.' + image.urls.full.match(/&fm=([a-z]*)/)[1]
-        const model = new ImageModel(
-          image,
-          image.urls.small, 
-          `${image.links.download}?client_id=${unsplash_key}`
-        )
+        const fileName = image.id + '.' + image.urls.full.match(/&fm=([a-z]*)/)[1]
+        const downloadUrl = `${image.links.download}?client_id=${unsplash_key}`
+        const model = new ImageModel(image, image.urls.small, downloadUrl)
         model.setAttribution(image.user.name, image.user.links.html)
         model.setPreviewUrl(image.urls.regular)
 

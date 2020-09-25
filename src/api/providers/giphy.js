@@ -39,6 +39,7 @@ export default {
 
         model.setTitle(image.title)
         model.setDescription(image.alt_description)
+        model.setFileName(`${image.id}.gif`)
         if(image.tags) { model.setTags(image.tags) }
         
         results.push(model)
