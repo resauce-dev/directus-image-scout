@@ -28,13 +28,13 @@ export default {
     getSearch(search_term, current_page) {
       const queryUrl = this[`${this.providerSelected}UrlSearch`](search_term, current_page)
       if(this.queryCache.exists(queryUrl)) { 
-        console.info('🎨 getSearch from cache', search_term, current_page)
+        console.info('🎨 Searching cache', search_term, current_page)
         return this.fetchFromCache(queryUrl)
           .then(data => {
             return this[`${this.providerSelected}ProcessSearchResponse`](data)
           })
       }
-      console.info('🎨 getSearch from request', search_term, current_page)
+      console.info('🎨 Searching provider', search_term, current_page)
       return this[`api_${this.providerSelected}`].get(queryUrl)
         .then(({data}) => {
           this[`${this.providerSelected}ProcessSearchResponse`](data)
@@ -44,13 +44,13 @@ export default {
     getFeatured() {
       const queryUrl = this[`${this.providerSelected}UrlFeatured`]()
       if(this.queryCache.exists(queryUrl)) { 
-        console.info('🎨 getFeatured from cache')
+        console.info('🎨 Loading featured from cache')
         return this.fetchFromCache(queryUrl)
           .then(data => {
             this[`${this.providerSelected}ProcessFeaturedResponse`](data)
           }) 
       }
-      console.info('🎨 getFeatured from request')
+      console.info('🎨 Loading featured from provider')
       return this[`api_${this.providerSelected}`].get(queryUrl)
         .then(({data}) => {
           this[`${this.providerSelected}ProcessFeaturedResponse`](data)
