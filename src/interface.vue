@@ -11,13 +11,6 @@
       </v-button>
     </div>
 
-    <v-image-overlay 
-      v-if="overlayImage" 
-      :image="overlayImage" 
-      @close="overlayImage=null"
-    >
-    </v-image-overlay>
-
     <v-modal class="v-modal" title="Search Image Library" v-model="isModalOpen">
 
       <v-fullpage-loader v-if="processing">
@@ -51,37 +44,7 @@
       </div>
       
       <div class="image-container" v-if="images && images.length > 0">
-        <div class="image-grid" v-if="images && images.length > 0">
-          <v-card v-for="(image, i) in images" :key="`image_${image.url_thumb}`">
-            <img :src="image.url_thumb" :alt="image.description">
-            <div class="v-card-details">
-              <div>
-                <v-button class="action-button" x-small 
-                  v-if="image.attribution"
-                  :href="image.attribution.url"
-                >
-                  <v-icon name="account_circle" class="action-button-icon"></v-icon>
-                  {{image.attribution.name}} 
-                </v-button>
-              </div>
-              <div>
-                <v-button class="action-button" x-small icon
-                  :disabled="!image.url_download" 
-                  @click="selectImage(image)"
-                >
-                  <v-icon name="save_alt"></v-icon>
-                </v-button>
-                <v-button class="action-button" x-small icon
-                  v-if="image.url_preview"
-                  @click="overlayImage=image"
-                >
-                  <v-icon name="zoom_in"></v-icon>
-                </v-button>
-              </div>
-            </div>
-          </v-card>
-        </div>
-
+        <v-image-grid :images="images" @selection="image => selectImage(image)"></v-image-grid>
         <div class="v-paginator" v-if="countOfPages && countOfPages > 1">
           <v-pagination 
             v-model="current_page" 
@@ -90,15 +53,12 @@
             :show-first-last="true"
             @input="newPage => getPhotos(last_used_search_term, last_used_provider, newPage)"></v-pagination>
         </div>
-        
         <p class="api-supplier">
           Image library powered by
           <a :href="providerLastSelected.url" target="_BLANK">{{providerLastSelected.text}}</a>
         </p>
-
       </div>
-
-      <div class="container" v-else>
+      <div class="error-container" v-else>
         <v-info icon="image_search" title="No results" type="warning">
           Sorry, we couldn't retrieve any images for 
           you, please try to refine your search
@@ -112,7 +72,7 @@
 
 <script>
 import VFullpageLoader from './components/VFullpageLoader.vue';
-import VImageOverlay from './components/VImageOverlay.vue';
+import VImageGrid from './components/VImageGrid.vue';
 import VChipList from './components/VChipList.vue';
 
 import providerUnsplash from './api/providers/unsplash.js';
@@ -126,7 +86,7 @@ export default {
   name: 'search-image-library',
   components: {
     VFullpageLoader, 
-    VImageOverlay,
+    VImageGrid,
     VChipList,
   },
   mixins: [
@@ -140,17 +100,17 @@ export default {
   props: ['value'],
   data() {
     return {
-      overlayImage: null,
       search: '',
       last_used_search_term: '',
       last_used_provider: null,
-      current_page: 1,
+
       isModalOpen: false,
       processing: false,
 
       images: null,
       countOfPages: null,
       countOfImages: null,
+      current_page: 1,
       fetch_limit: 30,
       request_time: 0,
     }
@@ -219,27 +179,6 @@ export default {
   color: var(--background-normal);
 }
 
-.action-button {
-  padding: 0;
-  min-width: 0;
-
-  --v-button-color: #fff;
-  --v-button-color-hover: #ffffff99;
-  --v-button-color-activated: #ffffff99;
-  --v-button-color-disabled: #ffffffaa;
-  
-  --v-button-background-color: transparent;
-  --v-button-background-color-hover: transparent;
-  --v-button-background-color-activated: transparent;
-  --v-button-background-color-disabled: transparent;
-}
-.action-button::v-deep .button.x-small {
-  padding: 0;
-}
-.action-button-icon {
-  margin-right: 5px;
-}
-
 .v-avatar {
   margin-right: var(--input-padding);
 }
@@ -293,57 +232,10 @@ export default {
 .image-container {
   margin: var(--v-card-padding) 0;
 }
-.image-grid {
-  column-count: 3;
-}
 
-.container .v-card {
-  --v-card-min-width: 0;
-  --v-card-padding: 15px;
-  --v-card-background-color: var(--background-normal);
-  break-inside: avoid-column;
-  margin-bottom: 5%;
-  transition: 0.5s;
-  position: relative;
-  overflow: hidden;
 
-  img {
-    width: 100%;
-    height: auto;
-    vertical-align: middle;
-    transition: 0.5s;
-  }
 
-  &:hover {
-    transform: scale(0.975);
-  }
-}
-
-.v-card-details {
-  position: absolute;
-  top: 0;
-  left: 0;
-  bottom: 0;
-  background-image: linear-gradient(0, black -25%, transparent 75%);
-  height: 100%;
-  width: 100%;
-  padding: calc(var(--v-card-padding) / 2);
-
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-end;
-
-  transition: 0.5s;
-  opacity: 0;
-  pointer-events: none;
-}
-.v-card:hover .v-card-details{
-  transition: 0.5s;
-  opacity: 1;
-  pointer-events: all;
-}
-
-.container {
+.error-container {
   display: flex;
   justify-content: center;
   align-items: center;

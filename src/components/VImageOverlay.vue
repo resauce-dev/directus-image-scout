@@ -9,6 +9,7 @@
 
 <script>
 export default {
+  name: 'v-image-overlay',
   props: {
     image: {
       type: Object,
