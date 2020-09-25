@@ -50,12 +50,6 @@
         </p>
       </div>
       
-      <v-chip-list 
-        v-if="search_history && search_history.length > 0" 
-        :chips="search_history"
-        @click="term => getPhotos(term, last_used_provider)">
-      </v-chip-list>
-
       <div class="image-container" v-if="images && images.length > 0">
         <div class="image-grid" v-if="images && images.length > 0">
           <v-card v-for="(image, i) in images" :key="`image_${image.url_thumb}`">
@@ -153,7 +147,6 @@ export default {
       current_page: 1,
       isModalOpen: false,
       processing: false,
-      search_history: [],
 
       images: null,
       countOfPages: null,
@@ -182,10 +175,6 @@ export default {
     getPhotos(search_term, provider, page=1) {
       if(!search_term) { this.images = null }
       if(search_term.length < 1) { return this.getProviderFeaturedPhotos() }
-
-      if(search_term.length > 0 && !this.search_history.includes(search_term.toLowerCase())) { 
-        this.search_history.unshift(search_term.toLowerCase()) 
-      }
 
       this.search = this.last_used_search_term = search_term
       this.providerSelected = this.last_used_provider = provider
