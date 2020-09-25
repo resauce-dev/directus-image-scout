@@ -1,10 +1,9 @@
 <template>
   <div class="v-search-image-library">
-    
     <div class="display">
       <v-avatar class="v-avatar" x-large>
         <img v-if="value" :src="`/assets/${value}?key=system-small-cover`" />
-        <v-icon class="v-icon" v-else name="image_search"></v-icon>
+        <v-icon v-else name="image_search"></v-icon>
       </v-avatar>
       <v-button @click="isModalOpen=true" :outlined="true" :dashed="value?false:true" small>
         {{value ? 'Replace Image' : 'Browse Images'}}
@@ -12,11 +11,9 @@
     </div>
 
     <v-modal class="v-modal" title="Search Image Library" v-model="isModalOpen">
-
       <v-fullpage-loader v-if="processing">
         Please wait while we process your request...
       </v-fullpage-loader>
-
       <div>
         <div class="header-search-area">
           <v-input 
@@ -64,7 +61,6 @@
           you, please try to refine your search
         </v-info>
       </div>
-
     </v-modal>
 
   </div>
@@ -160,11 +156,14 @@ export default {
 </script>
 
 <style scoped lang="scss">
-
 .display {
   display:flex;
 }
+.v-avatar {
+  margin-right: var(--input-padding);
+}
 
+/* Modal Stuff */
 .api-supplier {
   text-align: center;
   font-size: 8px;
@@ -175,10 +174,6 @@ export default {
 
 .icon-search {
   color: var(--background-normal);
-}
-
-.v-avatar {
-  margin-right: var(--input-padding);
 }
 
 .v-modal {
