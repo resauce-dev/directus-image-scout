@@ -1,21 +1,43 @@
 <template>
   <div>
-    <v-image-overlay v-if="overlayImage" :image="overlayImage" @close="overlayImage=null" />
+    <v-image-overlay 
+      v-if="overlayImage" 
+      :image="overlayImage" 
+      @close="overlayImage=null" 
+    />
     <div class="image-grid" v-if="images && images.length > 0">
-      <v-card v-for="(image, i) in images" :key="`${i}__${image.url_thumb}`">
-        <img :src="image.url_thumb" :alt="image.description">
-        <div class="v-card-details">
+      <v-card 
+        v-for="(image, i) in images" 
+        :key="`${i}__${image.url_thumb}`"
+      >
+        <img 
+          :src="image.url_thumb" 
+          :alt="image.description"
+        >
+        <div class="card-hover-details">
           <div>
-            <v-button class="action-button" x-small v-if="image.attribution" :href="image.attribution.url">
-              <v-icon name="link" class="action-button-icon"></v-icon>
+            <v-button class="btn-action" 
+              x-small 
+              v-if="image.attribution" 
+              :href="image.attribution.url"
+            >
+              <v-icon name="link" class="btn-action-icon" />
               {{image.attribution.name}} 
             </v-button>
           </div>
           <div>
-            <v-button class="action-button" x-small icon v-if="image.url_preview" @click="overlayImage=image">
+            <v-button class="btn-action" 
+              x-small icon 
+              v-if="image.url_preview" 
+              @click="overlayImage=image"
+            >
               <v-icon name="zoom_in" />
             </v-button>
-            <v-button class="action-button" x-small icon :disabled="!image.url_download" @click="$emit('selection', image)">
+            <v-button class="btn-action" 
+              x-small icon 
+              :disabled="!image.url_download" 
+              @click="$emit('selection', image)"
+            >
               <v-icon name="save_alt" />
             </v-button>
           </div>
@@ -52,7 +74,7 @@ export default {
   column-count: 3;
 }
 
-.action-button {
+.btn-action {
   padding: 0;
   min-width: 0;
 
@@ -66,10 +88,10 @@ export default {
   --v-button-background-color-activated: transparent;
   --v-button-background-color-disabled: transparent;
 }
-.action-button::v-deep .button.x-small {
+.btn-action::v-deep .button.x-small {
   padding: 0;
 }
-.action-button-icon {
+.btn-action-icon {
   margin-right: 5px;
 }
 
@@ -95,7 +117,7 @@ export default {
   }
 }
 
-.v-card-details {
+.card-hover-details {
   position: absolute;
   top: 0;
   left: 0;
@@ -113,7 +135,7 @@ export default {
   opacity: 0;
   pointer-events: none;
 }
-.v-card:hover .v-card-details{
+.v-card:hover .card-hover-details{
   transition: 0.5s;
   opacity: 1;
   pointer-events: all;

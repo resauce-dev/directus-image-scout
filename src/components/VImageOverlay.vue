@@ -1,8 +1,5 @@
 <template>
-  <v-overlay 
-    :active="image?true:false" 
-    @click="$emit('close',image)" 
-  >
+  <v-overlay :active="image?true:false" @click="$emit('close',image)">
     <img class="image" :src="image.url_preview">
   </v-overlay>
 </template>
@@ -21,7 +18,7 @@ export default {
 
 <style scoped>
 .image {
-  max-height: 91vh;
+  max-height: 90vh;
   max-width: 90vw;
   height: auto;
   width: auto;

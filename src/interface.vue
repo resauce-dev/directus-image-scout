@@ -43,7 +43,7 @@
         </p>
       </div>
       
-      <div class="image-container" v-if="images && images.length > 0">
+      <div class="container-image" v-if="images && images.length > 0">
         <v-image-grid :images="images" @selection="image => selectImage(image)"></v-image-grid>
         <div class="v-paginator" v-if="countOfPages && countOfPages > 1">
           <v-pagination 
@@ -58,7 +58,7 @@
           <a :href="providerLastSelected.url" target="_BLANK">{{providerLastSelected.text}}</a>
         </p>
       </div>
-      <div class="error-container" v-else>
+      <div class="container-error" v-else>
         <v-info icon="image_search" title="No results" type="warning">
           Sorry, we couldn't retrieve any images for 
           you, please try to refine your search
@@ -73,7 +73,6 @@
 <script>
 import VFullpageLoader from './components/VFullpageLoader.vue';
 import VImageGrid from './components/VImageGrid.vue';
-import VChipList from './components/VChipList.vue';
 
 import providerUnsplash from './api/providers/unsplash.js';
 import providerPixabay from './api/providers/pixabay.js';
@@ -87,7 +86,6 @@ export default {
   components: {
     VFullpageLoader, 
     VImageGrid,
-    VChipList,
   },
   mixins: [
     providerUnsplash,
@@ -229,13 +227,10 @@ export default {
   margin: auto;
 }
 
-.image-container {
+.container-image {
   margin: var(--v-card-padding) 0;
 }
-
-
-
-.error-container {
+.container-error {
   display: flex;
   justify-content: center;
   align-items: center;

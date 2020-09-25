@@ -14,11 +14,12 @@ export default class ImageModel {
     // Not Required
     this.url_preview = null
     this.attribution = null
-    this.title = null
-    this.description = null
-    this.tags = null
-    this.location = null
-    this.url_share = null
+
+    this.file_title = null
+    this.file_description = null
+    this.file_tags = null
+    this.file_location = null
+    this.file_name = null
   }
   /**
    * Add URL of image to preview larger (typeof:`string`)
@@ -47,7 +48,7 @@ export default class ImageModel {
    * @param {String} data 
    */
   setTitle(data) {
-    this.title = data
+    this.file_title = data
     return this
   }
   /**
@@ -56,7 +57,7 @@ export default class ImageModel {
    * @param {String} data 
    */
   setDescription(data) {
-    this.description = data
+    this.file_description = data
     return this
   }
   /**
@@ -65,7 +66,7 @@ export default class ImageModel {
    * @param {Array} data 
    */
   setTags(data) {
-    this.tags = data
+    this.file_tags = data
     return this
   }
   /**
@@ -74,16 +75,29 @@ export default class ImageModel {
    * @param {String} data 
    */
   setLocation(data) {
-    this.url_share = data
+    this.file_location = data
     return this
   }
   /**
-   * Add URL to image source page (typeof:`string`)
+   * Add filename should have extension (typeof:`string`)
    * 
    * @param {String} data 
    */
-  setShareUrl(data) {
-    this.url_share = data
+  setFileName(data) {
+    if(!data.includes('.')) { throw "Filename should be provided an extension"}
+    this.file_name = data
     return this
+  }
+  /**
+   * Return the data needed to provide to Directus import
+   */
+  getImportData() {
+    return {
+      title: this.file_title,
+      description: this.file_description,
+      tags: JSON.stringify(this.file_tags),
+      location: this.file_location,
+      filename_download: this.file_name,
+    }
   }
 }
