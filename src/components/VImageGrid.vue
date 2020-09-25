@@ -2,12 +2,12 @@
   <div>
     <v-image-overlay v-if="overlayImage" :image="overlayImage" @close="overlayImage=null" />
     <div class="image-grid" v-if="images && images.length > 0">
-      <v-card v-for="(image, i) in images" :key="`image_${image.url_thumb}`">
+      <v-card v-for="(image, i) in images" :key="`${i}__${image.url_thumb}`">
         <img :src="image.url_thumb" :alt="image.description">
         <div class="v-card-details">
           <div>
             <v-button class="action-button" x-small v-if="image.attribution" :href="image.attribution.url">
-              <v-icon name="account_circle" class="action-button-icon"></v-icon>
+              <v-icon name="link" class="action-button-icon"></v-icon>
               {{image.attribution.name}} 
             </v-button>
           </div>

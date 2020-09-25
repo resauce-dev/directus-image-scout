@@ -30,10 +30,12 @@ export default {
     giphyFormatResults(data) {
       let results = []
       data.forEach(image => {
-        const gifUrl = `https://media.giphy.com/media/${image.id}/giphy.gif`
-        const model = new ImageModel(image, gifUrl, gifUrl)
-        model.setAttribution(image.source_tld, image.source_post_url)
-        model.setPreviewUrl(gifUrl)
+        const model = new ImageModel(image, image.images.fixed_width.url, image.images.original.url)
+
+        image.title = image.title.replace(/\s?GIF/g, '')
+
+        model.setAttribution(image.title, image.url)
+        model.setPreviewUrl(image.images.original.url)
 
         if(image.tags) { model.setTags(image.tags) }
         
