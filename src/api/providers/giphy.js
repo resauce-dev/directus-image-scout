@@ -37,11 +37,9 @@ export default {
         model.setAttribution(image.title, image.url)
         model.setPreviewUrl(image.images.original.url)
 
-        if(image.tags) { model.setTags(image.tags) }
-        
         model.setTitle(image.title)
         model.setDescription(image.alt_description)
-        model.setShareUrl(image.url)
+        if(image.tags) { model.setTags(image.tags) }
         
         results.push(model)
       })

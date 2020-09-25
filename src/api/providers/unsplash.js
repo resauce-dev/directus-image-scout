@@ -39,12 +39,10 @@ export default {
         model.setAttribution(image.user.name, image.user.links.html)
         model.setPreviewUrl(image.urls.regular)
 
-        if(image.tags) { model.setTags(image.tags.map(tag => tag['title'])) }
-        if(image.location) { model.setLocation(image.location.title) }
-
         model.setTitle(image.user.name)
         model.setDescription(image.alt_description)
-        model.setShareUrl(image.links.html)
+        if(image.tags) { model.setTags(image.tags.map(tag => tag['title'])) }
+        if(image.location) { model.setLocation(image.location.title) }
         
         results.push(model)
       })

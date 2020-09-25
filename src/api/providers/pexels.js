@@ -37,7 +37,6 @@ export default {
 
         model.setTitle(image.photographer)
         model.setDescription(image.alt_description)
-        model.setShareUrl(image.url)
         
         results.push(model)
       })

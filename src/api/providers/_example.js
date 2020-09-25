@@ -31,11 +31,12 @@ export default {
     myprovidernameFormatResults(data) {
       let results = []
       data.forEach(image => {
-        const model = new ImageModel(image, image.src.medium,  image.src.original)
-        model.setTitle(`Photo by ${image.photographer}`)
-        model.setDescription(image.alt_description)
-        model.setShareUrl(image.url)
-        model.setPreviewUrl(image.src.large2x)
+        const model = new ImageModel(image, image.src.thumbnail,  image.src.original)
+        model.setPreviewUrl(image.src.large)
+        model.setTitle(image.title)
+        model.setDescription(image.desc)
+        model.setTags(image.tags)
+        model.setLocation(image.location)
         results.push(model)
       })
       return results
