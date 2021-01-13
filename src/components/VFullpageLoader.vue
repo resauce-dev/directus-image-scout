@@ -1,5 +1,5 @@
 <template>
-  <div class="v-loader">
+  <div class="v-fullpage-loader">
     <v-progress-circular x-large indeterminate />
     <p><slot></slot></p>
   </div>
@@ -12,7 +12,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.v-loader {
+.v-fullpage-loader {
   position: absolute;
   display: flex;
   justify-content: center;
@@ -28,6 +28,6 @@ export default {
   z-index: 1;
 }
 .v-progress-circular {
-  margin-bottom: 25px;
+  margin-bottom: var(--v-card-padding);
 }
 </style>

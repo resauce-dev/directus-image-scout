@@ -1,8 +1,8 @@
 <template>
-  <div class="v-search-image-library">
+  <div :class="{'is-processing':processing}" class="v-search-image-library">
     <div class="display">
       <v-avatar class="v-avatar" x-large>
-        <img v-if="value" :src="`/assets/${value}?key=system-small-cover`" />
+        <img v-if="value" :src="`/assets/${value}?key=system-small-cover&access_token=${user_access_token}`" />
         <v-icon v-else name="image_search"></v-icon>
       </v-avatar>
       <v-button @click="isModalOpen=true" :outlined="true" :dashed="value?false:true" small>
@@ -10,58 +10,65 @@
       </v-button>
     </div>
 
-    <v-modal class="v-modal" title="Search Image Library" v-model="isModalOpen">
+    <v-drawer 
+      class="v-drawer" 
+      title="Search Image Library" 
+      v-model="isModalOpen"
+      @cancel="isModalOpen = false"
+    >
       <v-fullpage-loader v-if="processing">
         Please wait while we process your request...
       </v-fullpage-loader>
-      <div>
-        <div class="header-search-area">
-          <v-input 
-            v-model="search"
-            class="header-search--bar" 
-            placeholder="Search for image keywords..." 
-            @keyup.enter="getPhotos(search, providerSelected)"
-          >
-            <template v-slot:append>
-              <v-icon name="search"></v-icon>
-            </template>
-          </v-input>
-          <div class="header-search--provider">
-            <v-select 
-              v-model="providerSelected" 
-              :items="providerList" 
-              @input="search.length > 0 ? getPhotos(search, providerSelected) : getProviderFeaturedPhotos()"
+      <div class="drawer--content">
+        <div class="drawer--search processing-blur">
+          <div class="header-search-area">
+            <v-input 
+              v-model="search"
+              class="header-search--bar" 
+              placeholder="Search for image keywords..." 
+              @keyup.enter="getPhotos(search, providerSelected)"
             >
-            </v-select>
+              <template v-slot:append>
+                <v-icon name="search"></v-icon>
+              </template>
+            </v-input>
+            <div class="header-search--provider">
+              <v-select 
+                v-model="providerSelected" 
+                :items="providerList" 
+                @input="search.length > 0 ? getPhotos(search, providerSelected) : getProviderFeaturedPhotos()"
+              >
+              </v-select>
+            </div>
           </div>
+          <p v-if="countOfPages" class="header-search-detail">
+            {{providerLastSelected.text}} returned {{countOfImages.toLocaleString()}} results for "{{last_used_search_term}}" in {{request_time}} seconds
+          </p>
         </div>
-        <p v-if="countOfPages" class="header-search-detail">
-          {{providerLastSelected.text}} returned {{countOfImages.toLocaleString()}} results for "{{last_used_search_term}}" in {{request_time}} seconds
-        </p>
-      </div>
-      
-      <div class="container-image" v-if="images && images.length > 0">
-        <v-image-grid :images="images" @selection="image => selectImage(image)"></v-image-grid>
-        <div class="v-paginator" v-if="countOfPages && countOfPages > 1">
-          <v-pagination 
-            v-model="current_page" 
-            :length="countOfPages" 
-            :total-visible="5" 
-            :show-first-last="true"
-            @input="newPage => getPhotos(last_used_search_term, last_used_provider, newPage)"></v-pagination>
+        
+        <div class="drawer--images processing-blur" v-if="images && images.length > 0">
+          <v-image-grid :images="images" @selection="image => selectImage(image)"></v-image-grid>
+          <div class="v-paginator" v-if="countOfPages && countOfPages > 1">
+            <v-pagination 
+              v-model="current_page" 
+              :length="countOfPages" 
+              :total-visible="5" 
+              :show-first-last="true"
+              @input="newPage => getPhotos(last_used_search_term, last_used_provider, newPage)"></v-pagination>
+          </div>
+          <p class="api-supplier">
+            Image library powered by
+            <a :href="providerLastSelected.url" target="_BLANK">{{providerLastSelected.text}}</a>
+          </p>
         </div>
-        <p class="api-supplier">
-          Image library powered by
-          <a :href="providerLastSelected.url" target="_BLANK">{{providerLastSelected.text}}</a>
-        </p>
+        <div class="container-error" v-else>
+          <v-info icon="image_search" title="No results" type="warning">
+            Sorry, we couldn't retrieve any images for 
+            you, please try to refine your search
+          </v-info>
+        </div>
       </div>
-      <div class="container-error" v-else>
-        <v-info icon="image_search" title="No results" type="warning">
-          Sorry, we couldn't retrieve any images for 
-          you, please try to refine your search
-        </v-info>
-      </div>
-    </v-modal>
+    </v-drawer>
 
   </div>
 </template>
@@ -114,6 +121,9 @@ export default {
       return this.last_used_provider ? 
         this.providerList.find(i => i.value === this.last_used_provider) :
         this.providerList.find(i => i.value === this.providerSelected)
+    },
+    user_access_token() {
+      return this.system.api.defaults.headers.Authorization.replace("Bearer ", '')
     }
   },
   methods: {
@@ -176,11 +186,18 @@ export default {
   color: var(--background-normal);
 }
 
-.v-modal {
+.v-drawer {
   position: relative;
 }
+.drawer--content {
+  padding: var(--v-card-padding);
+}
 
-.v-loader {
+.is-processing .processing-blur {
+  filter: blur(3px)
+}
+
+.v-fullpage-loader {
   position: absolute;
   display: flex;
   justify-content: center;
@@ -194,9 +211,7 @@ export default {
   bottom: 0;
   background: var(--background-normal);
   z-index: 1;
-}
-.v-progress-circular {
-  margin-bottom: var(--v-card-padding);
+  opacity: 0.85;
 }
 
 .header-search-area {
@@ -222,7 +237,7 @@ export default {
   margin: auto;
 }
 
-.container-image {
+.drawer--images {
   margin: var(--v-card-padding) 0;
 }
 .container-error {
