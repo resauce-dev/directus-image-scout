@@ -17,7 +17,7 @@ export default class ImageModel {
 
     this.file_title = null
     this.file_description = null
-    this.file_tags = null
+    this.file_tags = []
     this.file_location = null
     this.file_name = null
   }
@@ -66,7 +66,7 @@ export default class ImageModel {
    * @param {Array} data 
    */
   setTags(data) {
-    this.file_tags = data
+    this.file_tags = this.file_tags.concat(data)
     return this
   }
   /**
@@ -95,9 +95,11 @@ export default class ImageModel {
     let data = {}
     if(this.file_title) { data.title = this.file_title } 
     if(this.file_description) { data.description = this.file_description } 
-    if(this.file_tags) { data.tags = JSON.stringify(this.file_tags) } 
     if(this.file_location) { data.location = this.file_location } 
     if(this.file_name) { data.filename_download = this.file_name } 
+    // Always add this tag so we know it came from our system.
+    const tags = this.file_tags.concat('resauce:image-scout', 'resauce:image-scout:xxx')
+    if(this.file_tags) { data.tags = JSON.stringify(tags) }
     return data
   }
 }
