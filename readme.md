@@ -1,4 +1,4 @@
-# Search Image Library
+# Image Scout
 
 This is an interface extension for Directus 9 that allows you to search an array 
 of online image library providers, this allows you to easily find and use the image
