@@ -37,13 +37,15 @@
               <v-select 
                 v-model="providerSelected" 
                 :items="providerList" 
+                item-value="key" 
+                item-text="name"
                 @input="search.length > 0 ? getPhotos(search, providerSelected) : getProviderFeaturedPhotos()"
               >
               </v-select>
             </div>
           </div>
           <p v-if="countOfPages" class="header-search-detail">
-            {{providerLastSelected.text}} returned {{countOfImages.toLocaleString()}} results for "{{last_used_search_term}}" in {{request_time}} seconds
+            {{providerLastSelected.name}} returned {{countOfImages.toLocaleString()}} results for "{{last_used_query}}" in {{request_time}} seconds
           </p>
         </div>
         
@@ -55,11 +57,11 @@
               :length="countOfPages" 
               :total-visible="5" 
               :show-first-last="true"
-              @input="newPage => getPhotos(last_used_search_term, last_used_provider, newPage)"></v-pagination>
+              @input="newPage => getPhotos(last_used_query, last_used_provider, newPage)"></v-pagination>
           </div>
           <p class="api-supplier">
             Image library powered by
-            <a :href="providerLastSelected.url" target="_BLANK">{{providerLastSelected.text}}</a>
+            <a :href="providerLastSelected.url" target="_BLANK">{{providerLastSelected.name}}</a>
           </p>
         </div>
         <div class="container-error" v-else>
@@ -78,32 +80,24 @@
 import VFullpageLoader from './components/VFullpageLoader.vue';
 import VImageGrid from './components/VImageGrid.vue';
 
-import providerUnsplash from './api/providers/unsplash.js';
-import providerPixabay from './api/providers/pixabay.js';
-import providerPexels from './api/providers/pexels.js';
-import providerGiphy from './api/providers/giphy.js';
-import providerBase from './api/providers/base.js';
+import apiImageScout from './api/image-scout.js';
 import apiDirectus from './api/directus.js';
 
 export default {
-  name: 'search-image-library',
+  name: 'resauce-image-scout',
   components: {
     VFullpageLoader, 
     VImageGrid,
   },
   mixins: [
-    providerUnsplash,
-    providerPixabay,
-    providerPexels,
-    providerGiphy,
-    providerBase,
+    apiImageScout,
     apiDirectus
   ],
   props: ['value'],
   data() {
     return {
       search: '',
-      last_used_search_term: '',
+      last_used_query: '',
       last_used_provider: null,
 
       isModalOpen: false,
@@ -120,8 +114,8 @@ export default {
   computed: {
     providerLastSelected() { 
       return this.last_used_provider ? 
-        this.providerList.find(i => i.value === this.last_used_provider) :
-        this.providerList.find(i => i.value === this.providerSelected)
+        this.providerList.find(i => i.key === this.last_used_provider) :
+        this.providerList.find(i => i.key === this.providerSelected)
     },
     user_access_token() {
       return this.system.api.defaults.headers.Authorization.replace("Bearer ", '')
@@ -137,18 +131,24 @@ export default {
           this.isModalOpen = false
         })
     },
-    getPhotos(search_term, provider, page=1) {
-      if(!search_term) { this.images = null }
-      if(search_term.length < 1) { return this.getProviderFeaturedPhotos() }
+    getPhotos(query, provider, page=1) {
+      if(!query) { this.images = null }
+      if(query.length < 1) { return this.getProviderFeaturedPhotos() }
 
-      this.search = this.last_used_search_term = search_term
+      this.search = this.last_used_query = query
       this.providerSelected = this.last_used_provider = provider
       this.current_page = page
 
       this.processing = true
       const timerStart = performance.now()
-      this.getSearch(search_term, page)
-        .then(() => {
+      this.getSearch(query, page)
+        .then(({data}) => {
+          console.log(data, 'search')
+          this.countOfImages = data.countOfImages
+          this.countOfPages = data.countOfPages
+          this.images = data.images
+
+
           this.processing = false
           const timerEnd = performance.now()
           this.request_time = parseFloat((timerEnd-timerStart)/1000).toFixed(12)
@@ -157,11 +157,19 @@ export default {
     getProviderFeaturedPhotos() {
       this.processing = true
       this.getFeatured()
-        .then(() => this.processing = false)
+        .then(({data}) => {
+          console.log(data, 'featured')
+          this.countOfImages = data.countOfImages
+          this.countOfPages = data.countOfPages
+          this.images = data.images
+
+
+          this.processing = false
+        })
     }
   },
   mounted() {
-    this.getProviderFeaturedPhotos()
+    this.getProviders().then(() => this.getProviderFeaturedPhotos())
   }
 }
 </script>
@@ -247,6 +255,6 @@ export default {
   align-items: center;
   text-align: center;
   flex-direction: column;
-  height: calc(100% - 20%);
+  height: calc(100vh - 30vh);
 }
 </style>
