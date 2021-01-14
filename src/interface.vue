@@ -1,5 +1,5 @@
 <template>
-  <div :class="{'is-processing':processing}" class="v-search-image-library">
+  <div :class="{'is-processing':processing}" class="v-resauce-image-scout">
     <div class="display">
       <v-avatar class="v-avatar" x-large>
         <img v-if="value" :src="`/assets/${value}?key=system-small-cover&access_token=${user_access_token}`" />
@@ -12,7 +12,8 @@
 
     <v-drawer 
       class="v-drawer" 
-      title="Search Image Library" 
+      title="Image Scout" 
+      icon="image_search"
       v-model="isModalOpen"
       @cancel="isModalOpen = false"
     >

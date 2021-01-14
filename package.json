@@ -1,5 +1,5 @@
 {
-  "name": "search-image-library",
+  "name": "resauce-image-scout",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -7,6 +7,7 @@
     "directus",
     "extension",
     "unsplash",
+    "pexels",
     "pixabay",
     "giphy",
     "image",
