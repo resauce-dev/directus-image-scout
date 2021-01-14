@@ -25,7 +25,7 @@ export default {
   right: 0;
   bottom: 0;
   background: var(--background-normal);
-  z-index: 1;
+  z-index: 10;
 }
 .v-progress-circular {
   margin-bottom: var(--v-card-padding);
