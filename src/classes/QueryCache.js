@@ -21,7 +21,7 @@ export default class QueryCache {
      * @param {String} query 
      */
     fetch(query) {
-        return JSON.parse(sessionStorage.getItem(`${this.provider}__${query}`))
+        return JSON.parse(sessionStorage.getItem(query))
     }
     /**
      * Passing in the query URL & data to save
@@ -30,6 +30,6 @@ export default class QueryCache {
      * @param {Object|Array} data 
      */
     save(query, data) {
-        return sessionStorage.setItem(`${this.provider}__${query}`, JSON.stringify(data))
+        return sessionStorage.setItem(query, JSON.stringify(data))
     }
 }
