@@ -82,8 +82,12 @@ To enable Image Scout as field in your application, follow this process:
 Before activating any provider, ensure you have agreed to their terms and usage policy. You are subject to their usage terms based on how you use these images. No contributor to this repository accepts responsibility for the use of the images. 
 
 ## Todo
-- If request for pagination page fails, the 'page' in pagination should be set back
+- Endpoint export isn't fully working. it should compile everything down.
+
+- Import is broken on unsplash, maybe all
+- Make opacity of full overlay darker so it covers more
 - Pagination currently not working
+- If request for pagination page fails, the 'page' in pagination should be set back
 - Proxy download requests so the API key is never exposed
 - Stop an image being able to be uploaded multiple times: Use Tags (extension:resauce-image-scout|provider:pexels|image_id:abxy)?
 - (look for the ID in files and if it exists, just return the UUID)
@@ -93,3 +97,4 @@ Before activating any provider, ensure you have agreed to their terms and usage 
 - Nicer animation for loading images in rather than rearranging everything, how about using the blur_hash?
 - Add loading spinner to image preview
 - Add close button to image preview
+- Fix all console errors
