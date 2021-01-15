@@ -9,7 +9,7 @@ export default [
     input: 'src/interface/index.js',
     output: {
       format: 'es',
-      file: 'dist/extensions/interfaces/resauce-image-scout/index.js'
+      file: 'dist/interfaces/resauce-image-scout/index.js'
     },
     plugins: [
       terser(),
@@ -22,14 +22,14 @@ export default [
     input: 'src/endpoints/index.js',
     output: {
       format: 'es',
-      file: 'dist/extensions/endpoints/resauce-image-scout/index.js',
+      file: 'dist/endpoints/resauce-image-scout/index.js',
     },
     plugins: [
       copy({
         targets: [
           { 
             src: 'src/endpoints/*', 
-            dest: 'dist/extensions/endpoints/resauce-image-scout'
+            dest: 'dist/endpoints/resauce-image-scout'
           }
         ]
       })
