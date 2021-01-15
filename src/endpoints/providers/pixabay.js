@@ -12,7 +12,7 @@ module.exports = class Pixabay extends Provider {
 		return {
 			images: this.formatResults(data.hits),
 			countOfImages: data.totalHits,
-			countOfPages: Math.round(data.totalHits / this.fetch_limit),
+			countOfPages: Math.round(data.totalHits / this.getFetchLimit()),
 		}
 	}
 	async getFeatured() {
