@@ -3,7 +3,6 @@ const fs = require('fs');
 
 let providers = []
 
-
 fs.readdir(providers_folder, function(err, items) {
     items.forEach(provider_name => {
 		const Provider = require(providers_folder + `/${provider_name}`)
