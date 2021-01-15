@@ -96,9 +96,35 @@ export default {
 }
 
 .container .v-card {
+  --checkerSize: 10px;
+  --checkerColor: lightgrey; /* edit me */
+  --checkerAltColor: var(--background-normal);
+  
+  background-image:
+    linear-gradient(45deg, var(--checkerColor) 25%, transparent 25%), 
+    linear-gradient(135deg, var(--checkerColor) 25%, transparent 25%),
+    linear-gradient(45deg, transparent 75%, var(--checkerColor) 75%),
+    linear-gradient(135deg, transparent 75%, var(--checkerColor) 75%);
+  background-color: var(--checkerAltColor);
+  
+  background-size: 
+    calc(2 * var(--checkerSize)) 
+    calc(2 * var(--checkerSize));
+  
+  background-position: 
+    0 0, 
+    var(--checkerSize) 0, 
+    var(--checkerSize) calc(-1 * var(--checkerSize)), 
+    0px var(--checkerSize);
+  
+  /* for fun */
+  transition-property: background-color, background-position, background-size;
+  transition-duration: 1s;
+}
+
+.container .v-card {
   --v-card-min-width: 0;
   --v-card-padding: 15px;
-  --v-card-background-color: var(--background-normal);
   break-inside: avoid-column;
   margin-bottom: 5%;
   transition: 0.5s;
