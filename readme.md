@@ -83,15 +83,17 @@ Before activating any provider, ensure you have agreed to their terms and usage 
 
 ## Todo
 - Import is broken on unsplash, maybe all
-- Pagination currently not working
-- If request for pagination page fails, the 'page' in pagination should be set back
-- Proxy download requests so the API key is never exposed
-- Stop an image being able to be uploaded multiple times: Use Tags (extension:resauce-image-scout|provider:pexels|image_id:abxy)?
-- (look for the ID in files and if it exists, just return the UUID)
-- Allow users to optionally select from their own library of images?
+- If request for pagination page fails, the 'page' in pagination should be set back?
+- Proxy download requests so the API key is never exposed || /ris/import | post{url:'xxx'}
 - If any errors, notify the user something went wrong... use propper response codes to notify error (404) and stop caching
 - Don't hide everything when processing, dim images & replace them when fresh search comes in.
 - Nicer animation for loading images in rather than rearranging everything, how about using the blur_hash?
 - Add loading spinner to image preview
 - Add close button to image preview
 - Fix all console errors
+
+### Enhance
+- Allow users to optionally select from their own library of images?
+
+- Stop an image being able to be uploaded multiple times: Use Tags (extension:resauce-image-scout|provider:pexels|image_id:abxy)?
+- (look for the ID in files and if it exists, just return the UUID)
