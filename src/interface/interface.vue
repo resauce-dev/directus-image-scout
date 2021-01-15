@@ -220,7 +220,7 @@ export default {
   bottom: 0;
   background: var(--background-normal);
   z-index: 1;
-  opacity: 0.85;
+  opacity: 0.95;
 }
 
 .header-search-area {
