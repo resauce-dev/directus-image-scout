@@ -57,7 +57,7 @@ import VImagePreview from './VImagePreview.vue';
 export default {
   name: 'v-image-grid',
   components: {
-    VImageOverlay
+    VImagePreview
   },
   props: {
     images: {
