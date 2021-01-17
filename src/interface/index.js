@@ -6,7 +6,7 @@ export default {
     description: 'Search and use images from online libraries',
     icon: 'image_search',
     component: InterfaceComponent,
-    relationship: 'm2o',
     types: ['uuid'],
-    recommendedDisplays: ['image']
+    groups: ['file', 'files'],
+    recommendedDisplays: ['image'],
 }
