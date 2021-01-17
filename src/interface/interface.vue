@@ -140,16 +140,18 @@ export default {
     selectImage(image) {
       // If only one, then only allow one item in the array, if more than one, then add to array.
       const imageId = image.id
-      const limit = 1
-      if(limit > 1) {
+      const multiple = false
+      if(multiple) {
         if(this.imagesSelected.includes(imageId)) {
           this.imagesSelected.splice(this.imagesSelected.indexOf(imageId), 1)
         } else {
           this.imagesSelected.push(imageId)
         }
       } else {
-        this.imagesSelected = []
-        if(!this.imagesSelected.includes(imageId)) {
+        if(this.imagesSelected.includes(imageId)) {
+          this.imagesSelected = []
+        } else {
+          this.imagesSelected = []
           this.imagesSelected.push(imageId)
         }
       }
