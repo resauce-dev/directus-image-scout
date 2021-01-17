@@ -17,9 +17,10 @@
           x-small 
           v-if="image.attribution" 
           :href="image.attribution.url"
+          :title="image.attribution.name"
         >
           <v-icon name="link" class="btn-action-icon" />
-          {{image.attribution.name}} 
+          <span class="attribution-link">{{image.attribution.name}}</span>
         </v-button>
       </div>
       <div>
@@ -82,9 +83,16 @@ export default {
   margin-right: 5px;
 }
 
+.attribution-link{
+  max-width: 145px;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+
 .container .v-card {
   --checkerSize: 10px;
-  --checkerColor: lightgrey; /* edit me */
+  --checkerColor: lightgrey;
   --checkerAltColor: var(--background-normal);
   
   background-image:
