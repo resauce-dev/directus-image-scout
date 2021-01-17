@@ -106,7 +106,7 @@ export default {
   mixins: [
     apiImageScout
   ],
-  props: ['value'],
+  props: ['value', 'type', 'group'],
   data() {
     return {
       search: '',
@@ -140,14 +140,13 @@ export default {
     selectImage(image) {
       // If only one, then only allow one item in the array, if more than one, then add to array.
       const imageId = image.id
-      const multiple = false
-      if(multiple) {
+      if(this.group === 'files') {
         if(this.imagesSelected.includes(imageId)) {
           this.imagesSelected.splice(this.imagesSelected.indexOf(imageId), 1)
         } else {
           this.imagesSelected.push(imageId)
         }
-      } else {
+      } else { // single file
         if(this.imagesSelected.includes(imageId)) {
           this.imagesSelected = []
         } else {
