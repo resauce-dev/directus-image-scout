@@ -3,7 +3,7 @@ import QueryCache from '../classes/QueryCache.js'
 export default {
   data() {
     return { 
-      apiImageScout: this.system.axios.create({ baseURL: '/custom/resauce-image-scout' }),
+      apiPrefix: '/custom/resauce-image-scout',
       providerList: [],
       providerSelected: null,
     }
@@ -15,7 +15,7 @@ export default {
   },
   methods: {
     getProviders() {
-      return this.apiImageScout.get('/providers')
+      return this.system.api.get(`${this.apiPrefix}/providers`)
         .then(({data}) => {
           this.providerList = data.data.filter(i => i.is_configured)
           this.providerSelected = this.providerList[0].key
@@ -33,37 +33,37 @@ export default {
       })
     },
     getSearch(query, page) {
-      const queryUrl = `/providers/${this.providerSelected}/search?query=${query}&page=${page}`
+      const queryUrl = `${this.apiPrefix}/providers/${this.providerSelected}/search?query=${query}&page=${page}`
       if(this.queryCache.exists(queryUrl)) { 
         console.info('🎨 Searching cache', query, page)
         return this.fetchFromCache(queryUrl)
           .then(data => data);
       }
       console.info('🎨 Searching provider', query, page)
-      return this.apiImageScout.get(queryUrl)
+      return this.system.api.get(queryUrl)
         .then(({data}) => {
           this.queryCache.save(queryUrl, data)
           return data
         })
     },
     getFeatured() {
-      const queryUrl = `/providers/${this.providerSelected}/featured`
+      const queryUrl = `${this.apiPrefix}/providers/${this.providerSelected}/featured`
       if(this.queryCache.exists(queryUrl)) { 
         console.info('🎨 Loading featured from cache')
         return this.fetchFromCache(queryUrl)
           .then(data => data)
       }
       console.info('🎨 Loading featured from provider')
-      return this.apiImageScout.get(queryUrl)
+      return this.system.api.get(queryUrl)
         .then(({data}) => {
           this.queryCache.save(queryUrl, data)
           return data
         })
     },
     downloadImage(image) {
-      const queryUrl = `/providers/${this.providerSelected}/download`
+      const queryUrl = `${this.apiPrefix}/providers/${this.providerSelected}/download`
       const postData = {image: image}
-      return this.apiImageScout.post(queryUrl, postData)
+      return this.system.api.post(queryUrl, postData)
         .then(({ data }) => {
           return data
         })

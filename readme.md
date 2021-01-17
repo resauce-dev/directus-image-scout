@@ -63,6 +63,7 @@ To enable a provider for your users to use, add a key-pair to the environment fi
 | API_KEY_PIXABAY='ZX3ZX3' | The key you configured to use the Pixabay API |
 | API_KEY_GIPHY='PO4PO4' | The key you configured to use the Giphy API |
 | RIS_DEFAULT_PROVIDER='UNSPLASH' | The key of the provider you would like used as default |
+| RIS_REQUIRED_AUTH=false | Set to false to use this API externally without needing Directus authentication |
 
 ## Configuring Image Scout in your collection
 
@@ -82,10 +83,9 @@ To enable Image Scout as field in your application, follow this process:
 Before activating any provider, ensure you have agreed to their terms and usage policy. You are subject to their usage terms based on how you use these images. No contributor to this repository accepts responsibility for the use of the images. 
 
 ## Todo
-- Hide the endpoints behind authentication if enabled/disabled in env
-- Import is broken on unsplash, maybe all
+- Pass through the 'group' as a default prop so I can check if group file or files is being used
+- Proxy download requests so the API key is never exposed // cant make internal requests easy right now
 - If request for pagination page fails, the 'page' in pagination should be set back?
-- Proxy download requests so the API key is never exposed || /ris/import | post{url:'xxx'}
 - If any errors, notify the user something went wrong... use propper response codes to notify error (404) and stop caching
 - Don't hide everything when processing, dim images & replace them when fresh search comes in.
 - Nicer animation for loading images in rather than rearranging everything, how about using the blur_hash?
@@ -95,6 +95,5 @@ Before activating any provider, ensure you have agreed to their terms and usage 
 
 ### Enhance
 - Allow users to optionally select from their own library of images?
-
 - Stop an image being able to be uploaded multiple times: Use Tags (extension:resauce-image-scout|provider:pexels|image_id:abxy)?
 - (look for the ID in files and if it exists, just return the UUID)
