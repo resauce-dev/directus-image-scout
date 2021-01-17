@@ -4,68 +4,38 @@
       v-if="previewImage" 
       :image="previewImage" 
       @close="previewImage=null" 
+      @keyup.esc.prevent="previewImage=null"
     />
     <div class="image-grid" v-if="images && images.length > 0">
-      <v-card 
+      <v-image
         v-for="(image, i) in images" 
         :key="`${i}__${image.url_thumb}`"
-        :class="{
-          'v-card--is-selected': selectedImage && selectedImage === image.id.toString()
-        }"
-      >
-        <img 
-          :src="image.url_thumb" 
-          :alt="image.description"
-        >
-        <v-radio name="selected" :value="image.id.toString()" v-model="selectedImage"/>
-        <div class="card-hover-details">
-          <div>
-            <v-button class="btn-action" 
-              x-small 
-              v-if="image.attribution" 
-              :href="image.attribution.url"
-            >
-              <v-icon name="link" class="btn-action-icon" />
-              {{image.attribution.name}} 
-            </v-button>
-          </div>
-          <div>
-            <v-button class="btn-action" 
-              x-small icon 
-              v-if="image.url_preview" 
-              @click="previewImage=image"
-            >
-              <v-icon name="zoom_in" />
-            </v-button>
-            <v-button class="btn-action" 
-              x-small icon 
-              :disabled="!image.url_download" 
-              @click="$emit('selection', image)"
-            >
-              <v-icon name="save_alt" />
-            </v-button>
-          </div>
-        </div>
-      </v-card>
+        :image="image"
+        :images-selected="imagesSelected"
+        @preview="previewImage=image"
+        @select="$emit('select',image)"
+      />
     </div>
   </div>
 </template>
 
 <script>
 import VImagePreview from './VImagePreview.vue';
+import VImage from './VImage.vue'
 
 export default {
   name: 'v-image-grid',
   components: {
-    VImagePreview
+    VImagePreview,
+    VImage
   },
   props: {
     images: {
       type: Array,
       required: true
     },
-    selectedImage: {
-      type: String
+    imagesSelected: {
+      type: Array
     }
   },
   data() {
@@ -77,118 +47,15 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.image-grid {
-  column-count: 3;
+.image-grid { column-count: 1; }
+
+/* Extra small devices (phones, 600px and down) */
+@media only screen and (min-width: 600px) {
+  .image-grid { column-count: 2; }
 }
 
-.btn-action {
-  padding: 0;
-  min-width: 0;
-
-  --v-button-color: #fff;
-  --v-button-color-hover: #ffffff99;
-  --v-button-color-activated: #ffffff99;
-  --v-button-color-disabled: #ffffffaa;
-  
-  --v-button-background-color: transparent;
-  --v-button-background-color-hover: transparent;
-  --v-button-background-color-activated: transparent;
-  --v-button-background-color-disabled: transparent;
-}
-.btn-action::v-deep .button.x-small {
-  padding: 0;
-}
-.btn-action-icon {
-  margin-right: 5px;
-}
-
-.container .v-card {
-  --checkerSize: 10px;
-  --checkerColor: lightgrey; /* edit me */
-  --checkerAltColor: var(--background-normal);
-  
-  background-image:
-    linear-gradient(45deg, var(--checkerColor) 25%, transparent 25%), 
-    linear-gradient(135deg, var(--checkerColor) 25%, transparent 25%),
-    linear-gradient(45deg, transparent 75%, var(--checkerColor) 75%),
-    linear-gradient(135deg, transparent 75%, var(--checkerColor) 75%);
-  background-color: var(--checkerAltColor);
-  
-  background-size: 
-    calc(2 * var(--checkerSize)) 
-    calc(2 * var(--checkerSize));
-  
-  background-position: 
-    0 0, 
-    var(--checkerSize) 0, 
-    var(--checkerSize) calc(-1 * var(--checkerSize)), 
-    0px var(--checkerSize);
-  
-  /* for fun */
-  transition-property: background-color, background-position, background-size;
-  transition-duration: 1s;
-}
-
-.container .v-card {
-  --v-card-min-width: 0;
-  --v-card-padding: 15px;
-  break-inside: avoid-column;
-  margin-bottom: 5%;
-  transition: 0.5s;
-  position: relative;
-  overflow: hidden;
-  border-radius: var(--border-radius);
-  border: 4px solid white;
-
-  img {
-    width: 100%;
-    height: auto;
-    vertical-align: middle;
-    transition: 0.5s;
-    border-radius: 0!important;
-  }
-
-  &:hover {
-    transform: scale(0.975);
-  }
-}
-
-.v-card--is-selected {
-  border-color: var(--primary-75)!important;
-}
-
-.v-radio {
-  position: absolute;
-  top: 10px;
-  left: 10px;
-}
-
-.card-hover-details {
-  position: absolute;
-  top: 0;
-  left: 0;
-  bottom: 0;
-  background-image: linear-gradient(0, black -25%, transparent 75%);
-  height: 100%;
-  width: 100%;
-  padding: calc(var(--v-card-padding) / 2);
-
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-end;
-
-  opacity: 0;
-  pointer-events: none;
-}
-.v-card:hover .card-hover-details{
-  opacity: 1;
-  pointer-events: all;
-}
-
-.v-card,
-.v-card--is-selected,
-.card-hover-details,
-.v-card:hover .card-hover-details{
-  transition: all 0.5s;
+/* Large devices (laptops/desktops, 992px and up) */
+@media only screen and (min-width: 992px) {
+  .image-grid { column-count: 3; }
 }
 </style>

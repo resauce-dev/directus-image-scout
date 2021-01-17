@@ -1,5 +1,5 @@
 <template>
-  <div :class="{'is-processing':processing}" class="v-resauce-image-scout">
+  <div class="v-resauce-image-scout">
     <div class="display">
       <v-avatar class="v-avatar" x-large>
         <img v-if="value" :src="`/assets/${value}?key=system-small-cover&access_token=${user_access_token}`" />
@@ -9,7 +9,6 @@
         {{value ? 'Replace Image' : 'Browse Images'}}
       </v-button>
     </div>
-
     <v-drawer 
       class="v-drawer" 
       title="Image Scout" 
@@ -32,7 +31,7 @@
         Please wait while we process your request...
       </v-fullpage-loader>
       <div class="drawer--content">
-        <div class="drawer--search processing-blur">
+        <div class="drawer--search">
           <div class="header-search-area">
             <v-input 
               v-model="search"
@@ -60,8 +59,12 @@
           </p>
         </div>
         
-        <div class="drawer--images processing-blur" v-if="images && images.length > 0">
-          <v-image-grid :images="images" :selected-image="selectedImageId" @selection="image => selectImage(image)"></v-image-grid>
+        <div class="drawer--images" v-if="images && images.length > 0">
+          <v-image-grid 
+            :images="images" 
+            :images-selected="imagesSelected" 
+            @select="image => selectImage(image)"
+          />
           <div class="v-paginator" v-if="countOfPages && countOfPages > 1">
             <v-pagination 
               v-model="current_page" 
@@ -113,7 +116,7 @@ export default {
       isModalOpen: false,
       processing: false,
 
-      selectedImageId: null,
+      imagesSelected: [],
 
       images: null,
       countOfPages: null,
@@ -135,15 +138,17 @@ export default {
   },
   methods: {
     selectImage(image) {
-      const imageId = image.id.toString()
-      if(imageId === this.selectedImageId) {
-        this.selectedImageId = null
+      // If only one, then only allow one item in the array, if more than one, then add to array.
+      const imageId = image.id
+      if(this.imagesSelected.includes(imageId)) {
+        this.imagesSelected.splice(this.imagesSelected.indexOf(imageId), 1)
+      } else {
+        this.imagesSelected.push(imageId)
       }
-      this.selectedImageId = imageId
     },
     downloadSelected() {
       this.processing = true
-      this.downloadImage(this.selectedImageId)
+      this.downloadImage(this.imagesSelected)
         .then((data) => {
           this.$emit('input', data.data.id)
           this.processing = false
@@ -154,6 +159,8 @@ export default {
     getPhotos(query, provider, page=1) {
       if(!query) { this.images = null }
       if(query.length < 1) { return this.getProviderFeaturedPhotos() }
+
+      this.imagesSelected = [] // Reset selected images so as to not cause confusion
 
       this.search = this.last_used_query = query
       this.providerSelected = this.last_used_provider = provider
@@ -167,7 +174,6 @@ export default {
           this.countOfPages = data.countOfPages
           this.images = data.images
 
-
           this.processing = false
           const timerEnd = performance.now()
           this.request_time = parseFloat((timerEnd-timerStart)/1000).toFixed(12)
@@ -180,7 +186,6 @@ export default {
           this.countOfImages = data.countOfImages
           this.countOfPages = data.countOfPages
           this.images = data.images
-
 
           this.processing = false
         })
@@ -218,10 +223,6 @@ export default {
 }
 .drawer--content {
   padding: var(--v-card-padding);
-}
-
-.is-processing .processing-blur {
-  filter: blur(3px)
 }
 
 .v-fullpage-loader {
