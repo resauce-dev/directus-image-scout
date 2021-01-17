@@ -17,6 +17,17 @@
       v-model="isModalOpen"
       @cancel="isModalOpen = false"
     >
+      <template #actions>
+        <v-button
+          @click="downloadSelected"
+          icon
+          rounded
+          primary
+          v-tooltip.bottom="$t('save')"
+        >
+          <v-icon name="done" />
+        </v-button>
+      </template>
       <v-fullpage-loader v-if="processing">
         Please wait while we process your request...
       </v-fullpage-loader>
@@ -50,7 +61,7 @@
         </div>
         
         <div class="drawer--images processing-blur" v-if="images && images.length > 0">
-          <v-image-grid :images="images" @selection="image => selectImage(image)"></v-image-grid>
+          <v-image-grid :images="images" :selected-image="selectedImageId" @selection="image => selectImage(image)"></v-image-grid>
           <div class="v-paginator" v-if="countOfPages && countOfPages > 1">
             <v-pagination 
               v-model="current_page" 
@@ -81,17 +92,16 @@ import VFullpageLoader from './components/VFullpageLoader.vue';
 import VImageGrid from './components/VImageGrid.vue';
 
 import apiImageScout from './api/image-scout.js';
-import apiDirectus from './api/directus.js';
 
 export default {
   name: 'resauce-image-scout',
+  inject: ['system'],
   components: {
     VFullpageLoader, 
     VImageGrid,
   },
   mixins: [
-    apiImageScout,
-    apiDirectus
+    apiImageScout
   ],
   props: ['value'],
   data() {
@@ -102,6 +112,8 @@ export default {
 
       isModalOpen: false,
       processing: false,
+
+      selectedImageId: null,
 
       images: null,
       countOfPages: null,
@@ -123,13 +135,21 @@ export default {
   },
   methods: {
     selectImage(image) {
+      const imageId = image.id.toString()
+      if(imageId === this.selectedImageId) {
+        this.selectedImageId = null
+      }
+      this.selectedImageId = imageId
+    },
+    downloadSelected() {
       this.processing = true
-      this.directusImportImage(image)
+      this.downloadImage(this.selectedImageId)
         .then((data) => {
-          this.processing = false
           this.$emit('input', data.data.id)
+          this.processing = false
           this.isModalOpen = false
         })
+        .catch(err => console.warn('importing image failed'))
     },
     getPhotos(query, provider, page=1) {
       if(!query) { this.images = null }
@@ -143,7 +163,6 @@ export default {
       const timerStart = performance.now()
       this.getSearch(query, page)
         .then(({data}) => {
-          console.log(data, 'search')
           this.countOfImages = data.countOfImages
           this.countOfPages = data.countOfPages
           this.images = data.images
@@ -158,7 +177,6 @@ export default {
       this.processing = true
       this.getFeatured()
         .then(({data}) => {
-          console.log(data, 'featured')
           this.countOfImages = data.countOfImages
           this.countOfPages = data.countOfPages
           this.images = data.images
@@ -166,7 +184,7 @@ export default {
 
           this.processing = false
         })
-    }
+    },
   },
   mounted() {
     this.getProviders().then(() => this.getProviderFeaturedPhotos())

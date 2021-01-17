@@ -6,7 +6,7 @@
 
 <script>
 export default {
-  name: 'v-image-overlay',
+  name: 'v-image-preview',
   props: {
     image: {
       type: Object,

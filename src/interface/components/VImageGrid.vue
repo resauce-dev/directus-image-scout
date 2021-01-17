@@ -1,19 +1,23 @@
 <template>
   <div>
-    <v-image-overlay 
-      v-if="overlayImage" 
-      :image="overlayImage" 
-      @close="overlayImage=null" 
+    <v-image-preview 
+      v-if="previewImage" 
+      :image="previewImage" 
+      @close="previewImage=null" 
     />
     <div class="image-grid" v-if="images && images.length > 0">
       <v-card 
         v-for="(image, i) in images" 
         :key="`${i}__${image.url_thumb}`"
+        :class="{
+          'v-card--is-selected': selectedImage && selectedImage === image.id.toString()
+        }"
       >
         <img 
           :src="image.url_thumb" 
           :alt="image.description"
         >
+        <v-radio name="selected" :value="image.id.toString()" v-model="selectedImage"/>
         <div class="card-hover-details">
           <div>
             <v-button class="btn-action" 
@@ -29,7 +33,7 @@
             <v-button class="btn-action" 
               x-small icon 
               v-if="image.url_preview" 
-              @click="overlayImage=image"
+              @click="previewImage=image"
             >
               <v-icon name="zoom_in" />
             </v-button>
@@ -48,7 +52,7 @@
 </template>
 
 <script>
-import VImageOverlay from './VImageOverlay.vue';
+import VImagePreview from './VImagePreview.vue';
 
 export default {
   name: 'v-image-grid',
@@ -59,11 +63,14 @@ export default {
     images: {
       type: Array,
       required: true
+    },
+    selectedImage: {
+      type: String
     }
   },
   data() {
     return {
-      overlayImage: null,
+      previewImage: null,
     }
   }
 }
@@ -130,17 +137,30 @@ export default {
   transition: 0.5s;
   position: relative;
   overflow: hidden;
+  border-radius: var(--border-radius);
+  border: 4px solid white;
 
   img {
     width: 100%;
     height: auto;
     vertical-align: middle;
     transition: 0.5s;
+    border-radius: 0!important;
   }
 
   &:hover {
     transform: scale(0.975);
   }
+}
+
+.v-card--is-selected {
+  border-color: var(--primary-75)!important;
+}
+
+.v-radio {
+  position: absolute;
+  top: 10px;
+  left: 10px;
 }
 
 .card-hover-details {
@@ -157,13 +177,18 @@ export default {
   justify-content: space-between;
   align-items: flex-end;
 
-  transition: 0.5s;
   opacity: 0;
   pointer-events: none;
 }
 .v-card:hover .card-hover-details{
-  transition: 0.5s;
   opacity: 1;
   pointer-events: all;
+}
+
+.v-card,
+.v-card--is-selected,
+.card-hover-details,
+.v-card:hover .card-hover-details{
+  transition: all 0.5s;
 }
 </style>
