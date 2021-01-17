@@ -7,7 +7,7 @@ module.exports = class Pixabay extends Provider {
 	 */
 	constructor() { super('pixabay', 'Pixabay', 'https://pixabay.com') }
 	getAxiosBaseUrl() { return 'https://pixabay.com/api/' }
-    async getSearch(query, page) {
+  async getSearch(query, page) {
 		const { data } = await this.api.get(`/?key=${this.getApiKey()}&per_page=${this.getFetchLimit()}&page=${page}&q=${query}`)
 		return {
 			images: this.formatResults(data.hits),
@@ -37,5 +37,12 @@ module.exports = class Pixabay extends Provider {
 		  results.push(model)
 		})
 		return results
-	}
+  }
+  async downloadImage(image) {
+    const { data } = await this.system.api.post('/files/import', {
+      url: image.url_download, 
+      data: this.formatImageDataForImport(image)
+    })
+    return data
+  }
 }

@@ -53,5 +53,27 @@ module.exports = class Provider {
 	 *
 	 * @param {*} data
 	 */
-	formatResults(data) { return null }
+  formatResults(data) { return null }
+  /**
+   * Download an image URL to Directus
+   * 
+   * @param {String} image
+   */
+  downloadImage(image) { return null }
+	/**
+	 * Return the data needed to provide to Directus import
+   * 
+   * @param {*} image
+	 */
+	formatImageDataForImport(image) {
+	  let data = {}
+	  if(image.file_title) { data.title = image.file_title }
+	  if(image.file_description) { data.description = image.file_description }
+	  if(image.file_location) { data.location = image.file_location }
+	  if(image.file_name) { data.filename_download = image.file_name }
+	  // Always add this tag so we know it came from our system.
+	  const tags = image.file_tags.concat([`extension:resauce-image-scout|provider:${this.key}|id:${image.id}`])
+	  if(image.file_tags) { data.tags = JSON.stringify(tags) }
+	  return data
+	}
 }

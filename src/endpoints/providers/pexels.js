@@ -1,3 +1,4 @@
+const axios = require('axios');
 const Provider = require(__dirname + '/../classes/Provider')
 const ImageModel = require(__dirname + '/../classes/Image')
 
@@ -37,5 +38,18 @@ module.exports = class Pexels extends Provider {
 		  results.push(model)
 		})
 		return results
-	}
+  }
+  async downloadImage(image) {
+    const imageData = await this.formatImageDataForImport(image)
+    try {
+      const { data } = await axios.post('/files/import', {
+        url: image.url_download, 
+        data: imageData
+      })
+      console.log('xxx', { resdata: data })
+    } catch (error) {
+      console.log('yyyy', { resdata: error })
+    }
+    return data
+  }
 }

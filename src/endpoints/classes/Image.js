@@ -21,7 +21,7 @@ module.exports = class ImageModel {
 	  this.file_description = null
 	  this.file_tags = []
 	  this.file_location = null
-	  this.file_name = null
+    this.file_name = null
 	}
 	/**
 	 * Add URL of image to preview larger (typeof:`string`)
@@ -90,18 +90,4 @@ module.exports = class ImageModel {
 	  this.file_name = data
 	  return this
 	}
-	/**
-	 * Return the data needed to provide to Directus import
-	 */
-	getImportData() {
-	  let data = {}
-	  if(this.file_title) { data.title = this.file_title }
-	  if(this.file_description) { data.description = this.file_description }
-	  if(this.file_location) { data.location = this.file_location }
-	  if(this.file_name) { data.filename_download = this.file_name }
-	  // Always add this tag so we know it came from our system.
-	  const tags = this.file_tags.concat(`extension:resauce-image-scout|provider:${this.provider_key}|id:${this.id}`)
-	  if(this.file_tags) { data.tags = JSON.stringify(tags) }
-	  return data
-	}
-  }
+}

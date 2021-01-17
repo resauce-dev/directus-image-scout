@@ -28,8 +28,7 @@ module.exports = class Unsplash extends Provider {
 		let results = []
 		data.forEach(image => {
 		  const fileName = image.id + '.' + image.urls.full.match(/&fm=([a-z]*)/)[1]
-		  const downloadUrl = `${image.links.download}?client_id=${this.getApiKey()}`
-		  const model = new ImageModel(image, image.id, image.urls.small, downloadUrl)
+		  const model = new ImageModel(image, image.id, image.urls.small, image.links.download)
 		  model.setAttribution(image.user.name, image.user.links.html)
 		  model.setPreviewUrl(image.urls.regular)
 
@@ -42,5 +41,12 @@ module.exports = class Unsplash extends Provider {
 		  results.push(model)
 		})
 		return results
-	}
+  }
+  async downloadImage(image) {
+    const { data } = await this.system.api.post('/files/import', {
+      url: `${image.url_download}?client_id=${this.getApiKey()}`, 
+      data: this.formatImageDataForImport(image)
+    })
+    return data
+  }
 }

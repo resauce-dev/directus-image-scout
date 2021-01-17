@@ -82,6 +82,7 @@ To enable Image Scout as field in your application, follow this process:
 Before activating any provider, ensure you have agreed to their terms and usage policy. You are subject to their usage terms based on how you use these images. No contributor to this repository accepts responsibility for the use of the images. 
 
 ## Todo
+- Hide the endpoints behind authentication if enabled/disabled in env
 - Import is broken on unsplash, maybe all
 - If request for pagination page fails, the 'page' in pagination should be set back?
 - Proxy download requests so the API key is never exposed || /ris/import | post{url:'xxx'}

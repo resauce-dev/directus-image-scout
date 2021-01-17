@@ -59,6 +59,14 @@ export default {
           this.queryCache.save(queryUrl, data)
           return data
         })
+    },
+    downloadImage(image) {
+      const queryUrl = `/providers/${this.providerSelected}/download`
+      const postData = {image: image}
+      return this.apiImageScout.post(queryUrl, postData)
+        .then(({ data }) => {
+          return data
+        })
     }
   }
 }
