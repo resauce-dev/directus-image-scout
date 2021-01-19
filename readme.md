@@ -48,7 +48,7 @@ API Registration: https://www.pexels.com/api/
 
 ## Configuring Image Scout on your server
 
-Ensure the following folders exist in your Directus application with the same content as this repositories `dist` folder.
+Copy the folders from this repository's `dist` directory into your extensions folder
 - `/extensions/interfaces/resauce-image-scout
 - `/extensions/endpoints/resauce-image-scout
 
@@ -70,13 +70,11 @@ To enable a provider for your users to use, add a key-pair to the environment fi
 To enable Image Scout as field in your application, follow this process:
 
 1. Head to the settings of the collection you'd like Image Scout on
-2. Create a new field: Standard Field
+2. Create a new files field
 3. Call the column whatever you'd like (feature_image?)
-4. Set the "Type" to `UUID`
-5. Set the "On Create" field to `Do Nothing`
-6. Fill out any of the other fields of your own accord
-7. Under "Interface" select `Image Scout`
-8. Under "Display" select `Image` as the display.
+4. Fill out any of the other fields of your own accord
+5. Under "Interface" select `Image Scout`
+6. Under "Display" select `Image` as the display.
 
 ## Liability
 
