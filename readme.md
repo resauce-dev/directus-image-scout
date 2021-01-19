@@ -4,6 +4,11 @@
 
 Image Scout is an interface extension for Directus 9 developed by Resauce. A clean interface is provided allowing you to search multiple online image libraries to find images that suit your needs. When a provider is configured, the connection should be seamless, allowing you to easily find and use the image that you want or need in your project.
 
+### Here's what image-scout looks like!
+
+![Picture of the interface](./docs/interface.jpg)
+
+
 ## What's a provider?
 
 A provider is an online service that allows you to view and download images for use in your own project. The providers we have are listed below, to enable them, you must register an API key with the service then store that key in your Envrionment File. 
