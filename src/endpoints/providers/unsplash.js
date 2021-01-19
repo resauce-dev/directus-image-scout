@@ -37,7 +37,8 @@ module.exports = class Unsplash extends Provider {
 		  model.setDescription(image.alt_description)
 		  model.setFileName(fileName)
 		  if(image.tags) { model.setTags(image.tags.map(tag => tag['title'])) }
-		  if(image.location) { model.setLocation(image.location.title) }
+      if(image.location) { model.setLocation(image.location.title) }
+		  model.setSize(image.width, image.height)
 
 		  results.push(model)
 		})

@@ -34,7 +34,8 @@ module.exports = class Pexels extends Provider {
 
 		  model.setTitle(`Photo by ${image.photographer}`)
 		  model.setDescription(image.alt_description)
-
+      model.setSize(image.width, image.height)
+      
 		  results.push(model)
 		})
 		return results

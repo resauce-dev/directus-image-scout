@@ -36,7 +36,8 @@ module.exports = class Giphy extends Provider {
 		  model.setTitle(image.title)
 		  model.setDescription(image.alt_description)
 		  model.setFileName(`${image.id}.gif`)
-		  if(image.tags) { model.setTags(image.tags) }
+      if(image.tags) { model.setTags(image.tags) }
+      model.setSize(image.images.fixed_width.width, image.images.fixed_width.height)
 
 		  results.push(model)
 		})

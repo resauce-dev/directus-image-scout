@@ -11,9 +11,10 @@ module.exports = class ImageModel {
 	//   this.$source = $source
 	  this.id = id
 	  this.url_thumb = url_thumb
-	  this.url_download = url_download
-
-	  // Not Required
+    this.url_download = url_download
+    
+    // Not Required
+  
 	  this.url_preview = null
 	  this.attribution = null
 
@@ -22,6 +23,10 @@ module.exports = class ImageModel {
 	  this.file_tags = []
 	  this.file_location = null
     this.file_name = null
+
+    // Sizing
+    this.width = null
+    this.height = null
 	}
 	/**
 	 * Add URL of image to preview larger (typeof:`string`)
@@ -88,6 +93,17 @@ module.exports = class ImageModel {
 	setFileName(data) {
 	  if(!data.includes('.')) { throw "Filename should be provided an extension"}
 	  this.file_name = data
+	  return this
+	}
+	/**
+	 * Set the size of the image
+	 *
+	 * @param {Number} width
+	 * @param {Number} height
+	 */
+	setSize(width, height) {
+	  this.width = width
+	  this.height = height
 	  return this
 	}
 }
