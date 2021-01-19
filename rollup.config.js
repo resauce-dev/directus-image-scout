@@ -4,12 +4,16 @@ import commonjs from 'rollup-plugin-commonjs'
 import vue from 'rollup-plugin-vue'
 import copy from 'rollup-plugin-copy'
 
+// Make this your local Directus install if you'd like to build dev changes straight to there.
+const extension_folder = 'dist'  // C:/Users/MyUser/workingcopy/directus/api/extensions
+const extension_name = 'resauce-image-scout'
+
 export default [
   {
     input: 'src/interface/index.js',
     output: {
       format: 'es',
-      file: 'dist/interfaces/resauce-image-scout/index.js'
+      file: `${extension_folder}/interfaces/${extension_name}/index.js`,
     },
     plugins: [
       terser(),
@@ -22,14 +26,14 @@ export default [
     input: 'src/endpoints/index.js',
     output: {
       format: 'es',
-      file: 'dist/endpoints/resauce-image-scout/index.js',
+      file: `${extension_folder}/endpoints/${extension_name}/index.js`,
     },
     plugins: [
       copy({
         targets: [
           { 
             src: 'src/endpoints/*', 
-            dest: 'dist/endpoints/resauce-image-scout'
+            dest: `${extension_folder}/endpoints/${extension_name}`,
           }
         ]
       })
