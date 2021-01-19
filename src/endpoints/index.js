@@ -1,3 +1,4 @@
+let RequestDetails = require(__dirname + '/classes/RequestDetails')
 let providers = require(__dirname + '/providers');
 
 /**
@@ -7,17 +8,6 @@ let providers = require(__dirname + '/providers');
 function getProvider(providerName) {
 	const provider_key = providerName.toUpperCase()
 	return providers.find(p => p.key === provider_key)
-}
-
-/**
- * Is there a user currently authenticated?
- * @param {Object} req 
- */
-function authenticated(req) {
-  // Does the endpoints require a user to be authenticated?
-  const authRequired = "RIS_REQUIRED_AUTH" in process.env ? process.env.RIS_REQUIRED_AUTH : true
-  if(authRequired === 'false') return true
-  return req.accountability.user ? req.accountability.user : false
 }
 
 /**
@@ -37,7 +27,8 @@ module.exports = function registerEndpoint(router, { services, exceptions }) {
 	 * List the available endpoints for this extension.
 	 */
 	router.get('/', (req, res) => {
-    if(!authenticated(req)) return sendUnauthedMessage(res)
+    const request = new RequestDetails(req)
+    if(!request.isAuthenticated()) return sendUnauthedMessage(res)
     res.send({
       '/': 'List the available endpoints for this extension. (You are here)',
       '/providers': 'Get the information of all the providers',
@@ -52,7 +43,8 @@ module.exports = function registerEndpoint(router, { services, exceptions }) {
 	 * Get the information of all the providers
 	 */
 	router.get('/providers', (req, res) => {
-    if(!authenticated(req)) return sendUnauthedMessage(res)
+    const request = new RequestDetails(req)
+    if(!request.isAuthenticated()) return sendUnauthedMessage(res)
     res.send({data:providers})
   })
 
@@ -60,7 +52,8 @@ module.exports = function registerEndpoint(router, { services, exceptions }) {
 	 * Get the information about a single provider
 	 */
 	router.get('/providers/:provider', (req, res) => {
-    if(!authenticated(req)) return sendUnauthedMessage(res)
+    const request = new RequestDetails(req)
+    if(!request.isAuthenticated()) return sendUnauthedMessage(res)
 		const provider = getProvider(req.params.provider)
 		if(!provider) { 
       res.status(500)
@@ -77,7 +70,8 @@ module.exports = function registerEndpoint(router, { services, exceptions }) {
 	 * Fetch the featured images the provider provides
 	 */
 	router.get('/providers/:provider/featured', async (req, res) => {
-    if(!authenticated(req)) return sendUnauthedMessage(res)
+    const request = new RequestDetails(req)
+    if(!request.isAuthenticated()) return sendUnauthedMessage(res)
 		try {
 			const provider = getProvider(req.params.provider)
 			const data = await provider.getFeatured()
@@ -92,7 +86,8 @@ module.exports = function registerEndpoint(router, { services, exceptions }) {
 	 * Search for provider images based on the users query
 	 */
 	router.get('/providers/:provider/search', async (req, res) => {
-    if(!authenticated(req)) return sendUnauthedMessage(res)
+    const request = new RequestDetails(req)
+    if(!request.isAuthenticated()) return sendUnauthedMessage(res)
 		try {
 			const provider = getProvider(req.params.provider)
 			const data = await provider.getSearch(req.query.query, req.query.page)
@@ -107,10 +102,11 @@ module.exports = function registerEndpoint(router, { services, exceptions }) {
 	 * Download an image using the URL provided in the post data.
 	 */
 	router.post('/providers/:provider/download', async (req, res) => {
-    if(!authenticated(req)) return sendUnauthedMessage(res)
+    const request = new RequestDetails(req)
+    if(!request.isAuthenticated()) return sendUnauthedMessage(res)
 		try {
       const provider = getProvider(req.params.provider)
-			const data = await provider.downloadImage(req.body.image)
+			const data = await provider.downloadImage(request)
 			res.send({data})
 		} catch (e) {
       res.status(500)

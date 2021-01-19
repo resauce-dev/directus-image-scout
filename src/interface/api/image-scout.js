@@ -60,10 +60,9 @@ export default {
           return data
         })
     },
-    downloadImage(image) {
+    downloadImage(image, access_token) {
       const queryUrl = `${this.apiPrefix}/providers/${this.providerSelected}/download`
-      const postData = {image: image}
-      return this.system.api.post(queryUrl, postData)
+      return this.system.api.post(queryUrl, {image, access_token})
         .then(({ data }) => {
           return data
         })

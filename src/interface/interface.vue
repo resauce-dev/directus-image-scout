@@ -157,8 +157,9 @@ export default {
     },
     downloadSelected() {
       this.processing = true
-      this.downloadImage(this.imagesSelected)
-        .then((data) => {
+      const image = this.images.find(i => i.id === this.imagesSelected[0]) // currently only downloading one image
+      this.downloadImage(image, this.user_access_token)
+        .then(({data}) => {
           this.$emit('input', data.data.id)
           this.processing = false
           this.isModalOpen = false

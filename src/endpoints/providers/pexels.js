@@ -39,17 +39,4 @@ module.exports = class Pexels extends Provider {
 		})
 		return results
   }
-  async downloadImage(image) {
-    const imageData = await this.formatImageDataForImport(image)
-    try {
-      const { data } = await axios.post('/files/import', {
-        url: image.url_download, 
-        data: imageData
-      })
-      console.log('xxx', { resdata: data })
-    } catch (error) {
-      console.log('yyyy', { resdata: error })
-    }
-    return data
-  }
 }

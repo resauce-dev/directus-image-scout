@@ -1,3 +1,4 @@
+const axios = require('axios')
 const Provider = require(__dirname + '/../classes/Provider')
 const ImageModel = require(__dirname + '/../classes/Image')
 
@@ -42,10 +43,11 @@ module.exports = class Unsplash extends Provider {
 		})
 		return results
   }
-  async downloadImage(image) {
-    const { data } = await this.system.api.post('/files/import', {
-      url: `${image.url_download}?client_id=${this.getApiKey()}`, 
-      data: this.formatImageDataForImport(image)
+  async downloadImage(req) {
+    const postUrl = `${req.getApiUrl()}/files/import?access_token=${req.getBody().access_token}`
+    const { data } = await axios.post(postUrl, {
+      url: `${req.getBody().image.url_download}?client_id=${this.getApiKey()}`, 
+      data: this.formatImageDataForImport(req.getBody().image)
     })
     return data
   }

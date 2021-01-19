@@ -42,11 +42,4 @@ module.exports = class Giphy extends Provider {
 		})
 		return results
   }
-  async downloadImage(image) {
-    const { data } = await this.system.api.post('/files/import', {
-      url: image.url_download, 
-      data: this.formatImageDataForImport(image)
-    })
-    return data
-  }
 }

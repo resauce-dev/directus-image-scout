@@ -57,9 +57,16 @@ module.exports = class Provider {
   /**
    * Download an image URL to Directus
    * 
-   * @param {String} image
+   * @param {Object} req
    */
-  downloadImage(image) { return null }
+  async downloadImage(req) {
+    const postUrl = `${req.getApiUrl()}/files/import?access_token=${req.getBody().access_token}`
+    const { data } = await axios.post(postUrl, {
+      url: req.getBody().image.url_download, 
+      data: this.formatImageDataForImport(req.getBody().image)
+    })
+    return data
+  }
 	/**
 	 * Return the data needed to provide to Directus import
    * 
@@ -71,9 +78,11 @@ module.exports = class Provider {
 	  if(image.file_description) { data.description = image.file_description }
 	  if(image.file_location) { data.location = image.file_location }
 	  if(image.file_name) { data.filename_download = image.file_name }
-	  // Always add this tag so we know it came from our system.
-	  const tags = image.file_tags.concat([`extension:resauce-image-scout|provider:${this.key}|id:${image.id}`])
-	  if(image.file_tags) { data.tags = JSON.stringify(tags) }
+    // Always add this tag so we know it came from our system.
+    let tags = []
+    if(image.file_tags) { tags = tags.concat(image.file_tags) }
+    tags = tags.concat([`extension:resauce-image-scout|provider:${this.key}|id:${image.id}`]) // @todo use filename_download instead provider__id.ext?
+	  data.tags = JSON.stringify(tags)
 	  return data
 	}
 }
