@@ -1,5 +1,5 @@
 {
-  "name": "resauce-image-scout",
+  "name": "directus-image-scout",
   "version": "1.0.0",
   "description": "Image Scout is a Directus 9 interface that allowing you to search online image libraries for images.",
   "main": "index.js",
@@ -13,7 +13,8 @@
     "image",
     "library",
     "royalty free",
-    "vue"
+    "vue",
+    "resauce"
   ],
   "author": "Shea Lavington <shea@lavington.me>",
   "license": "ISC",
