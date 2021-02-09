@@ -20,9 +20,9 @@ module.exports = class ImageModel {
     this.height = null
 
     // Import options
-	  this.title = ''
-	  this.description = ''
-	  this.location = ''
+	  this.title = null
+	  this.description = null
+	  this.location = null
     this.filename_download = null
 	  this.tags = ['resauce-image-scout']
 	}
