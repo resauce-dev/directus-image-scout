@@ -82,9 +82,8 @@ module.exports = class Provider {
     }
 
     // Conditionally add the filename if set
-    if(image.filename_download) data.filename_download = image.filename_download,
+    if(image.filename_download) data.filename_download = image.filename_download
 
-    console.log(data, image)
     return data
 	}
 }
