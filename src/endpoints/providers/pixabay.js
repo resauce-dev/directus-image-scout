@@ -31,7 +31,6 @@ module.exports = class Pixabay extends Provider {
 		  model.setPreviewUrl(image.largeImageURL)
 
 		  model.setTitle(`Photo by ${image.user}`)
-		  model.setDescription(image.alt_description)
 		  if(image.tags) { model.setTags(image.tags.split(', ')) }
       model.setSize(image.imageWidth, image.imageHeight)
 

@@ -34,7 +34,7 @@ module.exports = class Unsplash extends Provider {
 		  model.setPreviewUrl(image.urls.regular)
 
 		  model.setTitle(`Photo by ${image.user.name}`)
-		  model.setDescription(image.alt_description)
+		  model.setDescription(image.description)
 		  model.setFileName(fileName)
 		  if(image.tags) { model.setTags(image.tags.map(tag => tag['title'])) }
       if(image.location) { model.setLocation(image.location.title) }
