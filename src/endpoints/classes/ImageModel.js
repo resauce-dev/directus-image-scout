@@ -7,7 +7,6 @@ module.exports = class ImageModel {
 	 */
 	constructor(id, url_thumb, url_download) {
 	  // Required
-	  // this.$source = $source
 	  this.id = id
 	  this.url_thumb = url_thumb
     this.url_download = url_download
