@@ -2,7 +2,7 @@
   <div class="v-resauce-image-scout">
     <div class="display">
       <v-avatar class="v-avatar" x-large>
-        <img v-if="value" :src="`/assets/${value}?key=system-small-cover&access_token=${user_access_token}`" />
+        <img v-if="value" :src="`/assets/${value}?key=system-medium-cover&access_token=${user_access_token}`" />
         <v-icon v-else name="image_search"></v-icon>
       </v-avatar>
       <v-button @click="isModalOpen=true" :outlined="true" :dashed="value?false:true" small>
