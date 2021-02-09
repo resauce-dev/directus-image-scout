@@ -158,7 +158,7 @@ export default {
     downloadSelected() {
       this.processing = true
       const image = this.images.find(i => i.id === this.imagesSelected[0]) // currently only downloading one image
-      this.downloadImage(image, this.user_access_token)
+      this.triggerDownload(image, this.user_access_token)
         .then(({data}) => {
           this.$emit('input', data.data.id)
           this.processing = false

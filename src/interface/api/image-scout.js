@@ -60,7 +60,7 @@ export default {
           return data
         })
     },
-    downloadImage(image, access_token) {
+    triggerDownload(image, access_token) {
       const queryUrl = `${this.apiPrefix}/providers/${this.providerSelected}/download`
       return this.system.api.post(queryUrl, {image, access_token})
         .then(({ data }) => {
