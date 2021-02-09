@@ -6,7 +6,7 @@ module.exports = class ImageModel {
 	 * @param {String} url_thumb
 	 * @param {String} url_download
 	 */
-	constructor($source, id, url_thumb, url_download) {
+	constructor(id, url_thumb, url_download) {
 	  // Required
 	  // this.$source = $source
 	  this.id = id
@@ -25,7 +25,7 @@ module.exports = class ImageModel {
 	  this.title = ''
 	  this.description = ''
 	  this.location = ''
-    this.filename_download = ''
+    this.filename_download = null
 	  this.tags = ['resauce-image-scout']
 	}
 	/**

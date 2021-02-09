@@ -29,7 +29,7 @@ module.exports = class Unsplash extends Provider {
 		let results = []
 		data.forEach(image => {
 		  const fileName = image.id + '.' + image.urls.full.match(/&fm=([a-z]*)/)[1]
-		  const model = new ImageModel(image, image.id, image.urls.small, image.links.download)
+		  const model = new ImageModel(image.id, image.urls.small, image.links.download)
 		  model.setAttribution(image.user.name, image.user.links.html)
 		  model.setPreviewUrl(image.urls.regular)
 

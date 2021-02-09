@@ -26,7 +26,7 @@ module.exports = class Pixabay extends Provider {
 	formatResults(data) {
 		let results = []
 		data.forEach(image => {
-		  const model = new ImageModel(image, image.id, image.webformatURL, image.imageURL)
+		  const model = new ImageModel(image.id, image.webformatURL, image.imageURL)
 		  model.setAttribution(image.user, `https://pixabay.com/users/${image.user}-${image.user_id}/`)
 		  model.setPreviewUrl(image.largeImageURL)
 

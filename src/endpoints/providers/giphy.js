@@ -26,7 +26,7 @@ module.exports = class Giphy extends Provider {
 	formatResults(data) {
 		let results = []
 		data.forEach(image => {
-		  const model = new ImageModel(image, image.id, image.images.fixed_width.url, image.images.original.url)
+		  const model = new ImageModel(image.id, image.images.fixed_width.url, image.images.original.url)
 
 		  image.title = image.title.replace(/\s?GIF/g, '')
 

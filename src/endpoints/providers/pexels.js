@@ -28,7 +28,7 @@ module.exports = class Pexels extends Provider {
 	formatResults(data) {
 		let results = []
 		data.forEach(image => {
-		  const model = new ImageModel(image, image.id, image.src.medium,  image.src.original)
+		  const model = new ImageModel(image.id, image.src.medium,  image.src.original)
 		  model.setAttribution(image.photographer, image.photographer_url)
 		  model.setPreviewUrl(image.src.large2x)
 
