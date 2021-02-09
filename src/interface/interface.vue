@@ -27,9 +27,9 @@
           <v-icon name="done" />
         </v-button>
       </template>
-      <v-fullpage-loader v-if="processing">
+      <ris-fullpage-loader v-if="processing">
         Please wait while we process your request...
-      </v-fullpage-loader>
+      </ris-fullpage-loader>
       <div class="drawer--content">
         <div class="drawer--search">
           <div class="header-search-area">
@@ -60,7 +60,7 @@
         </div>
         
         <div class="drawer--images" v-if="images && images.length > 0">
-          <v-image-grid 
+          <ris-image-grid
             :images="images" 
             :images-selected="imagesSelected" 
             @select="image => selectImage(image)"
@@ -91,8 +91,8 @@
 </template>
 
 <script>
-import VFullpageLoader from './components/VFullpageLoader.vue';
-import VImageGrid from './components/VImageGrid.vue';
+import RISFullpageLoader from './components/RISFullpageLoader.vue';
+import RISImageGrid from './components/RISImageGrid.vue';
 
 import apiImageScout from './api/image-scout.js';
 
@@ -100,8 +100,8 @@ export default {
   name: 'resauce-image-scout',
   inject: ['system'],
   components: {
-    VFullpageLoader, 
-    VImageGrid,
+    'ris-fullpage-loader': RISFullpageLoader, 
+    'ris-image-grid': RISImageGrid,
   },
   mixins: [
     apiImageScout
@@ -235,7 +235,7 @@ export default {
   padding: var(--v-card-padding);
 }
 
-.v-fullpage-loader {
+.ris-fullpage-loader {
   position: absolute;
   display: flex;
   justify-content: center;
