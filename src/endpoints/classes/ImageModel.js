@@ -1,7 +1,6 @@
 module.exports = class ImageModel {
 	/**
 	 *
-	 * @param {Object} $source
 	 * @param {String} id
 	 * @param {String} url_thumb
 	 * @param {String} url_download

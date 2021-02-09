@@ -49,11 +49,14 @@ module.exports = class Provider {
 	 */
 	getSearch(query, page) { return null }
 	/**
-	 * Process the search results
+	 * Process the search results into our format
 	 *
 	 * @param {*} data
 	 */
-  formatResults(data) { return null }
+	formatResults(data) {
+    const ImageModel = require(__dirname + `/../image-models/${this.key.toLowerCase()}`)
+    return data.map(img => new ImageModel(img))
+  }
   /**
    * Download an image URL to Directus
    * 

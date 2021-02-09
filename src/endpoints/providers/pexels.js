@@ -1,6 +1,5 @@
 const axios = require('axios');
 const Provider = require(__dirname + '/../classes/Provider')
-const ImageModel = require(__dirname + '/../classes/Image')
 
 module.exports = class Pexels extends Provider {
 	/**
@@ -25,18 +24,4 @@ module.exports = class Pexels extends Provider {
 			countOfPages: null,
 		}
 	}
-	formatResults(data) {
-		let results = []
-		data.forEach(image => {
-		  const model = new ImageModel(image.id, image.src.medium,  image.src.original)
-		  model.setAttribution(image.photographer, image.photographer_url)
-		  model.setPreviewUrl(image.src.large2x)
-
-		  model.setTitle(`Photo by ${image.photographer}`)
-      model.setSize(image.width, image.height)
-      
-		  results.push(model)
-		})
-		return results
-  }
 }
