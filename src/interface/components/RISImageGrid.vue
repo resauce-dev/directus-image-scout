@@ -1,13 +1,13 @@
 <template>
   <div>
-    <v-image-preview 
+    <ris-image-preview 
       v-if="previewImage" 
       :image="previewImage" 
       @close="previewImage=null" 
       @keyup.esc.prevent="previewImage=null"
     />
     <div class="image-grid" v-if="images && images.length > 0">
-      <v-image
+      <ris-image
         v-for="(image, i) in images" 
         :key="`${i}__${image.url_thumb}`"
         :image="image"
@@ -20,14 +20,14 @@
 </template>
 
 <script>
-import VImagePreview from './VImagePreview.vue';
-import VImage from './VImage.vue'
+import RISImagePreview from './RISImagePreview.vue';
+import RISImage from './RISImage.vue'
 
 export default {
-  name: 'v-image-grid',
+  name: 'ris-image-grid',
   components: {
-    VImagePreview,
-    VImage
+    'ris-image-preview': RISImagePreview,
+    'ris-image': RISImage
   },
   props: {
     images: {

@@ -6,7 +6,7 @@
 
 <script>
 export default {
-  name: 'v-image-preview',
+  name: 'ris-image-preview',
   props: {
     image: {
       type: Object,

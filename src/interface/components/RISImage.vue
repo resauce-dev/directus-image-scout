@@ -44,7 +44,7 @@
 
 <script>
 export default {
-  name: 'v-image',
+  name: 'ris-image',
   props: {
     image: {
       type: Object,

@@ -7,7 +7,7 @@
 
 <script>
 export default {
-  name: 'v-fullpage-loader'
+  name: 'ris-fullpage-loader'
 }
 </script>
 
