@@ -1,5 +1,4 @@
 const Provider = require(__dirname + '/../classes/Provider')
-const ImageModel = require(__dirname + '/../classes/Image')
 
 module.exports = class Pixabay extends Provider {
 	/**
@@ -23,19 +22,4 @@ module.exports = class Pixabay extends Provider {
 			countOfPages: null,
 		}
 	}
-	formatResults(data) {
-		let results = []
-		data.forEach(image => {
-		  const model = new ImageModel(image, image.id, image.webformatURL, image.imageURL)
-		  model.setAttribution(image.user, `https://pixabay.com/users/${image.user}-${image.user_id}/`)
-		  model.setPreviewUrl(image.largeImageURL)
-
-		  model.setTitle(`Photo by ${image.user}`)
-		  model.setDescription(image.alt_description)
-		  if(image.tags) { model.setTags(image.tags.split(', ')) }
-
-		  results.push(model)
-		})
-		return results
-  }
 }

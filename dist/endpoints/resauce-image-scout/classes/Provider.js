@@ -49,11 +49,14 @@ module.exports = class Provider {
 	 */
 	getSearch(query, page) { return null }
 	/**
-	 * Process the search results
+	 * Process the search results into our format
 	 *
 	 * @param {*} data
 	 */
-  formatResults(data) { return null }
+	formatResults(data) {
+    const ImageModel = require(__dirname + `/../image-models/${this.key.toLowerCase()}`)
+    return data.map(img => new ImageModel(img))
+  }
   /**
    * Download an image URL to Directus
    * 
@@ -61,10 +64,11 @@ module.exports = class Provider {
    */
   async downloadImage(req) {
     const postUrl = `${req.getApiUrl()}/files/import?access_token=${req.getBody().access_token}`
-    const { data } = await axios.post(postUrl, {
+    const postBody = {
       url: req.getBody().image.url_download, 
       data: this.formatImageDataForImport(req.getBody().image)
-    })
+    }
+    const { data } = await axios.post(postUrl, postBody)
     return data
   }
 	/**
@@ -73,16 +77,15 @@ module.exports = class Provider {
    * @param {*} image
 	 */
 	formatImageDataForImport(image) {
-	  let data = {}
-	  if(image.file_title) { data.title = image.file_title }
-	  if(image.file_description) { data.description = image.file_description }
-	  if(image.file_location) { data.location = image.file_location }
-	  if(image.file_name) { data.filename_download = image.file_name }
-    // Always add this tag so we know it came from our system.
-    let tags = []
-    if(image.file_tags) { tags = tags.concat(image.file_tags) }
-    tags = tags.concat([`extension:resauce-image-scout|provider:${this.key}|id:${image.id}`]) // @todo use filename_download instead provider__id.ext?
-	  data.tags = JSON.stringify(tags)
-	  return data
+    const data = {}
+
+    // Conditionally add if set to avoid blank data going in
+    if(image.title) data.title = image.title
+    if(image.description) data.description = image.description
+    if(image.location) data.location = image.location
+    if(image.tags) data.tags = JSON.stringify(image.tags)
+    if(image.filename_download) data.filename_download = image.filename_download
+
+    return data
 	}
 }

@@ -1,32 +1,24 @@
 {
   "name": "@resauce-dev/directus-image-scout",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Image Scout is a Directus 9 interface that allowing you to search online image libraries for images.",
   "main": "index.js",
   "keywords": [
-    "directus",
-    "extension",
-    "unsplash",
-    "pexels",
-    "pixabay",
-    "giphy",
-    "image",
-    "library",
-    "royalty free",
-    "vue",
+    "directus", "extension",
+    "royalty free", "image", "library",
+    "unsplash", "pexels", "pixabay", "giphy",
+    "vue", "javascript",
     "resauce"
   ],
   "author": "Shea Lavington <shea@lavington.me>",
-  "license": "ISC",
+  "license": "GNU GENERAL PUBLIC LICENSE",
   "scripts": {
     "build": "npx rollup -c",
     "watch": "npm-watch build"
   },
   "watch": {
     "build": {
-      "patterns": [
-        "src"
-      ],
+      "patterns": ["src"],
       "extensions": "js,vue"
     }
   },
