@@ -74,12 +74,17 @@ module.exports = class Provider {
    * @param {*} image
 	 */
 	formatImageDataForImport(image) {
-    return {
+    const data = {
       title: image.title,
       description: image.description,
       location: image.location,
-      filename_download: `${this.key}__${image.filename_download}`,
       tags: JSON.stringify(image.tags),
     }
+
+    // Conditionally add the filename if set
+    if(image.filename_download) data.filename_download = image.filename_download,
+
+    console.log(data, image)
+    return data
 	}
 }
