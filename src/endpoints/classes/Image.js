@@ -7,26 +7,26 @@ module.exports = class ImageModel {
 	 * @param {String} url_download
 	 */
 	constructor($source, id, url_thumb, url_download) {
-	  // Requied
-	//   this.$source = $source
+	  // Required
+	  // this.$source = $source
 	  this.id = id
 	  this.url_thumb = url_thumb
     this.url_download = url_download
     
     // Not Required
-  
 	  this.url_preview = null
 	  this.attribution = null
-
-	  this.file_title = null
-	  this.file_description = null
-	  this.file_tags = []
-	  this.file_location = null
-    this.file_name = null
 
     // Sizing
     this.width = null
     this.height = null
+
+    // Import options
+	  this.title = ''
+	  this.description = ''
+	  this.location = ''
+    this.filename_download = ''
+	  this.tags = ['resauce-image-scout']
 	}
 	/**
 	 * Add URL of image to preview larger (typeof:`string`)
@@ -55,7 +55,7 @@ module.exports = class ImageModel {
 	 * @param {String} data
 	 */
 	setTitle(data) {
-	  this.file_title = data
+	  this.title = data
 	  return this
 	}
 	/**
@@ -64,7 +64,7 @@ module.exports = class ImageModel {
 	 * @param {String} data
 	 */
 	setDescription(data) {
-	  this.file_description = data
+	  this.description = data
 	  return this
 	}
 	/**
@@ -73,8 +73,8 @@ module.exports = class ImageModel {
 	 * @param {Array} data
 	 */
 	setTags(data) {
-	  this.file_tags = this.file_tags.concat(data)
-	  return this
+    this.tags = this.tags.concat(data)
+    return this
 	}
 	/**
 	 * Add location (typeof:`string`)
@@ -82,7 +82,7 @@ module.exports = class ImageModel {
 	 * @param {String} data
 	 */
 	setLocation(data) {
-	  this.file_location = data
+	  this.location = data
 	  return this
 	}
 	/**
@@ -92,7 +92,7 @@ module.exports = class ImageModel {
 	 */
 	setFileName(data) {
 	  if(!data.includes('.')) { throw "Filename should be provided an extension"}
-	  this.file_name = data
+	  this.filename_download = data
 	  return this
 	}
 	/**
