@@ -22,7 +22,7 @@
           icon
           rounded
           primary
-          v-tooltip.bottom="$t('save')"
+          v-tooltip.bottom="'Save'"
         >
           <v-icon name="done" />
         </v-button>
@@ -99,6 +99,7 @@ import apiImageScout from './api/image-scout.js';
 export default {
   name: 'resauce-image-scout',
   inject: ['system'],
+  emits: ['input'],
   components: {
     'ris-fullpage-loader': RISFullpageLoader, 
     'ris-image-grid': RISImageGrid,

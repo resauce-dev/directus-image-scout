@@ -100,7 +100,7 @@ export default {
   --v-button-background-color-activated: transparent;
   --v-button-background-color-disabled: transparent;
 }
-.btn-action::v-deep .button.x-small {
+.btn-action:deep(.button.x-small) {
   padding: 0;
 }
 .btn-action-icon {
