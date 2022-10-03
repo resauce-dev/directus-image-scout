@@ -12,8 +12,8 @@ module.exports = class GiphyImageModel extends ImageModel {
     this.setTitle(image.title)
     this.setSize(image.images.fixed_width.width, image.images.fixed_width.height)
 
-    if(image.tags) { this.setTags(image.tags) }
-    
+    if (image.tags) { this.setTags(image.tags) }
+
     this.setFileName(`${image.id}.gif`)
   }
 }

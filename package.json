@@ -1,6 +1,6 @@
 {
   "name": "@resauce-dev/directus-image-scout",
-  "version": "2.0.1",
+  "version": "3.0.0",
   "description": "Image Scout is a Directus 9 interface that allowing you to search online image libraries for images.",
   "main": "index.js",
   "keywords": [
@@ -33,7 +33,7 @@
   },
   "directus:extension": {
     "type": "interface",
-    "path": "./dist/interfaces/resauce-image-scout/index.js",
+    "path": "../directus-resauce/extensions/interfaces/resauce-image-scout/index.js",
     "source": "src/interface/index.ts",
     "host": "^9.18.1"
   }

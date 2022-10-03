@@ -1,7 +1,9 @@
 <template>
   <div class="v-fullpage-loader">
     <v-progress-circular x-large indeterminate />
-    <p><slot></slot></p>
+    <p>
+      <slot></slot>
+    </p>
   </div>
 </template>
 
@@ -27,6 +29,7 @@ export default {
   background: var(--background-normal);
   z-index: 10;
 }
+
 .v-progress-circular {
   margin-bottom: var(--v-card-padding);
 }
