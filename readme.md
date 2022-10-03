@@ -72,7 +72,7 @@ To enable a provider for your users to use, add a key-pair to the environment fi
 
 ## Configuring Image Scout in your collection
 
-To enable Image Scout as field in your application, follow this process:
+To enable Image Scout as field in your application, follow this guide:
 
 1. Head to the settings of the collection you'd like Image Scout on
 2. Create a new files field
