@@ -28,25 +28,25 @@ module.exports = function registerEndpoint(router, { services, exceptions }) {
 	 */
 	router.get('/', (req, res) => {
     const request = new RequestDetails(req)
-    if(!request.isAuthenticated()) return sendUnauthedMessage(res)
-    res.send({
-      '/': 'List the available endpoints for this extension. (You are here)',
-      '/providers': 'Get the information of all the providers',
-      '/providers/[provider]': 'Get the information about a single provider',
-      '/providers/[provider]/featured': 'Fetch the featured images the provider provides',
-      '/providers/[provider]/search?query=Dog&page=2': 'Search for provider images based on the users query',
-      '/providers/[provider]/download': 'Post request of a URL to download an image from the provider allowing a hidden prefix of api_key',
-    })
-  })
+		if(!request.isAuthenticated()) return sendUnauthedMessage(res)
+		res.send({
+			'/': 'List the available endpoints for this extension. (You are here)',
+			'/providers': 'Get the information of all the providers',
+			'/providers/[provider]': 'Get the information about a single provider',
+			'/providers/[provider]/featured': 'Fetch the featured images the provider provides',
+			'/providers/[provider]/search?query=Dog&page=2': 'Search for provider images based on the users query',
+			'/providers/[provider]/download': 'Post request of a URL to download an image from the provider allowing a hidden prefix of api_key',
+		})
+	})
 
 	/**
 	 * Get the information of all the providers
 	 */
 	router.get('/providers', (req, res) => {
-    const request = new RequestDetails(req)
-    if(!request.isAuthenticated()) return sendUnauthedMessage(res)
-    res.send({data:providers})
-  })
+		const request = new RequestDetails(req)
+		if(!request.isAuthenticated()) return sendUnauthedMessage(res)
+		res.send({data:providers})
+	})
 
 	/**
 	 * Get the information about a single provider
@@ -56,13 +56,13 @@ module.exports = function registerEndpoint(router, { services, exceptions }) {
     if(!request.isAuthenticated()) return sendUnauthedMessage(res)
 		const provider = getProvider(req.params.provider)
 		if(!provider) { 
-      res.status(500)
-      res.send({data: 'This provider does not exist'}) 
-    }
+			res.status(500)
+			res.send({data: 'This provider does not exist'}) 
+		}
 		if(!provider.is_configured) { 
-      res.status(500) 
-      res.send({data: 'This provider has not been configured'}) 
-    }
+			res.status(500) 
+			res.send({data: 'This provider has not been configured'}) 
+		}
 		res.send({data: {provider}})
 	})
 
@@ -77,7 +77,7 @@ module.exports = function registerEndpoint(router, { services, exceptions }) {
 			const data = await provider.getFeatured()
 			res.send({data})
 		} catch (e) {
-      res.status(500)
+      		res.status(500)
 			res.send({data: 'Failed to get featured results'})
 		}
 	})
@@ -93,7 +93,7 @@ module.exports = function registerEndpoint(router, { services, exceptions }) {
 			const data = await provider.getSearch(req.query.query, req.query.page)
 			res.send({data})
 		} catch (e) {
-      res.status(500)
+      		res.status(500)
 			res.send({data: 'Failed to get search results'})
 		}
 	})
@@ -105,11 +105,11 @@ module.exports = function registerEndpoint(router, { services, exceptions }) {
     const request = new RequestDetails(req)
     if(!request.isAuthenticated()) return sendUnauthedMessage(res)
 		try {
-      const provider = getProvider(req.params.provider)
+      		const provider = getProvider(req.params.provider)
 			const data = await provider.downloadImage(request)
 			res.send({data})
 		} catch (e) {
-      res.status(500)
+      		res.status(500)
 			res.send({data: 'Failed to save image'})
 		}
 	})
