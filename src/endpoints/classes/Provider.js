@@ -22,9 +22,7 @@ module.exports = class Provider {
 	/**
 	 * Return the API Key if it has been configured in the ENV file.
 	 */
-	getApiKey() {
-		return process.env[`API_KEY_${this.key}`]
-	}
+	getApiKey() { return process.env[`API_KEY_${this.key}`]	}
 	/**
 	 * Axios base URL: the website that will receive the network request.
 	 */
@@ -68,8 +66,8 @@ module.exports = class Provider {
 			url: req.getBody().image.url_download, 
 			data: this.formatImageDataForImport(req.getBody().image)
 		}
-		const { data } = await axios.post(postUrl, postBody)
-		return data
+		const res = await axios.post(postUrl, postBody)
+		return res.data
 	}
 	/**
 	 * Return the data needed to provide to Directus import
