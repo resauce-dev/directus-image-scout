@@ -26,10 +26,10 @@ To enable providers for your users to use:
 
 | Env Example | Default Value | Security URL | Description |
 | ----------- | ------------- | ----- | ----------- |
-| API_KEY_UNSPLASH='QW1QW1' | `NULL` | https://images.unsplash.com | The key you configured to use the Unsplash API |
-| API_KEY_PEXELS='AS2AS2'   | `NULL` | https://images.pexels.com | The key you configured to use the Pexels API |
-| API_KEY_PIXABAY='ZX3ZX3'  | `NULL` | https://pixabay.com | The key you configured to use the Pixabay API |
-| API_KEY_GIPHY='PO4PO4'    | `NULL` | https://*.giphy.com | The key you configured to use the Giphy API |
+| API_KEY_UNSPLASH | `NULL` | https://images.unsplash.com | The key you configured to use the Unsplash API |
+| API_KEY_PEXELS   | `NULL` | https://images.pexels.com | The key you configured to use the Pexels API |
+| API_KEY_PIXABAY  | `NULL` | https://pixabay.com | The key you configured to use the Pixabay API |
+| API_KEY_GIPHY    | `NULL` | https://*.giphy.com | The key you configured to use the Giphy API |
 | RIS_DEFAULT_PROVIDER | `NULL` | - | The key of the provider you would like as your default selection |
 | RIS_REQUIRED_AUTH | `TRUE` | - | Is direcus authentication required to use this API externally? |
 
