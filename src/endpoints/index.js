@@ -110,7 +110,9 @@ module.exports = function registerEndpoint(router, { services, exceptions }) {
 			res.send({data})
 		} catch (e) {
       		res.status(500)
-			res.send({data: 'Failed to save image'})
+			res.send({
+				data: 'Failed to import image. Ensure URL is the same as your HOST.'
+			})
 		}
 	})
 

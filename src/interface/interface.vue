@@ -165,7 +165,7 @@ export default {
           this.processing = false
           this.isModalOpen = false
         })
-        .catch(err => console.warn('importing image failed'))
+        .catch(err => console.error('🎨 Failed to import image'))
     },
     getPhotos(query, provider, page=1) {
       if(!query) { this.images = null }
