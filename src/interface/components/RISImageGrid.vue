@@ -46,7 +46,7 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
+<style scoped>
 .image-grid { column-count: 1; }
 
 /* Extra small devices (phones, 600px and down) */

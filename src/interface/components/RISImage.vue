@@ -85,7 +85,7 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
+<style scoped>
 .btn-action {
   padding: 0;
   min-width: 0;
@@ -125,24 +125,23 @@ export default {
   overflow: hidden;
   border-radius: var(--border-radius);
   transition: transform var(--ris-transition-time);
+}
+.container .v-card img {
+  width: 100%;
+  height: auto;
+  vertical-align: middle;
+  border-radius: 0!important;
 
-  img {
-    width: 100%;
-    height: auto;
-    vertical-align: middle;
-    border-radius: 0!important;
+  opacity: 0;
+  transition: opacity var(--ris-transition-time);
+  
+}
+.container .v-card img[data-ris-rendered="true"] {
+  opacity: 1;
+}
 
-    opacity: 0;
-    transition: opacity var(--ris-transition-time);
-    
-    &[data-ris-rendered="true"] {
-      opacity: 1;
-    }
-  }
-
-  &:hover {
-    transform: scale(0.975);
-  }
+.container .v-card:hover {
+  transform: scale(0.975);
 }
 
 .card-hover-details {
