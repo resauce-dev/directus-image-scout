@@ -92,6 +92,20 @@ API Registration: https://www.pexels.com/api/
 
 > Note: An approved account will be required to be able to download high-res images. Please have your account approved otherwise you may not be able to download images.
 
+## Common Issues
+
+I've come across a few issues, here's the issues and how to fix them.
+
+### 🎨 Failed to import image
+
+This error usually comes along with ECONNREFUSED and a 500 status request to `/resauce-image-scout/providers/<provider>/download`
+
+This happens when you are loading the app from a different URL to the one configured in your `HOST` entry in your `.env` file
+
+### Refused to load the image '<URL>' because it violates the following Content Security Policy directive
+
+This occurs when you've failed to configure the URL in the `CONTENT_SECURITY_POLICY_DIRECTIVES__IMG_SRC` variable required further up the documentation.
+
 ## Liability
 
 Before activating any provider, ensure you have agreed to their terms and usage policy. You are subject to their usage terms based on how you use these images. No contributor to this repository accepts responsibility for the use of the images. 
