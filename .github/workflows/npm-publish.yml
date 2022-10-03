@@ -15,7 +15,7 @@ jobs:
       - uses: actions/setup-node@v1
         with:
           node-version: 12
-      - run: npm ci
+      # - run: npm ci
       # - run: npm test # I don't have any tests written for this.
 
   publish-npm:
