@@ -9,7 +9,7 @@ module.exports = class PixabayImageModel extends ImageModel {
 
     this.setTitle(`Photo by ${image.user}`)
     this.setSize(image.imageWidth, image.imageHeight)
-    
-    if(image.tags) { this.setTags(image.tags.split(', ')) }
+
+    if (image.tags) { this.setTags(image.tags.split(', ')) }
   }
 }

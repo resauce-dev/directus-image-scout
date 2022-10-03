@@ -1,40 +1,35 @@
 <template>
   <v-card :class="{'v-card--is-selected': isSelected}">
-    <img 
+    <img
       ref="img"
       :style="{height}"
-      :src="image.url_thumb" 
+      :src="image.url_thumb"
       :alt="image.description"
-      @load="triggerRender"
-    >
-    <div 
-      class="card-hover-details" 
-      :class="{'card-hover-details--active':isSelected}"
-    >
+      @load="triggerRender">
+    <div
+      class="card-hover-details"
+      :class="{'card-hover-details--active':isSelected}">
       <div>
-        <v-button class="btn-action" 
-          x-small 
-          v-if="image.attribution" 
+        <v-button class="btn-action"
+          x-small
+          v-if="image.attribution"
           :href="image.attribution.url"
-          :title="image.attribution.name"
-        >
+          :title="image.attribution.name">
           <v-icon name="link" class="btn-action-icon" />
           <span class="attribution-link">{{image.attribution.name}}</span>
         </v-button>
       </div>
       <div>
-        <v-button class="btn-action" 
-          x-small icon 
-          v-if="image.url_preview" 
-          @click="$emit('preview', image)"
-        >
+        <v-button class="btn-action"
+          x-small icon
+          v-if="image.url_preview"
+          @click="$emit('preview', image)">
           <v-icon name="zoom_in" />
         </v-button>
-        <v-button class="btn-action" 
-          x-small icon 
-          :disabled="!image.url_download" 
-          @click="$emit('select', image)"
-        >
+        <v-button class="btn-action"
+          x-small icon
+          :disabled="!image.url_download"
+          @click="$emit('select', image)">
           <v-icon :name="isSelected?'check_circle':'radio_button_unchecked'" />
         </v-button>
       </div>
@@ -71,7 +66,7 @@ export default {
     }
   },
   /**
-   * A Photo is 1600x1200px, but we only have space for an image of 400px wide. 
+   * A Photo is 1600x1200px, but we only have space for an image of 400px wide.
    * To find the new height of the image while preserving the aspect ratio
    * Follow this calculation: ((origHeight / origWidth) x newWidth) = newHeight
    * Flip based on landscape or portrait
@@ -85,7 +80,7 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
+<style scoped>
 .btn-action {
   padding: 0;
   min-width: 0;
@@ -94,20 +89,22 @@ export default {
   --v-button-color-hover: #ffffff99;
   --v-button-color-activated: #ffffff99;
   --v-button-color-disabled: #ffffffaa;
-  
+
   --v-button-background-color: transparent;
   --v-button-background-color-hover: transparent;
   --v-button-background-color-activated: transparent;
   --v-button-background-color-disabled: transparent;
 }
+
 .btn-action:deep(.button.x-small) {
   padding: 0;
 }
+
 .btn-action-icon {
   margin-right: 5px;
 }
 
-.attribution-link{
+.attribution-link {
   max-width: 145px;
   white-space: nowrap;
   text-overflow: ellipsis;
@@ -125,24 +122,25 @@ export default {
   overflow: hidden;
   border-radius: var(--border-radius);
   transition: transform var(--ris-transition-time);
+}
 
-  img {
-    width: 100%;
-    height: auto;
-    vertical-align: middle;
-    border-radius: 0!important;
+.container .v-card img {
+  width: 100%;
+  height: auto;
+  vertical-align: middle;
+  border-radius: 0 !important;
 
-    opacity: 0;
-    transition: opacity var(--ris-transition-time);
-    
-    &[data-ris-rendered="true"] {
-      opacity: 1;
-    }
-  }
+  opacity: 0;
+  transition: opacity var(--ris-transition-time);
 
-  &:hover {
-    transform: scale(0.975);
-  }
+}
+
+.container .v-card img[data-ris-rendered="true"] {
+  opacity: 1;
+}
+
+.container .v-card:hover {
+  transform: scale(0.975);
 }
 
 .card-hover-details {
@@ -164,7 +162,7 @@ export default {
 }
 
 .card-hover-details--active,
-.v-card:hover .card-hover-details{
+.v-card:hover .card-hover-details {
   opacity: 1;
   pointer-events: all;
 }
@@ -172,7 +170,7 @@ export default {
 .v-card,
 .v-card--is-selected,
 .card-hover-details,
-.v-card:hover .card-hover-details{
+.v-card:hover .card-hover-details {
   transition: all var(--ris-transition-time);
 }
 
@@ -182,21 +180,20 @@ export default {
   --checkerAltColor: var(--background-normal);
 
   background-image:
-    linear-gradient(45deg, var(--checkerColor) 25%, transparent 25%), 
+    linear-gradient(45deg, var(--checkerColor) 25%, transparent 25%),
     linear-gradient(135deg, var(--checkerColor) 25%, transparent 25%),
     linear-gradient(45deg, transparent 75%, var(--checkerColor) 75%),
     linear-gradient(135deg, transparent 75%, var(--checkerColor) 75%);
   background-color: var(--checkerAltColor);
-  
-  background-size: 
-    calc(2 * var(--checkerSize)) 
-    calc(2 * var(--checkerSize));
-  
-  background-position: 
-    0 0, 
-    var(--checkerSize) 0, 
-    var(--checkerSize) calc(-1 * var(--checkerSize)), 
+
+  background-size:
+    calc(2 * var(--checkerSize)) calc(2 * var(--checkerSize));
+
+  background-position:
+    0 0,
+    var(--checkerSize) 0,
+    var(--checkerSize) calc(-1 * var(--checkerSize)),
     0px var(--checkerSize);
-  
+
 }
 </style>

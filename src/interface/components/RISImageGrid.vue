@@ -1,20 +1,18 @@
 <template>
   <div>
-    <ris-image-preview 
-      v-if="previewImage" 
-      :image="previewImage" 
-      @close="previewImage=null" 
-      @keyup.esc.prevent="previewImage=null"
-    />
+    <ris-image-preview
+      v-if="previewImage"
+      :image="previewImage"
+      @close="previewImage=null"
+      @keyup.esc.prevent="previewImage=null" />
     <div class="image-grid" v-if="images && images.length > 0">
       <ris-image
-        v-for="(image, i) in images" 
+        v-for="(image, i) in images"
         :key="`${i}__${image.url_thumb}`"
         :image="image"
         :images-selected="imagesSelected"
         @preview="previewImage=image"
-        @select="$emit('select',image)"
-      />
+        @select="$emit('select',image)" />
     </div>
   </div>
 </template>
@@ -46,16 +44,22 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
-.image-grid { column-count: 1; }
+<style scoped>
+.image-grid {
+  column-count: 1;
+}
 
 /* Extra small devices (phones, 600px and down) */
 @media only screen and (min-width: 600px) {
-  .image-grid { column-count: 2; }
+  .image-grid {
+    column-count: 2;
+  }
 }
 
 /* Large devices (laptops/desktops, 992px and up) */
 @media only screen and (min-width: 992px) {
-  .image-grid { column-count: 3; }
+  .image-grid {
+    column-count: 3;
+  }
 }
 </style>

@@ -14,7 +14,7 @@ module.exports = class RequestDetails {
   isAuthenticated() {
     // Does the endpoints require a user to be authenticated?
     const authRequired = "RIS_REQUIRED_AUTH" in process.env ? process.env.RIS_REQUIRED_AUTH : true
-    if(authRequired === 'false') return true
+    if (authRequired === 'false') return true
     return this.getUserId() ? this.getUserId() : false
   }
   /**

@@ -2,8 +2,8 @@ const ImageModel = require(__dirname + '/../classes/ImageModel')
 
 module.exports = class UnsplashImageModel extends ImageModel {
   /**
-   * 
-   * @param {*} image 
+   *
+   * @param {*} image
    */
   constructor(image) {
     super(image.id, image.urls.small, image.links.download)
@@ -14,10 +14,10 @@ module.exports = class UnsplashImageModel extends ImageModel {
     this.setTitle(`Photo by ${image.user.name}`)
     this.setDescription(image.description)
     this.setSize(image.width, image.height)
-    
-    if(image.tags) { this.setTags(image.tags.map(tag => tag['title'])) }
-    if(image.location) { this.setLocation(image.location.title) }
-    
+
+    if (image.tags) { this.setTags(image.tags.map(tag => tag['title'])) }
+    if (image.location) { this.setLocation(image.location.title) }
+
     const fileName = image.id + '.' + image.urls.full.match(/&fm=([a-z]*)/)[1]
     this.setFileName(fileName)
   }
