@@ -3,7 +3,7 @@ import QueryCache from '../classes/QueryCache.js'
 export default {
   data() {
     return { 
-      apiPrefix: '/custom/resauce-image-scout',
+      apiPrefix: '/resauce-image-scout',
       providerList: [],
       providerSelected: null,
     }
