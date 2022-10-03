@@ -43,12 +43,15 @@ This means you will need to add the below configuration to your environment file
 
 To enable Image Scout as field in your application, follow this guide:
 
-1. Head to the settings of the collection you'd like Image Scout on
-2. Create a new files field
-3. Call the column whatever you'd like (feature_image?)
+1. Edit collection where you would like to enable Image Scout
+2. Create a new field for: `Image`
+3. Name the column whatever you'd like (feature_image?)
 4. Fill out any of the other fields of your own accord
-5. Under "Interface" select `Image Scout`
-6. Under "Display" select `Image` as the display.
+5. Click "**Continue in Advanced Field Creation Mode**"
+6. Open "Interface"
+7. Deselect "Image" as the selected interface
+8. Select "Image Scout" as your interface
+6. Open "Display", and select `Image` as the display.
 
 ## Learn More — What's a provider?
 
