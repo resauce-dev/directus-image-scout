@@ -98,7 +98,7 @@ import apiImageScout from './api/image-scout.js';
 
 export default {
   name: 'resauce-image-scout',
-  inject: ['system'],
+  inject: ['api'],
   emits: ['input'],
   components: {
     'ris-fullpage-loader': RISFullpageLoader, 
@@ -134,7 +134,7 @@ export default {
         this.providerList.find(i => i.key === this.providerSelected)
     },
     user_access_token() {
-      return this.system.api.defaults.headers.Authorization.replace("Bearer ", '')
+      return this.api.defaults.headers.Authorization.replace("Bearer ", '')
     }
   },
   methods: {

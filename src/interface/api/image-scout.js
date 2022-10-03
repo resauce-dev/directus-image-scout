@@ -15,7 +15,7 @@ export default {
   },
   methods: {
     getProviders() {
-      return this.system.api.get(`${this.apiPrefix}/providers`)
+      return this.api.get(`${this.apiPrefix}/providers`)
         .then(({data}) => {
           this.providerList = data.data.filter(i => i.is_configured)
           this.providerSelected = this.providerList[0].key
@@ -40,7 +40,7 @@ export default {
           .then(data => data);
       }
       console.info('🎨 Searching provider', query, page)
-      return this.system.api.get(queryUrl)
+      return this.api.get(queryUrl)
         .then(({data}) => {
           this.queryCache.save(queryUrl, data)
           return data
@@ -54,7 +54,7 @@ export default {
           .then(data => data)
       }
       console.info('🎨 Loading featured from provider')
-      return this.system.api.get(queryUrl)
+      return this.api.get(queryUrl)
         .then(({data}) => {
           this.queryCache.save(queryUrl, data)
           return data
@@ -62,7 +62,7 @@ export default {
     },
     triggerDownload(image, access_token) {
       const queryUrl = `${this.apiPrefix}/providers/${this.providerSelected}/download`
-      return this.system.api.post(queryUrl, {image, access_token})
+      return this.api.post(queryUrl, {image, access_token})
         .then(({ data }) => {
           return data
         })
