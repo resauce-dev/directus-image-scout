@@ -134,7 +134,7 @@ export default {
         this.providerList.find(i => i.key === this.providerSelected)
     },
     user_access_token() {
-      return this.api.defaults.headers.Authorization.replace("Bearer ", '')
+      return this.api.defaults.headers.common.Authorization.replace("Bearer ", '')
     }
   },
   methods: {
