@@ -1,5 +1,5 @@
-let RequestDetails = require(__dirname + '/classes/RequestDetails')
-let providers = require(__dirname + '/providers');
+let RequestDetails = require(__dirname + '/classes/RequestDetails.cjs')
+let providers = require(__dirname + '/providers.cjs');
 
 /**
  * Get the provider object class from the list of providers
@@ -21,7 +21,7 @@ function sendUnauthedMessage(res) {
 /**
  * Register all of the URLs
  */
-module.exports = function registerEndpoint(router, { services, exceptions }) {
+module.exports = (router, { services, exceptions }) => {
 
   /**
    * List the available endpoints for this extension.

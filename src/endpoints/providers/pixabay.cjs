@@ -1,4 +1,4 @@
-const Provider = require(__dirname + '/../classes/Provider')
+const Provider = require(__dirname + '/../classes/Provider.cjs')
 
 module.exports = class Pixabay extends Provider {
   /**

@@ -1,4 +1,4 @@
-const ImageModel = require(__dirname + '/../classes/ImageModel')
+const ImageModel = require(__dirname + '/../classes/ImageModel.cjs')
 
 module.exports = class PexelsImageModel extends ImageModel {
   constructor(image) {

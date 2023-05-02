@@ -52,7 +52,7 @@ module.exports = class Provider {
    * @param {*} data
    */
   formatResults(data) {
-    const ImageModel = require(__dirname + `/../image-models/${this.key.toLowerCase()}`)
+    const ImageModel = require(__dirname + `/../image-models/${this.key.toLowerCase()}.cjs`)
     return data.map(img => new ImageModel(img))
   }
   /**

@@ -1,5 +1,5 @@
 const axios = require('axios');
-const Provider = require(__dirname + '/../classes/Provider')
+const Provider = require(__dirname + '/../classes/Provider.cjs')
 
 module.exports = class Pexels extends Provider {
   /**
