@@ -16,7 +16,7 @@ services:
 
   directus:
     container_name: directus
-    image: directus/directus:latest
+    image: directus/directus:10.0.0
     ports:
       - 8055:8055
     volumes:
