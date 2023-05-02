@@ -1,14 +1,16 @@
-const axios = require('axios')
-const Provider = require(__dirname + '/../classes/Provider')
+import axios from 'axios'
+import Provider from '../classes/Provider'
+import type { AxiosRequestHeaders } from 'axios'
+import type { ScoutSearchResult } from '../types'
 
 module.exports = class Unsplash extends Provider {
   /**
    * Control and configuration of a provider
    */
-  constructor() { super('unsplash', 'Unsplash', 'https://unsplash.com') }
-  getAxiosBaseUrl() { return 'https://api.unsplash.com' }
-  getAxiosHeaders() { return { "Authorization": `Client-ID ${this.getApiKey()}` } }
-  async getSearch(query, page) {
+  constructor () { super('unsplash', 'Unsplash', 'https://unsplash.com') }
+  getAxiosBaseUrl(): string { return 'https://api.unsplash.com' }
+  getAxiosHeaders(): AxiosRequestHeaders { return { "Authorization": `Client-ID ${this.getApiKey()}` } }
+  async getSearch(query: string, page: number): Promise<ScoutSearchResult> {
     const { data } = await this.api.get(`/search/photos?per_page=${this.getFetchLimit()}&page=${page}&query=${query}`)
     return {
       images: this.formatResults(data.results),
@@ -16,7 +18,7 @@ module.exports = class Unsplash extends Provider {
       countOfPages: data.total_pages,
     }
   }
-  async getFeatured() {
+  async getFeatured(): Promise<ScoutSearchResult> {
     const { data } = await this.api.get(`/photos/random?featured=true&count=${this.getFetchLimit()}`)
     return {
       images: this.formatResults(data),

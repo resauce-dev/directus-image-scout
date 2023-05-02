@@ -1,5 +1,5 @@
-let RequestDetails = require(__dirname + '/classes/RequestDetails')
-let providers = require(__dirname + '/providers');
+import RequestDetails from './classes/RequestDetails'
+import providerList from './providers'
 
 /**
  * Get the provider object class from the list of providers
@@ -7,7 +7,7 @@ let providers = require(__dirname + '/providers');
  */
 function getProvider(providerName) {
   const provider_key = providerName.toUpperCase()
-  return providers.find(p => p.key === provider_key)
+  return providerList.find(p => p.key === provider_key)
 }
 
 /**
@@ -21,7 +21,7 @@ function sendUnauthedMessage(res) {
 /**
  * Register all of the URLs
  */
-module.exports = function registerEndpoint(router, { services, exceptions }) {
+export default function registerEndpoint(router, { services, exceptions }) {
 
   /**
    * List the available endpoints for this extension.
@@ -45,7 +45,7 @@ module.exports = function registerEndpoint(router, { services, exceptions }) {
   router.get('/providers', (req, res) => {
     const request = new RequestDetails(req)
     if (!request.isAuthenticated()) return sendUnauthedMessage(res)
-    res.send({ data: providers })
+    res.send({ data: providerList })
   })
 
   /**

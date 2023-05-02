@@ -90,7 +90,7 @@
 import RISFullpageLoader from './components/RISFullpageLoader.vue';
 import RISImageGrid from './components/RISImageGrid.vue';
 
-import apiImageScout from './api/image-scout.js';
+import apiImageScout from './api/image-scout';
 
 export default {
   name: 'resauce-image-scout',

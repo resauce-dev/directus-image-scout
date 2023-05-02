@@ -1,11 +1,30 @@
-module.exports = class ImageModel {
+import type { ImageAttribution } from '../types'
+
+export default class ImageModel {
+
+  public id: string
+  public url_thumb: string
+  public url_download: string
+
+  public url_preview: string | null
+  public attribution: ImageAttribution | null
+
+  public width: number | null
+  public height: number | null
+
+  public title: string | null
+  public description: string | null
+  public location: string | null
+  public filename_download: string | null
+  public tags: string[]
+
   /**
    *
    * @param {String} id
    * @param {String} url_thumb
    * @param {String} url_download
    */
-  constructor(id, url_thumb, url_download) {
+  constructor (id: string, url_thumb: string, url_download: string) {
     // Required
     this.id = id
     this.url_thumb = url_thumb
@@ -27,11 +46,11 @@ module.exports = class ImageModel {
     this.tags = ['resauce-image-scout']
   }
   /**
-   * Add URL of image to preview larger (typeof:`string`)
+   * Add URL of image to preview larger
    *
    * @param {String} data
    */
-  setPreviewUrl(data) {
+  setPreviewUrl(data): this {
     this.url_preview = data
     return this
   }
@@ -41,54 +60,52 @@ module.exports = class ImageModel {
    * @param {String} name
    * @param {String} url
    */
-  setAttribution(name, url) {
-    this.attribution = {
-      name: name,
-      url: url
-    }
+  setAttribution(name: string, url: string): this {
+    this.attribution = { name, url }
+    return this
   }
   /**
-   * Add title (typeof:`array`)
+   * Add title
    *
    * @param {String} data
    */
-  setTitle(data) {
+  setTitle(data: string): this {
     this.title = data
     return this
   }
   /**
-   * Add title (typeof:`array`)
+   * Add description
    *
    * @param {String} data
    */
-  setDescription(data) {
+  setDescription(data: string): this {
     this.description = data
     return this
   }
   /**
-   * Add tags (typeof:`array`)
+   * Add tags
    *
    * @param {Array} data
    */
-  setTags(data) {
+  setTags(data: string[]): this {
     this.tags = this.tags.concat(data)
     return this
   }
   /**
-   * Add location (typeof:`string`)
+   * Add location
    *
    * @param {String} data
    */
-  setLocation(data) {
+  setLocation(data: string): this {
     this.location = data
     return this
   }
   /**
-   * Add filename should have extension (typeof:`string`)
+   * Add filename should have extension
    *
    * @param {String} data
    */
-  setFileName(data) {
+  setFileName(data: string): this {
     if (!data.includes('.')) { throw "Filename should be provided an extension" }
     this.filename_download = data
     return this
@@ -99,7 +116,7 @@ module.exports = class ImageModel {
    * @param {Number} width
    * @param {Number} height
    */
-  setSize(width, height) {
+  setSize(width: number, height: number): this {
     this.width = width
     this.height = height
     return this

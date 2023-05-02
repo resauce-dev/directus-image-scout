@@ -1,7 +1,19 @@
-const ImageModel = require(__dirname + '/../classes/ImageModel')
+import ImageModel from '../classes/ImageModel'
 
-module.exports = class PixabayImageModel extends ImageModel {
-  constructor(image) {
+interface ImportedImageModel {
+  id: string
+  webformatURL: string
+  imageURL: string
+  largeImageURL: string
+  imageWidth: number
+  imageHeight: number
+  user: string
+  user_id: string
+  tags: string
+}
+
+export default class PixabayImageModel extends ImageModel {
+  constructor (image: ImportedImageModel) {
     super(image.id, image.webformatURL, image.imageURL)
 
     this.setAttribution(image.user, `https://pixabay.com/users/${image.user}-${image.user_id}/`)

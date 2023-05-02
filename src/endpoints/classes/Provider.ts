@@ -1,6 +1,17 @@
-const axios = require('axios');
+import axios from 'axios'
+import type { AxiosInstance, AxiosRequestHeaders } from 'axios'
+import type { DirectusImageProperties, ScoutSearchResult } from '../types'
+import type ImageModel from '../classes/ImageModel'
 
-module.exports = class Provider {
+export default class Provider {
+
+  public key: string
+  public name: string
+  public url: string
+  public is_configured: boolean
+
+  public api: AxiosInstance
+
   /**
    * Control and configuration of a provider
    *
@@ -8,7 +19,7 @@ module.exports = class Provider {
    * @param {String} name
    * @param {String} url
    */
-  constructor(key, name, url) {
+  constructor (key: string, name: string, url: string) {
     this.key = key.toUpperCase()
     this.name = name
     this.url = url
@@ -22,36 +33,42 @@ module.exports = class Provider {
   /**
    * Return the API Key if it has been configured in the ENV file.
    */
-  getApiKey() { return process.env[`API_KEY_${this.key}`] }
+  getApiKey(): string { return process.env[`API_KEY_${this.key}`] || `MISSING CONFIG: ${`API_KEY_${this.key}`}` }
   /**
    * Axios base URL: the website that will receive the network request.
    */
-  getAxiosBaseUrl() { return '' }
+  getAxiosBaseUrl(): string { return '' }
   /**
    * Axios headers: Authorization key to send to the server.
    */
-  getAxiosHeaders() { return {} }
+  getAxiosHeaders(): AxiosRequestHeaders { return {} }
   /**
    * How many items should be returned through the request
    */
-  getFetchLimit() { return 25 }
+  getFetchLimit(): number { return 25 }
   /**
    * Get Featured Images
    */
-  getFeatured() { return null }
+  async getFeatured(): Promise<ScoutSearchResult> {
+    throw "Provider function getFeatured has not been implemented."
+    return {}
+  }
   /**
    * Get Search Images
    *
    * @param {String} query
    * @param {Number} page
    */
-  getSearch(query, page) { return null }
+  async getSearch(query: string, page: number): Promise<ScoutSearchResult> {
+    throw "Provider function getSearch has not been implemented."
+    return {}
+  }
   /**
    * Process the search results into our format
    *
    * @param {*} data
    */
-  formatResults(data) {
+  formatResults(data): ImageModel[] {
     const ImageModel = require(__dirname + `/../image-models/${this.key.toLowerCase()}`)
     return data.map(img => new ImageModel(img))
   }
@@ -74,8 +91,8 @@ module.exports = class Provider {
    *
    * @param {*} image
    */
-  formatImageDataForImport(image) {
-    const data = {}
+  formatImageDataForImport(image: ImageModel): DirectusImageProperties {
+    const data: DirectusImageProperties = {}
 
     // Conditionally add if set to avoid blank data going in
     if (image.title) data.title = image.title

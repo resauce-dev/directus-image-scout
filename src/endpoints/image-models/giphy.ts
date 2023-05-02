@@ -1,7 +1,24 @@
-const ImageModel = require(__dirname + '/../classes/ImageModel')
+import ImageModel from '../classes/ImageModel'
 
-module.exports = class GiphyImageModel extends ImageModel {
-  constructor(image) {
+interface ImportedImageModel {
+  id: string
+  title: string
+  url: string
+  images: {
+    original: {
+      url: string
+    }
+    fixed_width: {
+      url: string
+      width: number
+      height: number
+    }
+  }
+  tags: string[]
+}
+
+export default class GiphyImageModel extends ImageModel {
+  constructor (image: ImportedImageModel) {
     image.title = image.title.replace(/\s?GIF/g, '')
 
     super(image.id, image.images.fixed_width.url, image.images.original.url)

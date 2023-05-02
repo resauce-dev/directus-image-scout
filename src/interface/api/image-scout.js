@@ -1,4 +1,4 @@
-import QueryCache from '../classes/QueryCache.js'
+import QueryCache from '../classes/QueryCache.ts'
 
 export default {
   data() {

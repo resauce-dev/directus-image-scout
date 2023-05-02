@@ -1,5 +1,5 @@
-module.exports = class RequestDetails {
-  constructor(req) {
+export default class RequestDetails {
+  constructor (req) {
     this.req = req
   }
   /**
@@ -21,7 +21,7 @@ module.exports = class RequestDetails {
    * Get the URL of the currently used Directus API
    */
   getApiUrl() {
-    return this.req.protocol + '://' + this.req.get('host');
+    return this.req.protocol + '://' + this.req.get('host')
   }
   /**
    * Get the body of the request
