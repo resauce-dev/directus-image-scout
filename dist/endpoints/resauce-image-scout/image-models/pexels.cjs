@@ -1,8 +1,8 @@
-const ImageModel = require(__dirname + '/../classes/ImageModel')
+const ImageModel = require(__dirname + '/../classes/ImageModel.cjs')
 
 module.exports = class PexelsImageModel extends ImageModel {
   constructor(image) {
-    super(image.id, image.src.medium,  image.src.original)
+    super(image.id, image.src.medium, image.src.original)
 
     this.setAttribution(image.photographer, image.photographer_url)
     this.setPreviewUrl(image.src.large2x)
