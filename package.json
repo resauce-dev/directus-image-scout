@@ -33,7 +33,7 @@
   },
   "directus:extension": {
     "type": "interface",
-    "path": "../directus-resauce/extensions/interfaces/resauce-image-scout/index.js",
+    "path": "./dist/interfaces/resauce-image-scout/index.js",
     "source": "src/interface/index.ts",
     "host": "^9.18.1"
   }

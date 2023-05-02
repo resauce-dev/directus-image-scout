@@ -6,7 +6,7 @@ const copy = require('rollup-plugin-copy')
  *
  * EG: D:/directus-project/extensions
  */
-const extension_folder = '../directus-resauce/extensions' //'dist'
+const extension_folder = './dist' //'dist'
 
 /**
  * Ensure endpoints are copied to the dist folder.
