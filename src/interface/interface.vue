@@ -70,7 +70,6 @@
             ></v-pagination>
           </div>
           <p class="api-supplier">
-            Updated2
             Image library powered by
             <a :href="providerLastSelected.url" target="_BLANK">{{ providerLastSelected.name }}</a>
           </p>
