@@ -5,8 +5,8 @@
         <img v-if="value" :src="`/assets/${value}?key=system-medium-cover&access_token=${user_access_token}`" />
         <v-icon v-else name="image_search"></v-icon>
       </v-avatar>
-      <v-button @click="isModalOpen=true" :outlined="true" :dashed="value?false:true" small>
-        {{value ? 'Replace Image' : 'Browse Images'}}
+      <v-button @click="isModalOpen = true" :outlined="true" :dashed="value ? false : true" small>
+        {{ value ? 'Replace Image' : 'Browse Images' }}
       </v-button>
     </div>
     <v-drawer
@@ -51,8 +51,8 @@
             </div>
           </div>
           <p v-if="countOfPages" class="header-search-detail">
-            {{providerLastSelected.name}} returned {{countOfImages.toLocaleString()}} results for "{{last_used_query}}"
-            in {{request_time}} seconds
+            {{ providerLastSelected.name }} returned {{ countOfImages.toLocaleString() }} results for "{{ last_used_query }}"
+            in {{ request_time }} seconds
           </p>
         </div>
 
@@ -67,11 +67,11 @@
               :length="countOfPages"
               :total-visible="5"
               :show-first-last="true"
-              @input="newPage => getPhotos(last_used_query, last_used_provider, newPage)"></v-pagination>
+            ></v-pagination>
           </div>
           <p class="api-supplier">
             Image library powered by
-            <a :href="providerLastSelected.url" target="_BLANK">{{providerLastSelected.name}}</a>
+            <a :href="providerLastSelected.url" target="_BLANK">{{ providerLastSelected.name }}</a>
           </p>
         </div>
         <div class="container-error" v-else>
@@ -121,6 +121,11 @@ export default {
       current_page: 1,
       fetch_limit: 30,
       request_time: 0,
+    }
+  },
+  watch: {
+    current_page: function (newPage) {
+      this.getPhotos(this.last_used_query, this.last_used_provider, newPage)
     }
   },
   computed: {
