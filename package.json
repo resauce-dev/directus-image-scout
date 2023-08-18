@@ -1,6 +1,6 @@
 {
   "name": "@resauce-dev/directus-image-scout",
-  "version": "3.1.0",
+  "version": "3.1.1",
   "description": "Image Scout is a Directus 9 interface that allowing you to search online image libraries for images.",
   "main": "index.js",
   "keywords": [
