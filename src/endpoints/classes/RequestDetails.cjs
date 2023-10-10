@@ -20,7 +20,7 @@ module.exports = class RequestDetails {
   /**
    * Get the URL of the currently used Directus API
    */
-  getApiUrl() {
+  getDirectusApiUrl() {
     return this.req.protocol + '://' + this.req.get('host');
   }
   /**

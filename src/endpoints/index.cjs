@@ -77,6 +77,7 @@ module.exports = (router, { services, exceptions }) => {
       const data = await provider.getFeatured()
       res.send({ data })
     } catch (e) {
+      console.error('🎨 Error during Feature Fetch', e)
       res.status(500)
       res.send({ data: 'Failed to get featured results' })
     }
@@ -93,6 +94,7 @@ module.exports = (router, { services, exceptions }) => {
       const data = await provider.getSearch(req.query.query, req.query.page)
       res.send({ data })
     } catch (e) {
+      console.error('🎨 Error during Search Fetch', e)
       res.status(500)
       res.send({ data: 'Failed to get search results' })
     }
@@ -109,6 +111,7 @@ module.exports = (router, { services, exceptions }) => {
       const data = await provider.downloadImage(request)
       res.send({ data })
     } catch (e) {
+      console.error('🎨 Error during Download', e)
       res.status(500)
       res.send({
         data: 'Failed to import image. Ensure URL is the same as your HOST.'

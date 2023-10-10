@@ -1,5 +1,3 @@
-const axios = require('axios');
-
 module.exports = class Provider {
   /**
    * Control and configuration of a provider
@@ -14,23 +12,31 @@ module.exports = class Provider {
     this.url = url
     this.is_configured = this.getApiKey() ? true : false
 
-    this.api = axios.create({
-      baseURL: this.getAxiosBaseUrl(),
-      headers: this.getAxiosHeaders()
-    })
+    this.fetch = async (method, urlPath, data) => {
+      const response = await fetch(
+        new URL(urlPath, this.getFetchBaseUrl()),
+        {
+          method: method, // GET, POST, PUT, DELETE
+          headers: this.getFetchHeaders(),
+          body: JSON.stringify(data),
+        }
+      );
+
+      return response.json();
+    }
   }
   /**
    * Return the API Key if it has been configured in the ENV file.
    */
   getApiKey() { return process.env[`API_KEY_${this.key}`] }
   /**
-   * Axios base URL: the website that will receive the network request.
+   * Full base URL: the API that will receive the network request.
    */
-  getAxiosBaseUrl() { return '' }
+  getFetchBaseUrl() { return '' }
   /**
-   * Axios headers: Authorization key to send to the server.
+   * All required headers (including authorization key for the platform)
    */
-  getAxiosHeaders() { return {} }
+  getFetchHeaders() { return {} }
   /**
    * How many items should be returned through the request
    */
@@ -61,13 +67,18 @@ module.exports = class Provider {
    * @param {Object} req
    */
   async downloadImage(req) {
-    const postUrl = `${req.getApiUrl()}/files/import?access_token=${req.getBody().access_token}`
-    const postBody = {
+    const postUrl = `${req.getDirectusApiUrl()}/files/import?access_token=${req.getBody().access_token}`
+    const data = {
       url: req.getBody().image.url_download,
       data: this.formatImageDataForImport(req.getBody().image)
     }
-    const res = await axios.post(postUrl, postBody)
-    return res.data
+    const response = await fetch(postUrl, {
+      method: 'POST',
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(data),
+    });
+
+    return response.json()
   }
   /**
    * Return the data needed to provide to Directus import

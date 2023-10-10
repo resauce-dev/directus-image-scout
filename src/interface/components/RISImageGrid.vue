@@ -3,16 +3,16 @@
     <ris-image-preview
       v-if="previewImage"
       :image="previewImage"
-      @close="previewImage=null"
-      @keyup.esc.prevent="previewImage=null" />
+      @close="previewImage = null"
+      @keydown.esc.prevent="previewImage = null" />
     <div class="image-grid" v-if="images && images.length > 0">
       <ris-image
         v-for="(image, i) in images"
         :key="`${i}__${image.url_thumb}`"
         :image="image"
         :images-selected="imagesSelected"
-        @preview="previewImage=image"
-        @select="$emit('select',image)" />
+        @preview="previewImage = image"
+        @select="$emit('select', image)" />
     </div>
   </div>
 </template>
