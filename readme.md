@@ -1,6 +1,6 @@
 # Image Scout
 
-> Image Scout v3.1.1 Tested On Directus v10.0.0 & v10.6.1
+> **Image Scout v3.1.2 Tested On Directus v10.0.0 & v10.6.3**
 
 ## What is Image Scout?
 
