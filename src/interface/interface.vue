@@ -2,7 +2,7 @@
   <div class="v-resauce-image-scout">
     <div class="display">
       <v-avatar class="v-avatar" x-large>
-        <img v-if="value" :src="`/assets/${value}?key=system-medium-cover&access_token=${user_access_token}`" />
+        <img v-if="value" :src="`/assets/${value}?key=system-medium-cover`" />
         <v-icon v-else name="image_search"></v-icon>
       </v-avatar>
       <v-button @click="isModalOpen = true" :outlined="true" :dashed="value ? false : true" small>
@@ -141,9 +141,6 @@ export default {
         this.providerList.find(i => i.key === this.last_used_provider) :
         this.providerList.find(i => i.key === this.providerSelected)
     },
-    user_access_token() {
-      return this.api.defaults.headers.common.Authorization.replace("Bearer ", '')
-    }
   },
   methods: {
     selectImage(image) {
@@ -168,7 +165,7 @@ export default {
       this.processing = true
       this.hasError = false
       const image = this.images.find(i => i.id === this.imagesSelected[0]) // currently only downloading one image
-      this.triggerDownload(image, this.user_access_token)
+      this.triggerDownload(image)
         .then(({ data }) => {
           this.$emit('input', data.data.id)
           this.isModalOpen = false

@@ -83,7 +83,7 @@ export class UnsplashProvider extends Provider {
   }
 
   async downloadImage(req: RequestDetails): Promise<any> {
-    const postUrl = `${req.getDirectusApiUrl()}/files/import?access_token=${req.getBody().access_token}`
+    const postUrl = `${req.getDirectusApiUrl()}/files/import`
 
     const data = {
       url: `${req.getBody().image.url_download}?client_id=${this.getApiKey()}`,

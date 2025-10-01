@@ -1,4 +1,3 @@
-// import { Request, Response, NextFunction, RequestHandler } from 'express'
 import { RequestHandler } from 'express'
 import { RequestDetails } from './classes/RequestDetails'
 import providers from './providers'
@@ -9,7 +8,7 @@ import providers from './providers'
 export const ensureAuthenticated: RequestHandler = (req, res, next) => {
   const request = new RequestDetails(req)
   if (!request.isAuthenticated()) {
-    return res.status(401).send({ data: 'User is not authorized to make this request' })
+    return res.status(401).send({ data: 'You must be logged in to attempt this request.' })
   }
   return next()
 }

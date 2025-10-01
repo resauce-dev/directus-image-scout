@@ -103,7 +103,7 @@ export abstract class Provider {
    * Download an image URL to Directus
    */
   async downloadImage(req: RequestDetails): Promise<any> {
-    const postUrl = `${req.getDirectusApiUrl()}/files/import?access_token=${req.getBody().access_token}`
+    const postUrl = `${req.getDirectusApiUrl()}/files/import`
     const data = {
       url: req.getBody().image.url_download,
       data: this.formatImageDataForImport(req.getBody().image),
