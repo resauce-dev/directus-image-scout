@@ -105,7 +105,7 @@ export default {
 }
 
 .attribution-link {
-  max-width: 145px;
+  max-width: 10rem;
   white-space: nowrap;
   text-overflow: ellipsis;
   overflow: hidden;

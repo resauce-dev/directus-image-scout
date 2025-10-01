@@ -183,7 +183,8 @@ export default {
       if (!query) { this.images = null }
       if (query.length < 1) { return this.getProviderFeaturedPhotos() }
 
-      this.imagesSelected = [] // Reset selected images so as to not cause confusion
+      this.images = []
+      this.imagesSelected = []
 
       this.search = this.last_used_query = query
       this.providerSelected = this.last_used_provider = provider
@@ -232,6 +233,7 @@ export default {
 <style scoped>
 .display {
   display: flex;
+  gap: 1rem;
 }
 
 .v-avatar {
