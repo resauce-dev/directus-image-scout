@@ -46,6 +46,7 @@ export default {
 
 <style scoped>
 .image-grid {
+  padding: 2.5rem;
   column-count: 1;
 }
 

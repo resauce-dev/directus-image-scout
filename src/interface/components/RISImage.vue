@@ -105,7 +105,7 @@ export default {
 }
 
 .attribution-link {
-  max-width: 145px;
+  max-width: 10rem;
   white-space: nowrap;
   text-overflow: ellipsis;
   overflow: hidden;
@@ -120,7 +120,7 @@ export default {
   margin-bottom: 5%;
   position: relative;
   overflow: hidden;
-  border-radius: var(--border-radius);
+  border-radius: var(--v-input-border-radius, var(--theme--border-radius));
   transition: transform var(--ris-transition-time);
 }
 

@@ -1,12 +1,15 @@
 {
   "name": "@resauce-dev/directus-image-scout",
-  "version": "3.1.2",
-  "description": "Image Scout is a Directus 9 interface that allowing you to search online image libraries for images.",
+  "description": "Image Scout is a Directus interface that allowing you to search online image libraries for images.",
+  "author": "Shea Lavington <resauce@lavington.me>",
+  "license": "GNU GENERAL PUBLIC LICENSE",
+  "version": "3.2.0",
+  "icon": "image_search",
   "main": "index.js",
   "keywords": [
     "directus",
     "directus-extension",
-    "directus-custom-interface",
+    "directus-extension-bundle",
     "extension",
     "image",
     "library",
@@ -19,22 +22,42 @@
     "royalty free",
     "resauce"
   ],
-  "author": "Shea Lavington <shealavington@gmail.com>",
-  "license": "GNU GENERAL PUBLIC LICENSE",
+  "type": "module",
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "build": "directus-extension build",
-    "dev": "directus-extension build -w --no-minify"
+    "dev": "directus-extension build -w --no-minify",
+    "link": "directus-extension link",
+    "validate": "directus-extension validate",
+    "add": "directus-extension add"
   },
   "devDependencies": {
-    "@directus/extensions-sdk": "9.18.1",
-    "rollup-plugin-copy": "^3.4.0",
-    "typescript": "^4.8.4",
-    "vue": "^3.2.40"
+    "@directus/extensions-sdk": "16.0.2",
+    "typescript": "^5.9.3",
+    "vue": "^3.5.22",
+    "@types/node": "^24.6.1"
   },
   "directus:extension": {
-    "type": "interface",
-    "path": "./dist/interfaces/resauce-image-scout/index.js",
-    "source": "src/interface/index.ts",
-    "host": "^9.18.1"
+    "partial": false,
+    "type": "bundle",
+    "path": {
+      "app": "dist/app.js",
+      "api": "dist/api.js"
+    },
+    "entries": [
+      {
+        "type": "endpoint",
+        "name": "resauce-image-scout",
+        "source": "src/endpoints/index.ts"
+      },
+      {
+        "type": "interface",
+        "name": "resauce-image-scout-ui",
+        "source": "src/interface/index.ts"
+      }
+    ],
+    "host": "^10.10.0"
   }
 }

@@ -2,7 +2,7 @@
   <div class="v-resauce-image-scout">
     <div class="display">
       <v-avatar class="v-avatar" x-large>
-        <img v-if="value" :src="`/assets/${value}?key=system-medium-cover&access_token=${user_access_token}`" />
+        <img v-if="value" :src="`/assets/${value}?key=system-medium-cover`" />
         <v-icon v-else name="image_search"></v-icon>
       </v-avatar>
       <v-button @click="isModalOpen = true" :outlined="true" :dashed="value ? false : true" small>
@@ -25,62 +25,68 @@
           <v-icon name="done" />
         </v-button>
       </template>
-      <ris-fullpage-loader v-if="processing">
+      <div class="container-error" v-if="hasError">
+        <v-info icon="warning" title="Network Error" type="danger">
+          Something went wrong, please try again later or ask an administrator to check the Image Scout configuration.
+        </v-info>
+      </div>
+      <ris-fullpage-loader v-else-if="processing">
         Please wait while we process your request...
       </ris-fullpage-loader>
-      <div class="drawer--content">
-        <div class="drawer--search">
-          <div class="header-search-area">
-            <v-input
-              v-model="search"
-              class="header-search--bar"
-              placeholder="Search for image keywords..."
-              @keyup.enter="getPhotos(search, providerSelected)">
-              <template v-slot:append>
-                <v-icon name="search"></v-icon>
-              </template>
-            </v-input>
-            <div class="header-search--provider">
-              <v-select
-                v-model="providerSelected"
-                :items="providerList"
-                item-value="key"
-                item-text="name"
-                @input="search.length > 0 ? getPhotos(search, providerSelected) : getProviderFeaturedPhotos()">
-              </v-select>
+      <template v-else>
+        <div class="drawer--content">
+          <div class="drawer--search">
+            <div class="header-search-area">
+              <v-input
+                v-model="search"
+                class="header-search--bar"
+                placeholder="Search for image keywords..."
+                @keyup.enter="getPhotos(search, providerSelected)">
+                <template v-slot:append>
+                  <v-icon name="search"></v-icon>
+                </template>
+              </v-input>
+              <div class="header-search--provider">
+                <v-select
+                  v-model="providerSelected"
+                  :items="providerList"
+                  item-value="key"
+                  item-text="name"
+                  @input="search.length > 0 ? getPhotos(search, providerSelected) : getProviderFeaturedPhotos()">
+                </v-select>
+              </div>
             </div>
+            <p v-if="countOfPages" class="header-search-detail">
+              {{ providerLastSelected.name }} returned {{ countOfImages.toLocaleString() }} results for "{{ last_used_query }}"
+              in {{ request_time }} second(s)
+            </p>
           </div>
-          <p v-if="countOfPages" class="header-search-detail">
-            {{ providerLastSelected.name }} returned {{ countOfImages.toLocaleString() }} results for "{{ last_used_query }}"
-            in {{ request_time }} seconds
-          </p>
-        </div>
 
-        <div class="drawer--images" v-if="images && images.length > 0">
-          <ris-image-grid
-            :images="images"
-            :images-selected="imagesSelected"
-            @select="image => selectImage(image)" />
-          <div class="v-paginator" v-if="countOfPages && countOfPages > 1">
-            <v-pagination
-              v-model="current_page"
-              :length="countOfPages"
-              :total-visible="5"
-              :show-first-last="true"
-            ></v-pagination>
+          <div class="drawer--images" v-if="images && images.length > 0">
+            <ris-image-grid
+              :images="images"
+              :images-selected="imagesSelected"
+              @select="image => selectImage(image)" />
+            <div class="v-paginator" v-if="countOfPages && countOfPages > 1">
+              <v-pagination
+                v-model="current_page"
+                :length="countOfPages"
+                :total-visible="5"
+                :show-first-last="true"
+              ></v-pagination>
+            </div>
+            <p class="api-supplier">
+              Image library powered by
+              <a :href="providerLastSelected.url" target="_BLANK">{{ providerLastSelected.name }}</a>
+            </p>
           </div>
-          <p class="api-supplier">
-            Image library powered by
-            <a :href="providerLastSelected.url" target="_BLANK">{{ providerLastSelected.name }}</a>
-          </p>
+          <div class="container-error" v-else>
+            <v-info icon="image_search" title="No results" type="warning">
+              We couldn't retrieve any images, please try to refine your search
+            </v-info>
+          </div>
         </div>
-        <div class="container-error" v-else>
-          <v-info icon="image_search" title="No results" type="warning">
-            Sorry, we couldn't retrieve any images for
-            you, please try to refine your search
-          </v-info>
-        </div>
-      </div>
+      </template>
     </v-drawer>
 
   </div>
@@ -112,6 +118,7 @@ export default {
 
       isModalOpen: false,
       processing: false,
+      hasError: false,
 
       imagesSelected: [],
 
@@ -134,9 +141,6 @@ export default {
         this.providerList.find(i => i.key === this.last_used_provider) :
         this.providerList.find(i => i.key === this.providerSelected)
     },
-    user_access_token() {
-      return this.api.defaults.headers.common.Authorization.replace("Bearer ", '')
-    }
   },
   methods: {
     selectImage(image) {
@@ -159,20 +163,25 @@ export default {
     },
     downloadSelected() {
       this.processing = true
+      this.hasError = false
       const image = this.images.find(i => i.id === this.imagesSelected[0]) // currently only downloading one image
-      this.triggerDownload(image, this.user_access_token)
+      this.triggerDownload(image)
         .then(({ data }) => {
-          this.$emit('input', data.data.id)
-          this.processing = false
+          this.$emit('input', data.id)
           this.isModalOpen = false
         })
-        .catch(err => console.error('🎨 Failed to import image'))
+        .catch(err => {
+          this.hasError = true
+          console.error('🎨 Failed to import image', err)
+        })
+        .finally(() => this.processing = false)
     },
     getPhotos(query, provider, page = 1) {
       if (!query) { this.images = null }
       if (query.length < 1) { return this.getProviderFeaturedPhotos() }
 
-      this.imagesSelected = [] // Reset selected images so as to not cause confusion
+      this.images = []
+      this.imagesSelected = []
 
       this.search = this.last_used_query = query
       this.providerSelected = this.last_used_provider = provider
@@ -180,27 +189,36 @@ export default {
 
       this.processing = true
       const timerStart = performance.now()
-      this.getSearch(query, page)
+      this.getSearch(encodeURIComponent(query), page)
         .then(({ data }) => {
+          this.hasError = false
           this.countOfImages = data.countOfImages
           this.countOfPages = data.countOfPages
           this.images = data.images
 
-          this.processing = false
           const timerEnd = performance.now()
-          this.request_time = parseFloat((timerEnd - timerStart) / 1000).toFixed(12)
+          this.request_time = parseFloat((timerEnd - timerStart) / 1000).toFixed(2)
         })
+        .catch(err => {
+          this.hasError = true
+          throw err
+        })
+        .finally(() => this.processing = false)
     },
     getProviderFeaturedPhotos() {
       this.processing = true
       this.getFeatured()
         .then(({ data }) => {
+          this.hasError = false
           this.countOfImages = data.countOfImages
           this.countOfPages = data.countOfPages
           this.images = data.images
-
-          this.processing = false
         })
+        .catch(err => {
+          this.hasError = true
+          throw err
+        })
+        .finally(() => this.processing = false)
     },
   },
   mounted() {
@@ -212,6 +230,7 @@ export default {
 <style scoped>
 .display {
   display: flex;
+  gap: 1rem;
 }
 
 .v-avatar {
@@ -284,6 +303,10 @@ export default {
 
 .drawer--images {
   margin: var(--v-card-padding) 0;
+}
+
+.drawer--search {
+  padding: 0 2.5rem;
 }
 
 .container-error {

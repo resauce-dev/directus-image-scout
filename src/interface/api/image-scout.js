@@ -37,7 +37,7 @@ export default {
       if (this.queryCache.exists(queryUrl)) {
         console.info('🎨 Searching cache', query, page)
         return this.fetchFromCache(queryUrl)
-          .then(data => data);
+          .then(data => data)
       }
       console.info('🎨 Searching provider', query, page)
       return this.api.get(queryUrl)
@@ -60,10 +60,14 @@ export default {
           return data
         })
     },
-    triggerDownload(image, access_token) {
+    triggerDownload(image) {
       const queryUrl = `${this.apiPrefix}/providers/${this.providerSelected}/download`
-      return this.api.post(queryUrl, { image, access_token })
+      return this.api.post(queryUrl, { image })
         .then(({ data }) => {
+          if (data?.data?.errors) {
+            console.error(data.data.errors)
+            throw new Error('Error thrown')
+          }
           return data
         })
     }
