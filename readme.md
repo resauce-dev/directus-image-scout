@@ -8,7 +8,7 @@ Image Scout is an interface extension for Directus 9 developed by Resauce. A cle
 
 ### Here's what image-scout looks like!
 
-![Picture of the interface](./docs/interface.jpg)
+![Picture of the interface](https://github.com/resauce-dev/directus-image-scout/blob/main/docs/interface.jpg?raw=true)
 
 ## Install & Get Started
 
