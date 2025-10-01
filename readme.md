@@ -1,6 +1,6 @@
 # Image Scout
 
-> **Image Scout v3.1.2 Tested On Directus v10.0.0 & v10.6.3**
+> **Image Scout v3.2.0 Tested On Directus v10.10.0 and v11.12.0**
 
 ## What is Image Scout?
 
@@ -10,11 +10,7 @@ Image Scout is an interface extension for Directus 9 developed by Resauce. A cle
 
 ![Picture of the interface](https://github.com/resauce-dev/directus-image-scout/blob/main/docs/interface.jpg?raw=true)
 
-## Install & Get Started
-
-Copy the folders from this repository's `dist` directory into your extensions folder
-- `/extensions/interfaces/resauce-image-scout
-- `/extensions/endpoints/resauce-image-scout
+## Get Started
 
 To enable providers for your users to use:
 - Decide what providers you want to use and register for an API Key

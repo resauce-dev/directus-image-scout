@@ -58,6 +58,6 @@
         "source": "src/interface/index.ts"
       }
     ],
-    "host": "^11.12.0"
+    "host": "^10.10.0"
   }
 }
