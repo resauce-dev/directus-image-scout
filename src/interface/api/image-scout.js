@@ -37,7 +37,7 @@ export default {
       if (this.queryCache.exists(queryUrl)) {
         console.info('🎨 Searching cache', query, page)
         return this.fetchFromCache(queryUrl)
-          .then(data => data);
+          .then(data => data)
       }
       console.info('🎨 Searching provider', query, page)
       return this.api.get(queryUrl)

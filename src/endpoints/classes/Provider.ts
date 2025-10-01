@@ -102,18 +102,13 @@ export abstract class Provider {
   /**
    * Download an image URL to Directus
    */
-  async downloadImage(req: RequestDetails): Promise<any> {
-    const postUrl = `${req.getDirectusApiUrl()}/files/import`
-    const data = {
-      url: req.getBody().image.url_download,
-      data: this.formatImageDataForImport(req.getBody().image),
-    }
-    const response = await fetch(postUrl, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(data),
-    })
-    return response.json()
+  async importImage(filesService: any, req: RequestDetails): Promise<any> {
+    const assetKey = await filesService.importOne(
+      req.getBody().image.url_download,
+      this.formatImageDataForImport(req.getBody().image)
+    )
+
+    return await filesService.readOne(assetKey)
   }
 
   /**

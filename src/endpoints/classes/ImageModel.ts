@@ -10,19 +10,19 @@ export class ImageModel {
   url_download: string
 
   // Optional
-  url_preview: string | null = null;
-  attribution: Attribution | null = null;
+  url_preview: string | null = null
+  attribution: Attribution | null = null
 
   // Sizing
-  width: number | null = null;
-  height: number | null = null;
+  width: number | null = null
+  height: number | null = null
 
   // Import options
-  title: string | null = null;
-  description: string | null = null;
-  location: string | null = null;
-  filename_download: string | null = null;
-  tags: string[] = ['resauce-image-scout'];
+  title: string | null = null
+  description: string | null = null
+  location: string | null = null
+  filename_download: string | null = null
+  tags: string[] = ['resauce-image-scout']
 
   constructor (id: string, url_thumb: string, url_download: string) {
     this.id = id

@@ -1,6 +1,5 @@
 import { Provider, ProviderResult } from '../classes/Provider'
 import { UnsplashImageModel } from '../image-models/unsplash'
-import { UnsplashImage, UnsplashSearchResponse } from '../types/unsplash'
 import { RequestDetails } from '../classes/RequestDetails'
 
 export interface UnsplashUser {
@@ -8,7 +7,7 @@ export interface UnsplashUser {
   username: string
   name: string
   links: {
-    html: string;
+    html: string
     [key: string]: any
   }
 }
@@ -22,11 +21,11 @@ export interface UnsplashImage {
   urls: {
     small: string
     regular: string
-    full: string;
+    full: string
     [key: string]: string
   }
   links: {
-    download: string;
+    download: string
     [key: string]: string
   }
   user: UnsplashUser
@@ -82,20 +81,12 @@ export class UnsplashProvider extends Provider {
     }
   }
 
-  async downloadImage(req: RequestDetails): Promise<any> {
-    const postUrl = `${req.getDirectusApiUrl()}/files/import`
+  async importImage(filesService: any, req: RequestDetails): Promise<any> {
+    const assetKey = await filesService.importOne(
+      `${req.getBody().image.url_download}?client_id=${this.getApiKey()}`,
+      this.formatImageDataForImport(req.getBody().image)
+    )
 
-    const data = {
-      url: `${req.getBody().image.url_download}?client_id=${this.getApiKey()}`,
-      data: this.formatImageDataForImport(req.getBody().image),
-    }
-
-    const response = await fetch(postUrl, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(data),
-    })
-
-    return response.json()
+    return await filesService.readOne(assetKey)
   }
 }

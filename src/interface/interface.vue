@@ -25,7 +25,12 @@
           <v-icon name="done" />
         </v-button>
       </template>
-      <ris-fullpage-loader v-if="processing">
+      <div class="container-error" v-if="hasError">
+        <v-info icon="warning" title="Network Error" type="danger">
+          Something went wrong, please try again later or ask an administrator to check the Image Scout configuration.
+        </v-info>
+      </div>
+      <ris-fullpage-loader v-else-if="processing">
         Please wait while we process your request...
       </ris-fullpage-loader>
       <template v-else>
@@ -53,7 +58,7 @@
             </div>
             <p v-if="countOfPages" class="header-search-detail">
               {{ providerLastSelected.name }} returned {{ countOfImages.toLocaleString() }} results for "{{ last_used_query }}"
-              in {{ request_time }} seconds
+              in {{ request_time }} second(s)
             </p>
           </div>
 
@@ -74,11 +79,6 @@
               Image library powered by
               <a :href="providerLastSelected.url" target="_BLANK">{{ providerLastSelected.name }}</a>
             </p>
-          </div>
-          <div class="container-error" v-else-if="hasError">
-            <v-info icon="warning" title="Network Error" type="danger">
-              Something went wrong, please try again later or ask an administrator to check the Image Scout configuration.
-            </v-info>
           </div>
           <div class="container-error" v-else>
             <v-info icon="image_search" title="No results" type="warning">
@@ -167,7 +167,7 @@ export default {
       const image = this.images.find(i => i.id === this.imagesSelected[0]) // currently only downloading one image
       this.triggerDownload(image)
         .then(({ data }) => {
-          this.$emit('input', data.data.id)
+          this.$emit('input', data.id)
           this.isModalOpen = false
         })
         .catch(err => {
@@ -189,7 +189,7 @@ export default {
 
       this.processing = true
       const timerStart = performance.now()
-      this.getSearch(query, page)
+      this.getSearch(encodeURIComponent(query), page)
         .then(({ data }) => {
           this.hasError = false
           this.countOfImages = data.countOfImages
@@ -197,7 +197,7 @@ export default {
           this.images = data.images
 
           const timerEnd = performance.now()
-          this.request_time = parseFloat((timerEnd - timerStart) / 1000).toFixed(12)
+          this.request_time = parseFloat((timerEnd - timerStart) / 1000).toFixed(2)
         })
         .catch(err => {
           this.hasError = true

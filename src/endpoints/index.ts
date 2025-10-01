@@ -1,11 +1,11 @@
 import { defineEndpoint } from '@directus/extensions-sdk'
-import { Request, Response, Router } from 'express'
+import { Request, Response } from 'express'
 import { ensureAuthenticated, withProvider } from './middleware'
 import { RequestDetails } from './classes/RequestDetails'
 import { Provider } from './classes/Provider'
 import providers from './providers'
 
-export default defineEndpoint((router: Router) => {
+export default defineEndpoint((router, context) => {
   /**
    * Apply middleware to all routes
    */
@@ -74,9 +74,18 @@ export default defineEndpoint((router: Router) => {
    */
   router.post('/providers/:provider/download', withProvider, async (req: Request<{ provider: string }>, res) => {
     const provider = (req as any).provider as Provider
+
+    const { services, getSchema } = context
+    const { FilesService } = services
+
+    const filesService = new FilesService({
+      schema: await getSchema(),
+      accountability: req.accountability
+    })
+
     try {
       const requestDetails = new RequestDetails(req)
-      const data = await provider.downloadImage(requestDetails)
+      const data = await provider.importImage(filesService, requestDetails)
       res.send({ data })
     } catch (e) {
       console.error('🎨 Error during Download', e)

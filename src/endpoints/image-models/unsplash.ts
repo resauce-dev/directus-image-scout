@@ -8,16 +8,16 @@ export interface UnsplashApiImage {
   urls: {
     small: string
     regular: string
-    full: string;
+    full: string
     [key: string]: string
   }
   links: {
-    download: string;
+    download: string
     [key: string]: string
   }
   user: {
     name: string
-    links: { html: string };
+    links: { html: string }
     [key: string]: any
   }
   tags?: { title: string }[]

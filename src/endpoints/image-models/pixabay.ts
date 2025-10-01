@@ -9,7 +9,7 @@ export interface PixabayApiImage {
   largeImageURL: string
   imageWidth: number
   imageHeight: number
-  tags?: string; // e.g. "nature, landscape, tree"
+  tags?: string // e.g. "nature, landscape, tree"
   [key: string]: any // allow extra fields
 }
 
